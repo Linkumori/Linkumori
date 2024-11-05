@@ -1,5 +1,7 @@
 # Linkumori (URLs Purifier)
 
+[![Linkumori crx packaging](https://github.com/subham8907/Linkumori/actions/workflows/main.yml/badge.svg)](https://github.com/subham8907/Linkumori/actions/workflows/main.yml)
+
 ![Linkumori](https://github.com/subham8907/Linkumori/blob/main/icons/icon48.png)
 
 Linkumori (URLs Purifier) is a powerful browser extension for Chromium-based browsers that enhances your privacy by purifying URLs, removing tracking parameters, and blocking hyperlink auditing, all without interrupting your browsing experience.
