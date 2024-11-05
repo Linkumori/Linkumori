@@ -24,10 +24,19 @@ Linkumori (URLs Purifier) is a powerful browser extension for Chromium-based bro
 
 ## Installation
 
+### Load unpacked: Chrome, MS Edge or Brave (all desktop)
+
 1. Clone this repository or download the source code to a permanent location (do not delete the folder after installation).
 2. Open your Chromium-based browser (e.g., Chrome, Edge) and navigate to the extensions page.
 3. Enable "Developer mode" in the top right corner.
 4. Click "Load unpacked" and select the directory containing the extension files.
+
+### CRX-file: other Chromium browsers (Opera/Vivaldi/Yandex)
+
+1. Download the extension as a crx-file from latest release (right-click > save link as).
+2. In your browser navigate to the extensions page
+3. Enable "Developer mode" in the top right corner.
+4. Drag your crx-file anywhere on the page to import it.
 
 ## Usage
 
