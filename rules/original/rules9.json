@@ -1,4 +1,4 @@
 [
 {"id":1,"priority":1,"action":{"type":"redirect","redirect":{"url":"https://sso.crunchyroll.com/login"}},"condition":{"resourceTypes":["main_frame"],"requestDomains":["sso.crunchyroll.com"]}},
-{"id":2,"priority":1,"action":{"type":"redirect","redirect":{"url":"https://sso.crunchyroll.com/register"}},"condition":{"resourceTypes":["main_frame"],"requestDomains":["sso.crunchyroll.com"]}},
+{"id":2,"priority":1,"action":{"type":"redirect","redirect":{"url":"https://sso.crunchyroll.com/register"}},"condition":{"resourceTypes":["main_frame"],"requestDomains":["sso.crunchyroll.com"]}}
 ]
