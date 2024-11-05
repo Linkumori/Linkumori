@@ -73,11 +73,6 @@
         "path": "rules/adguard-modifed/rules7.json"
       },
       {
-        "id": "ruleset_8",
-        "enabled": true,
-        "path": "rules/original/rules8.json"
-      },
-      {
         "id": "ruleset_9",
         "enabled": true,
         "path": "rules/original/rules9.json"
