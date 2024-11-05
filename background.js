@@ -208,7 +208,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 /// main fuction start here//
 /// here you can see it use dnr to enable and disable it//
 async function updateRuleSet(enabled) {
-  const allRulesets = ['ruleset_1', 'ruleset_2', 'ruleset_3', 'ruleset_4', 'ruleset_5', 'ruleset_6', 'ruleset_7','ruleset_8','ruleset_9'];
+  const allRulesets = ['ruleset_1', 'ruleset_2', 'ruleset_3', 'ruleset_4', 'ruleset_5', 'ruleset_6', 'ruleset_7','ruleset_9'];
 
   // Update static rulesets
   await chrome.declarativeNetRequest.updateEnabledRulesets({
