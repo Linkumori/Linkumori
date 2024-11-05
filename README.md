@@ -1,6 +1,6 @@
 # Linkumori (URLs Purifier)
 
-[![Linkumori crx packaging](https://github.com/subham8907/Linkumori/actions/workflows/main.yml/badge.svg)](https://github.com/subham8907/Linkumori/actions/workflows/main.yml)
+[![Builds](https://github.com/subham8907/Linkumori/actions/workflows/main.yml/badge.svg)](https://github.com/subham8907/Linkumori/actions/workflows/main.yml)
 
 ![Linkumori](https://github.com/subham8907/Linkumori/blob/main/icons/icon48.png)
 
