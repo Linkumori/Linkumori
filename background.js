@@ -101,6 +101,7 @@ chrome.runtime.onStartup.addListener(async () => {
 async function initialize() {
   await firstInstalled();
   await start();
+  await isDomainWhitelisted(domain);
   await badge();
 }
 
