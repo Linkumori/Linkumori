@@ -145,6 +145,7 @@ async function firstInstalled() {
 /// fuctions for update and first installation
 
 chrome.runtime.onInstalled.addListener(async () => {
+
   const isFirstInstall = await firstInstalled(); 
   if (isFirstInstall) {
      setDefaultSettings();
@@ -208,7 +209,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 /// main fuction start here//
 /// here you can see it use dnr to enable and disable it//
 async function updateRuleSet(enabled) {
-  const allRulesets = ['ruleset_1', 'ruleset_2', 'ruleset_3', 'ruleset_4', 'ruleset_5', 'ruleset_6', 'ruleset_7','ruleset_9'];
+  const allRulesets = ['ruleset_1', 'ruleset_2', 'ruleset_3', 'ruleset_4', 'ruleset_5', 'ruleset_6', 'ruleset_7', 'ruleset_8','ruleset_9'];
 
   // Update static rulesets
   await chrome.declarativeNetRequest.updateEnabledRulesets({
@@ -350,49 +351,93 @@ async function handleTabUpdate(tabId, changeInfo, tab) {
 
 /// all the setting fuction works here///
 
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // Helper function to update settings and UI
+  const updateSettingsAndUI = async (enabled) => {
+    await updateRuleSet(enabled);
+    await updateDynamicRules(enabled);
+    badge(enabled);
+    
+    // Get all tabs and update rules
+    const tabs = await chrome.tabs.query({});
+    for (const tab of tabs) {
+      if (tab.url) {
+        await handleUrlChange(tab.url);
+      }
+    }
+  };
+
+  // Handle different message types
   if (message === 'get-settings') {
     readPurifyUrlsSettings((settings) => {
       if (!Object.hasOwn(settings, SETTINGS_KEY)) {
         console.log(CANT_FIND_SETTINGS_MSG);
         setDefaultSettings();
         sendResponse(defaultSettings);
-        updateRuleSet(defaultSettings.status);
-        updateDynamicRules(defaultSettings.status);
-        badge(defaultSettings.status);
+        updateSettingsAndUI(defaultSettings.status);
       } else {
         sendResponse(settings);
-        updateRuleSet(settings[SETTINGS_KEY].status);
-        updateDynamicRules(settings[SETTINGS_KEY].status);
-        badge(settings[SETTINGS_KEY].status);
+        updateSettingsAndUI(settings[SETTINGS_KEY].status);
       }
     });
-    return true; // Indicates that the response is sent asynchronously
-  } else if (message.action === 'updateRuleSet') {
-    updateRuleSet(message.enabled);
-    updateDynamicRules(message.enabled);
-    badge(message.enabled);
-    chrome.storage.local.set({ [SETTINGS_KEY]: { status: message.enabled } });
-    sendResponse({ success: true });
-  } else if (message.action === "cleanUrl") {
-    const cleanedUrl = cleanUrl(message.url);
-    sendResponse({ cleanedUrl: cleanedUrl });
-  } else if (message.action === "toggleExtension") {
-    chrome.storage.local.get(SETTINGS_KEY, (settings) => {
-      const newStatus = !settings[SETTINGS_KEY].status;
-      chrome.storage.local.set({ [SETTINGS_KEY]: { status: newStatus } }, () => {
-        updateRuleSet(newStatus);
-        updateDynamicRules(newStatus);
-        badge(newStatus);
-        sendResponse({ status: newStatus ? "activated" : "deactivated" });
-      });
-    });
+    return true; // Indicates async response
   } 
-  return true; // Indicates that the response will be sent asynchronously
+  
+  else if (message.action === 'updateRuleSet') {
+    (async () => {
+      try {
+        const settings = await chrome.storage.local.get(SETTINGS_KEY);
+        const newSettings = settings[SETTINGS_KEY] 
+          ? {
+              ...settings[SETTINGS_KEY],
+              status: message.enabled
+            }
+          : { status: message.enabled };
+        
+        await chrome.storage.local.set({ [SETTINGS_KEY]: newSettings });
+        await updateSettingsAndUI(message.enabled);
+        sendResponse({ success: true });
+      } catch (error) {
+        console.error('Error updating rule set:', error);
+        sendResponse({ success: false, error: error.message });
+      }
+    })();
+    return true;
+  } 
+  
+  else if (message.action === "cleanUrl") {
+    const cleanedUrl = cleanUrl(message.url);
+    sendResponse({ cleanedUrl });
+    return false; // Synchronous response
+  } 
+  
+  else if (message.action === "toggleExtension") {
+    chrome.storage.local.get(SETTINGS_KEY, async (settings) => {
+      try {
+        const currentSettings = settings[SETTINGS_KEY] || { status: false };
+        const newStatus = !currentSettings.status;
+        
+        await chrome.storage.local.set({ 
+          [SETTINGS_KEY]: { ...currentSettings, status: newStatus } 
+        });
+        
+        await updateSettingsAndUI(newStatus);
+        sendResponse({ 
+          status: newStatus ? "activated" : "deactivated" 
+        });
+      } catch (error) {
+        console.error('Error toggling extension:', error);
+        sendResponse({ 
+          error: error.message 
+        });
+      }
+    });
+    return true;
+  }
+  
+  return false; // Default response for unhandled messages
 });
-
-
-
 
 
 
@@ -416,7 +461,79 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 
 // ===== Linkumori Engine Ends =====//
 
+function extractDomain(url) {
+  try {
+    const urlObj = new URL(url);
+    return urlObj.hostname.toLowerCase();
+  } catch (e) {
+    console.error('Invalid URL:', url);
+    return null;
+  }
+}
 
 
+async function isDomainWhitelisted(domain) {
+  const { whitelist } = await chrome.storage.local.get('whitelist');
+  return whitelist.includes(domain);
+}
+
+// Update rules state
+
+
+// Handle each URL change
+async function handleUrlChange(url) {
+  const settings = await chrome.storage.local.get(SETTINGS_KEY);
+  if (!settings[SETTINGS_KEY] || !settings[SETTINGS_KEY].status) {
+    await updateRuleSet(false);
+    await updateDynamicRules(false);
+    return;
+  }
+
+  const domain = extractDomain(url);
+  if (!domain) return;
+
+  const isWhitelisted = await isDomainWhitelisted(domain);
+  await updateRuleSet(!isWhitelisted);
+  await updateDynamicRules(!isWhitelisted);
+
+}
+
+// Handle webNavigation events
+chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
+  if (details.frameId === 0 && details.url) {
+    await handleUrlChange(details.url);
+  }
+});
+
+
+chrome.webNavigation.onCommitted.addListener(async (details) => {
+  if (details.frameId === 0 && details.url) {
+    await handleUrlChange(details.url);
+  }
+});
+
+chrome.webNavigation.onHistoryStateUpdated.addListener(async (details) => {
+  if (details.frameId === 0 && details.url) {
+    await handleUrlChange(details.url, details.tabId);
+  }
+});
+
+
+
+// Listen for messages from panelMenu.js
+
+
+// Listen for changes in whitelist or settings
+chrome.storage.onChanged.addListener(async (changes) => {
+  if (changes.whitelist || changes.enabled) {
+    // Get all tabs across all windows
+    const tabs = await chrome.tabs.query({});
+    for (const tab of tabs) {
+      if (tab.url) {
+        await handleUrlChange(tab.url);
+      }
+    }
+  }
+});
 
 

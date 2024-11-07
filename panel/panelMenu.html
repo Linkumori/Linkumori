@@ -1,33 +1,3 @@
-<!--/*
-Linkumori(URLs Purifier)
-Copyright (C) 2024 Subham Mahesh
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*
-* Based on:
-*   ERASER
-*   <https://github.com/Psychosynthesis/Eraser/blob/main/src/chrome/panel/panelMenu.html>
- <https://github.com/Psychosynthesis/Eraser/blob/main/src/chrome/panel/panelMenu.css>
-*   Copyright (c) 2022 Nick
-MIT License:
-*   You should have received a copy of the MIT License
-*  If not <https://github.com/subham8907/Linkumori/blob/main/LICENSE-MAIN>
-
-*/-->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,8 +12,8 @@ MIT License:
             font-style: normal;
         }
         .centered {
-    text-align: center;
-}
+            text-align: center;
+        }
 
         body, html {
             margin: 0;
@@ -86,6 +56,19 @@ MIT License:
             border-radius: 8px;
             padding: 10px;
             margin-top: 5px;
+        }
+
+        #whitelistContent {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 5px;
+            overflow-y: auto;
+            max-height: calc(100% - 80px);
+            color: #e0e0e0;
         }
 
         #licenseContent {
@@ -189,11 +172,87 @@ MIT License:
             background-color: #3a5278;
         }
 
+        /* Whitelist specific styles matching the theme */
+        .domain-input-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        #domainInput {
+            flex: 1;
+            padding: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            color: #ffffff;
+            font-family: "Liberation Serif";
+        }
+
+        #domainInput::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        #addDomain {
+            background-color: #4299e1;
+            border: none;
+            padding: 8px 16px;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: "Liberation Serif";
+        }
+
+        #addDomain:hover {
+            background-color: #3182ce;
+        }
+
+        .whitelist-container {
+            flex: 1;
+            overflow-y: auto;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .domain-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .domain-item:last-child {
+            border-bottom: none;
+        }
+
+        .domain-item button {
+            background-color: #e53e3e;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: "Liberation Serif";
+        }
+
+        .domain-item button:hover {
+            background-color: #c53030;
+        }
+
+        .empty-message {
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+            padding: 16px;
+        }
+
         #licenseContent h2 {
             color: #4299e1;
             margin-bottom: 10px;
             font-size: 16px;
         }
+
         #licenseContent h26 {
             color: #f5f5f5;
             margin-bottom: 10px;
@@ -222,6 +281,7 @@ MIT License:
         
         <div class="tab-container">
             <button id="mainTab" class="tab-button active">Main</button>
+            <button id="whitelistTab" class="tab-button">Whitelist</button>
             <button id="licenseTab" class="tab-button">License</button>
         </div>
 
@@ -234,6 +294,7 @@ MIT License:
                     <polygon points="75,20 78,28 86,31 78,34 75,42 72,34 64,31 72,28" fill="white"></polygon>
                 </svg>
             </div>
+            
             <div class="toggle-container">
                 <div id="toggleButton" class="toggle-button">
                     <span class="toggle-label">Off</span>
@@ -241,6 +302,16 @@ MIT License:
                         <div class="toggle-slider"></div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div id="whitelistContent" class="content" style="display: none;">
+            <div class="domain-input-container">
+                <input type="text" id="domainInput" placeholder="Enter domain">
+                <button id="addDomain">Add</button>
+            </div>
+            <div id="whitelistContainer" class="whitelist-container">
+                <!-- Whitelist items will be dynamically inserted here -->
             </div>
         </div>
 
@@ -2439,11 +2510,9 @@ Public License instead of this License.  But first, please read
 
 </body></html>
 
+        </div>
+    </div>
 
-
-</div>
-</div>
-
-<script type="module" src="panelMenu.js"></script>
+    <script type="module" src="panelMenu.js"></script>
 </body>
 </html>
