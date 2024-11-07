@@ -1,37 +1,3 @@
-name: Linkumori crx packaging and Release
-
-permissions:
-  contents: write  
-
-on:
-  release:
-    types: [created]
-
-jobs:
-  pack-and-release:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Needed for changelog generation
-
-      - name: Generate changelog
-        id: changelog
-        uses: metcalfc/changelog-generator@v4.1.0
-        with:
-          myToken: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Prepare clean directory
-        run: |
-          mkdir clean_ext
-          rsync -av --exclude='*.pem' --exclude='.git*' --exclude='.github' . clean_ext/
-
-      - name: Install Chrome
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y chromium-browser
 name: Linkumori crx packaging 
 # Add permissions block
 permissions:
@@ -72,29 +38,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Cleanup
-      - name: Cleanup
-        if: always()
-        run: rm -rf clean_ext
-      - name: Pack Extension
-        run: |
-          chromium-browser --pack-extension="$(pwd)/clean_ext"
-          mv clean_ext.crx "${{ github.event.repository.name }}.crx"
-          
-      - name: Update Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: ${{ github.event.repository.name }}.crx
-          body: |
-            ## What's Changed
-            ${{ steps.changelog.outputs.changelog }}
-            
-            ## Installation
-            Download the .crx file and install in Chrome.
-          token: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Cleanup
         if: always()
         run: rm -rf clean_ext
