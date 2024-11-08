@@ -49,42 +49,57 @@ Once installed, Linkumori works automatically in the background:
 3. Browse normally - Linkumori will clean URLs as you navigate, without any noticeable interruption to your browsing.
 
 
+## Interface Guide
+
+### Main Tab
+![Main Tab Interface](https://github.com/subham8907/Linkumori/blob/main/docs/images/main.png)
+- Simple On/Off toggle switch
+- Current extension status display
+- Clean, minimalist design
+
+### Whitelist Management
+![Whitelist Interface](https://github.com/subham8907/Linkumori/blob/main/docs/images/whitelist-active.png)
+- Domain input field with Add button
+- List of whitelisted domains
+- Quick remove options for each domain
+
+### License Information
+![License Tab](https://github.com/subham8907/Linkumori/blob/main/docs/images/license.png)
+- Complete license details
+- User rights and obligations
+- Scrollable interface for full license text
+
 ## Whitelisting System
 
 Linkumori includes a domain whitelisting system that allows you to exempt specific domains from URL cleaning. However, the domain matching requires careful attention to the domain format.
 
-### Important Notes About Domain Matching:
+### Domain Matching Rules:
+1. For URLs with `www` prefix (e.g. `www.example.com`):
+   - Can whitelist as `www.example.com` OR `example.com` 
+   - Both formats will work
+2. For URLs without `www` prefix (e.g. `example.com`):
+   - Must whitelist exactly as `example.com`
+   - Using `www.example.com` will NOT work
+3. For subdomains (e.g. `sub.example.com`):
+   - Must whitelist exactly as `sub.example.com`
 
-1. **Domain Matching Rules**:
-  - For URLs with `www` prefix (e.g. `www.example.com`):
-    - You can whitelist either as `www.example.com` OR `example.com` 
-    - Both formats will work
-  - For URLs without `www` prefix (e.g. `example.com`):
-    - You must whitelist exactly as `example.com`
-    - Using `www.example.com` will NOT work
-  - For subdomains (e.g. `sub.example.com`):
-    - You must whitelist exactly as `sub.example.com`
-
-### Examples:
-
+### Usage Examples:
 ✅ Correct Usage:
-- If URL is `https://www.example.com`:
- - Can whitelist as `www.example.com` OR
- - Can whitelist as `example.com` 
-- If URL is `https://example.com`:
- - Must whitelist as `example.com`
-- If URL is `https://sub.example.com`:
- - Must whitelist as `sub.example.com`
+- For `https://www.example.com`:
+  - Can use `www.example.com` OR `example.com` 
+- For `https://example.com`:
+  - Must use `example.com`
+- For `https://sub.example.com`:
+  - Must use `sub.example.com`
 
 ❌ Incorrect Usage:
-- If URL is `https://example.com`:
- - Whitelisting as `www.example.com` won't work
+- For `https://example.com`:
+  - Using `www.example.com` won't work
 
 ### Best Practices:
-
 1. Check the actual URL in your browser's address bar
-2. For sites with `www`, you can use either format (`www.example.com` or `example.com`)
-3. For sites without `www`, you must match exactly
+2. For sites with `www`, you can use either format
+3. For sites without `www`, must match exactly
 4. For subdomains, always match exactly
 5. Test the whitelist entry by visiting different pages on the domain
 ## Configuration
