@@ -468,7 +468,7 @@ async function disableDNRRules() {
 }
 
 // Main function to update DNR rules based on enabled state
-async function updateDNRRules() {
+async function updateDNRRules(enable) {
   const { enabled = true } = await chrome.storage.local.get('enabled');
   if (enabled) {
     await enableDNRRules();
