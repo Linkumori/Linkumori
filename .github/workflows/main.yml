@@ -54,8 +54,25 @@ jobs:
           body: |
             ${{ github.event.inputs.release_notes }}
             
-            ## Installation
-            Download the .crx file and install in Chrome.
+            ## Installation Instructions
+
+            ### Method 1: Load Unpacked (Chrome, MS Edge, or Brave - Desktop)
+            1. Clone this repository or download the source code to a permanent location (do not delete the folder after installation)
+            2. Open your Chromium-based browser (Chrome, Edge, or Brave)
+            3. Navigate to the extensions page:
+               - Chrome: chrome://extensions
+               - Edge: edge://extensions
+               - Brave: brave://extensions
+            4. Enable "Developer mode" in the top right corner
+            5. Click "Load unpacked" and select the directory containing the extension files
+
+            ### Method 2: CRX File (Opera, Vivaldi, Yandex)
+            1. Download the extension (.crx file) from this release (right-click > save link as)
+            2. In your browser navigate to the extensions page
+            3. Enable "Developer mode" in the top right corner
+            4. Drag the downloaded .crx file anywhere on the extensions page to import it
+
+            Note: Keep the source directory if using Method 1, as the extension needs these files to function.
           files: ${{ github.event.repository.name }}.crx
           draft: false
           prerelease: false
@@ -67,8 +84,25 @@ jobs:
         with:
           files: ${{ github.event.repository.name }}.crx
           body: |
-            ## Installation
-            Download the .crx file and install in Chrome.
+            ## Installation Instructions
+
+            ### Method 1: Load Unpacked (Chrome, MS Edge, or Brave - Desktop)
+            1. Clone this repository or download the source code to a permanent location (do not delete the folder after installation)
+            2. Open your Chromium-based browser (Chrome, Edge, or Brave)
+            3. Navigate to the extensions page:
+               - Chrome: chrome://extensions
+               - Edge: edge://extensions
+               - Brave: brave://extensions
+            4. Enable "Developer mode" in the top right corner
+            5. Click "Load unpacked" and select the directory containing the extension files
+
+            ### Method 2: CRX File (Opera, Vivaldi, Yandex)
+            1. Download the extension (.crx file) from this release (right-click > save link as)
+            2. In your browser navigate to the extensions page
+            3. Enable "Developer mode" in the top right corner
+            4. Drag the downloaded .crx file anywhere on the extensions page to import it
+
+            Note: Keep the source directory if using Method 1, as the extension needs these files to function.
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cleanup
