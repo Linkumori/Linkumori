@@ -138,7 +138,7 @@ Files `rules/adguard-modifed/rules5.json`, `rules/adguard-modifed/rules6.json`, 
 - Original work: https://github.com/AdguardTeam/AdguardFilters/blob/master/TrackParamFilter/sections/specific.txt
 - Original work license: GNU General Public License v3
 - Derivative work: Also under GNU General Public License v3
-- Copyright (c) 2024 Subham Mahesh
+- Copyright for modified part only (c) 2024 Subham Mahesh
 
 For more information about modifications, please see `rules/adguard-modifed/notice.txt`.
 
