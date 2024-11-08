@@ -46,9 +46,6 @@ jobs:
         with:
           files: ${{ github.event.repository.name }}.crx
           body: |
-            ## What's Changed
-            ${{ steps.changelog.outputs.changelog }}
-            
             ## Installation
             Download the .crx file and install in Chrome.
           token: ${{ secrets.GITHUB_TOKEN }}
