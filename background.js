@@ -412,13 +412,15 @@ function createAllowRule(domain, ruleId) {
     id: ruleId,
     priority: 1,
     action: {
-      type: "allowAllRequests"
+      type: "allow"
     },
     condition: {
       requestDomains: [domain],
       resourceTypes: [
         "main_frame",
-        "sub_frame"
+        "sub_frame",
+        "ping",
+        "xmlhttprequest"
       ]
     }
   };
