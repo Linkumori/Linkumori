@@ -48,6 +48,45 @@ Once installed, Linkumori works automatically in the background:
 2. Click the icon to toggle the extension on or off.
 3. Browse normally - Linkumori will clean URLs as you navigate, without any noticeable interruption to your browsing.
 
+
+## Whitelisting System
+
+Linkumori includes a domain whitelisting system that allows you to exempt specific domains from URL cleaning. However, the domain matching requires careful attention to the domain format.
+
+### Important Notes About Domain Matching:
+
+1. **Domain Matching Rules**:
+  - For URLs with `www` prefix (e.g. `www.example.com`):
+    - You can whitelist either as `www.example.com` OR `example.com` 
+    - Both formats will work
+  - For URLs without `www` prefix (e.g. `example.com`):
+    - You must whitelist exactly as `example.com`
+    - Using `www.example.com` will NOT work
+  - For subdomains (e.g. `sub.example.com`):
+    - You must whitelist exactly as `sub.example.com`
+
+### Examples:
+
+✅ Correct Usage:
+- If URL is `https://www.example.com`:
+ - Can whitelist as `www.example.com` OR
+ - Can whitelist as `example.com` 
+- If URL is `https://example.com`:
+ - Must whitelist as `example.com`
+- If URL is `https://sub.example.com`:
+ - Must whitelist as `sub.example.com`
+
+❌ Incorrect Usage:
+- If URL is `https://example.com`:
+ - Whitelisting as `www.example.com` won't work
+
+### Best Practices:
+
+1. Check the actual URL in your browser's address bar
+2. For sites with `www`, you can use either format (`www.example.com` or `example.com`)
+3. For sites without `www`, you must match exactly
+4. For subdomains, always match exactly
+5. Test the whitelist entry by visiting different pages on the domain
 ## Configuration
 
 Linkumori uses configuration files to determine which parameters to remove from URLs:
