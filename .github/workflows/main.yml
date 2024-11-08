@@ -30,12 +30,14 @@ jobs:
 
       - name: Install Chrome
         run: |
+          wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
           sudo apt-get update
-          sudo apt-get install -y chromium-browser
+          sudo apt-get install -y google-chrome-stable
 
       - name: Pack Extension
         run: |
-          chromium-browser --pack-extension="$(pwd)/clean_ext"
+          google-chrome --pack-extension="$(pwd)/clean_ext"
           mv clean_ext.crx "${{ github.event.repository.name }}.crx"
           
       - name: Update Release
