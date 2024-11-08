@@ -6,6 +6,17 @@ permissions:
 on:
   release:
     types: [created]
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag Name (e.g., v1.0.0)'
+        required: true
+      release_title:
+        description: 'Release Title'
+        required: true
+      release_notes:
+        description: 'Release Notes'
+        required: true
 
 jobs:
   pack-and-release:
@@ -15,13 +26,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Needed for changelog generation
-
-      - name: Generate changelog
-        id: changelog
-        uses: metcalfc/changelog-generator@v4.1.0
-        with:
-          myToken: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Prepare clean directory
         run: |
@@ -40,17 +45,31 @@ jobs:
           google-chrome --pack-extension="$(pwd)/clean_ext"
           mv clean_ext.crx "${{ github.event.repository.name }}.crx"
           
-      - name: Update Release
+      - name: Create Release
+        if: github.event_name == 'workflow_dispatch'
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          tag_name: ${{ github.event.inputs.tag_name }}
+          name: ${{ github.event.inputs.release_title }}
+          body: |
+            ${{ github.event.inputs.release_notes }}
+            
+            ## Installation
+            Download the .crx file and install in Chrome.
+          files: ${{ github.event.repository.name }}.crx
+          draft: false
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update Existing Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v1
         with:
           files: ${{ github.event.repository.name }}.crx
           body: |
             ## Installation
             Download the .crx file and install in Chrome.
           token: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cleanup
         if: always()
