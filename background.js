@@ -162,7 +162,7 @@ chrome.runtime.onInstalled.addListener(async () => {
   
 
   updateRuleSet(settings.status);
-  updateDynamicRules(settings.status);
+  updateDNRRules(settings.status);
   badge(settings.status);
 
 
@@ -197,7 +197,7 @@ chrome.runtime.onInstalled.addListener(async () => {
     
   
     updateRuleSet(settings.status);
-    updateDynamicRules(settings.status);
+    updateDNRRules(settings.status);
     badge(settings.status);
     chrome.alarms.create('wakeUpAlarm', { periodInMinutes: 1/60 });
     return; 
@@ -209,7 +209,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 /// main fuction start here//
 /// here you can see it use dnr to enable and disable it//
 async function updateRuleSet(enabled) {
-  const allRulesets = ['ruleset_1', 'ruleset_2', 'ruleset_3', 'ruleset_4', 'ruleset_5', 'ruleset_6', 'ruleset_7', 'ruleset_8','ruleset_9'];
+  const allRulesets = ['ruleset_1', 'ruleset_2', 'ruleset_3', 'ruleset_4', 'ruleset_5', 'ruleset_6', 'ruleset_7', 'ruleset_8','ruleset_9','ruleset_10'];
 
   // Update static rulesets
   await chrome.declarativeNetRequest.updateEnabledRulesets({
@@ -219,32 +219,7 @@ async function updateRuleSet(enabled) {
   console.log('Static rules updated:', enabled);  
 }
 
-async function updateDynamicRules(enabled) {
-  if (enabled) {
-    await chrome.declarativeNetRequest.updateDynamicRules({
-      removeRuleIds: rules.map(rule => rule.id),
-      addRules: rules
-    });
-    console.log('dynamic rules updated:', enabled);
-  } else {
-    await chrome.declarativeNetRequest.updateDynamicRules({
-      removeRuleIds: rules.map(rule => rule.id)
-    });
-    console.log('dynamic rules updated:', enabled);
-  }
-}
 
-
-let rules = [];
-
-/// here it is fetching all dynamic dnr rules
-
-fetch(chrome.runtime.getURL('./dynamic-rules/rules.json'))
-  .then(response => response.json())
-  .then(data => {
-    rules = data;
-  })
-  .catch(error => console.error('Error loading rules:', error));
 
   /// load all the regex in the array for changing url without reload using history api 
   let config = [];
@@ -353,90 +328,44 @@ async function handleTabUpdate(tabId, changeInfo, tab) {
 
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  // Helper function to update settings and UI
-  const updateSettingsAndUI = async (enabled) => {
-    await updateRuleSet(enabled);
-    await updateDynamicRules(enabled);
-    badge(enabled);
-    
-    // Get all tabs and update rules
-    const tabs = await chrome.tabs.query({});
-    for (const tab of tabs) {
-      if (tab.url) {
-        await handleUrlChange(tab.url);
-      }
-    }
-  };
-
-  // Handle different message types
   if (message === 'get-settings') {
     readPurifyUrlsSettings((settings) => {
       if (!Object.hasOwn(settings, SETTINGS_KEY)) {
         console.log(CANT_FIND_SETTINGS_MSG);
         setDefaultSettings();
         sendResponse(defaultSettings);
-        updateSettingsAndUI(defaultSettings.status);
+        updateRuleSet(defaultSettings.status);
+        updateDNRRules(defaultSettings.status);
+        badge(defaultSettings.status);
       } else {
         sendResponse(settings);
-        updateSettingsAndUI(settings[SETTINGS_KEY].status);
+        updateRuleSet(settings[SETTINGS_KEY].status);
+        updateDNRRules(settings[SETTINGS_KEY].status);
+        badge(settings[SETTINGS_KEY].status);
       }
     });
-    return true; // Indicates async response
-  } 
-  
-  else if (message.action === 'updateRuleSet') {
-    (async () => {
-      try {
-        const settings = await chrome.storage.local.get(SETTINGS_KEY);
-        const newSettings = settings[SETTINGS_KEY] 
-          ? {
-              ...settings[SETTINGS_KEY],
-              status: message.enabled
-            }
-          : { status: message.enabled };
-        
-        await chrome.storage.local.set({ [SETTINGS_KEY]: newSettings });
-        await updateSettingsAndUI(message.enabled);
-        sendResponse({ success: true });
-      } catch (error) {
-        console.error('Error updating rule set:', error);
-        sendResponse({ success: false, error: error.message });
-      }
-    })();
-    return true;
-  } 
-  
-  else if (message.action === "cleanUrl") {
+    return true; // Indicates that the response is sent asynchronously
+  } else if (message.action === 'updateRuleSet') {
+    updateRuleSet(message.enabled);
+    updateDNRRules(message.enabled);
+    badge(message.enabled);
+    chrome.storage.local.set({ [SETTINGS_KEY]: { status: message.enabled } });
+    sendResponse({ success: true });
+  } else if (message.action === "cleanUrl") {
     const cleanedUrl = cleanUrl(message.url);
-    sendResponse({ cleanedUrl });
-    return false; // Synchronous response
-  } 
-  
-  else if (message.action === "toggleExtension") {
-    chrome.storage.local.get(SETTINGS_KEY, async (settings) => {
-      try {
-        const currentSettings = settings[SETTINGS_KEY] || { status: false };
-        const newStatus = !currentSettings.status;
-        
-        await chrome.storage.local.set({ 
-          [SETTINGS_KEY]: { ...currentSettings, status: newStatus } 
-        });
-        
-        await updateSettingsAndUI(newStatus);
-        sendResponse({ 
-          status: newStatus ? "activated" : "deactivated" 
-        });
-      } catch (error) {
-        console.error('Error toggling extension:', error);
-        sendResponse({ 
-          error: error.message 
-        });
-      }
+    sendResponse({ cleanedUrl: cleanedUrl });
+  } else if (message.action === "toggleExtension") {
+    chrome.storage.local.get(SETTINGS_KEY, (settings) => {
+      const newStatus = !settings[SETTINGS_KEY].status;
+      chrome.storage.local.set({ [SETTINGS_KEY]: { status: newStatus } }, () => {
+        updateRuleSet(newStatus);
+        updateDNRRules(newStatus);
+        badge(newStatus);
+        sendResponse({ status: newStatus ? "activated" : "deactivated" });
+      });
     });
-    return true;
-  }
-  
-  return false; // Default response for unhandled messages
+  } 
+  return true; // Indicates that the response will be sent asynchronously
 });
 
 
@@ -459,81 +388,110 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 
 
 
-// ===== Linkumori Engine Ends =====//
 
-function extractDomain(url) {
-  try {
-    const urlObj = new URL(url);
-    return urlObj.hostname.toLowerCase();
-  } catch (e) {
-    console.error('Invalid URL:', url);
-    return null;
+
+
+// const RULE_ID_START = 1; // Unused constant, consider removing if not needed
+const RULE_ID_START = 1;
+
+// Initialize default state
+chrome.runtime.onInstalled.addListener(async () => {
+  const { enabled, whitelist } = await chrome.storage.local.get(['enabled', 'whitelist']);
+  if (enabled === undefined) {
+    await chrome.storage.local.set({ enabled: true });
   }
-}
-
-
-async function isDomainWhitelisted(domain) {
-  const { whitelist } = await chrome.storage.local.get('whitelist');
-  return whitelist.includes(domain);
-}
-
-// Update rules state
-
-
-// Handle each URL change
-async function handleUrlChange(url) {
-  const settings = await chrome.storage.local.get(SETTINGS_KEY);
-  if (!settings[SETTINGS_KEY] || !settings[SETTINGS_KEY].status) {
-    await updateRuleSet(false);
-    await updateDynamicRules(false);
-    return;
+  if (!whitelist) {
+    await chrome.storage.local.set({ whitelist: [] });
   }
-
-  const domain = extractDomain(url);
-  if (!domain) return;
-
-  const isWhitelisted = await isDomainWhitelisted(domain);
-  await updateRuleSet(!isWhitelisted);
-  await updateDynamicRules(!isWhitelisted);
-
-}
-
-// Handle webNavigation events
-chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
-  if (details.frameId === 0 && details.url) {
-    await handleUrlChange(details.url);
-  }
+  await updateDNRRules();
 });
 
-
-chrome.webNavigation.onCommitted.addListener(async (details) => {
-  if (details.frameId === 0 && details.url) {
-    await handleUrlChange(details.url);
-  }
-});
-
-chrome.webNavigation.onHistoryStateUpdated.addListener(async (details) => {
-  if (details.frameId === 0 && details.url) {
-    await handleUrlChange(details.url, details.tabId);
-  }
-});
-
-
-
-// Listen for messages from panelMenu.js
-
-
-// Listen for changes in whitelist or settings
-chrome.storage.onChanged.addListener(async (changes) => {
-  if (changes.whitelist || changes.enabled) {
-    // Get all tabs across all windows
-    const tabs = await chrome.tabs.query({});
-    for (const tab of tabs) {
-      if (tab.url) {
-        await handleUrlChange(tab.url);
-      }
+// Function to create a rule for a domain with exact format
+function createAllowRule(domain, ruleId) {
+  return {
+    id: ruleId,
+    priority: 1,
+    action: {
+      type: "allowAllRequests"
+    },
+    condition: {
+      requestDomains: [domain],
+      resourceTypes: [
+        "main_frame",
+        "sub_frame"
+      ]
     }
+  };
+}
+
+// Function to enable DNR rules
+async function enableDNRRules() {
+  try {
+    const { whitelist = [] } = await chrome.storage.local.get('whitelist');
+    
+    // Get existing rules to remove them
+    const existingRules = await chrome.declarativeNetRequest.getDynamicRules();
+    const existingRuleIds = existingRules.map(rule => rule.id);
+
+    // Create rules array with exact format
+    const newRules = whitelist.map((domain, index) => 
+      createAllowRule(domain, index + RULE_ID_START)
+    );
+
+    // Update rules
+    await chrome.declarativeNetRequest.updateDynamicRules({
+      removeRuleIds: existingRuleIds,
+      addRules: newRules
+    });
+
+  } catch (error) {
+    console.error('Error enabling DNR rules:', error);
+  }
+}
+
+// Function to disable all DNR rules
+async function disableDNRRules() {
+  try {
+    const existingRules = await chrome.declarativeNetRequest.getDynamicRules();
+    const existingRuleIds = existingRules.map(rule => rule.id);
+    
+    await chrome.declarativeNetRequest.updateDynamicRules({
+      removeRuleIds: existingRuleIds,
+      addRules: []
+    });
+
+  } catch (error) {
+    console.error('Error disabling DNR rules:', error);
+  }
+}
+
+// Main function to update DNR rules based on enabled state
+async function updateDNRRules() {
+  const { enabled = true } = await chrome.storage.local.get('enabled');
+  if (enabled) {
+    await enableDNRRules();
+  } else {
+    await disableDNRRules();
+  }
+}
+
+// Listen for storage changes
+chrome.storage.local.onChanged.addListener((changes) => {
+  if (changes.enabled) {
+    const isEnabled = changes.enabled.newValue;
+    if (isEnabled) {
+      enableDNRRules();
+    } else {
+      disableDNRRules();
+    }
+  } else if (changes.whitelist && changes.enabled?.newValue !== false) {
+    enableDNRRules();
   }
 });
 
+// Handle browser startup
+chrome.runtime.onStartup.addListener(async () => {
+  await updateDNRRules();
+});
 
+// ===== Linkumori Engine Ends =====//

@@ -52,8 +52,7 @@ Once installed, Linkumori works automatically in the background:
 
 Linkumori uses configuration files to determine which parameters to remove from URLs:
 
-- `rules/et_1` to `rules/et_8`: Static DNR rules
-- `default.json`: Dynamic DNR rules
+- `rules/et_1` to `rules/et_10`: Static DNR rules
 - `Artifact.json`: Additional URL cleaning patterns for the History API method
 
 Advanced users can modify these files to customize the extension's behavior.
@@ -72,9 +71,8 @@ The following files are completely under the GNU General Public License v3:
 
 - `/content.js`
 - `/Linkumori-Artifact/Artifact.json`
-- `/dynamic-rules/rules.json`
 - `/rules/original/rules1.json` to `/rules/original/rules3.json`
-- `/rules/original/rules8.json` to `/rules/original/rules9.json`
+- `/rules/original/rules8.json` to `/rules/original/rules10.json`
 - `icons/icon48.png`, `icons/icon96.png`, `icons/icon128.png`
 
 Copyright (c) 2024 Subham Mahesh

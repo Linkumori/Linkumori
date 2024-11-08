@@ -723,12 +723,13 @@ The following code in the files are completely under the GNU General Public Lice
 "/rules/original/rules3.json"
 "/rules/original/rules9.json"
 "/rules/original/rules8.json"
+"/rules/original/rules10.json"
+
 "/content.js",
 "icons/icon48.png",
 "icons/icon96.png",
 "icons/icon128.png"
 "/Linkumori-Artifact/Artifact.json"
-"/dynamic-rules/rules.json"
 Copyright: (c) 2024 Subham Mahesh
 
 Full license texts for GPLv3 license here:

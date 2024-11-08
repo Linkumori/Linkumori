@@ -40,49 +40,54 @@
     
       {
         "id": "ruleset_1",
-        "enabled": true,
+        "enabled": false,
         "path": "/rules/original/rules1.json"
       },
       {
         "id": "ruleset_2",
-        "enabled": true,
+        "enabled": false,
         "path": "rules/original/rules2.json"
       },
       {
         "id": "ruleset_3",
-        "enabled": true,
+        "enabled": false,
         "path": "rules/original/rules3.json"
       },
       {
         "id": "ruleset_4",
-        "enabled": true,
+        "enabled": false,
         "path": "rules/adguard-modifed/rules4.json"
       },
       {
         "id": "ruleset_5",
-        "enabled": true,
+        "enabled": false,
         "path": "rules/adguard-modifed/rules5.json"
       },
       {
         "id": "ruleset_6",
-        "enabled": true,
+        "enabled": false,
         "path": "rules/adguard-modifed/rules6.json"
       },
       {
         "id": "ruleset_7",
-        "enabled": true,
+        "enabled": false,
         "path": "rules/adguard-modifed/rules7.json"
       },
       {
         "id": "ruleset_8",
-        "enabled": true,
+        "enabled": false,
         "path": "/rules/original/rules8.json"
       },
 
       {
         "id": "ruleset_9",
-        "enabled": true,
+        "enabled": false,
         "path": "/rules/original/rules9.json"
+      },
+      {
+        "id": "ruleset_10",
+        "enabled": false,
+        "path": "/rules/original/rules10.json"
       }
     ]
   }
