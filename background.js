@@ -396,14 +396,11 @@ const RULE_ID_START = 1;
 
 // Initialize default state
 chrome.runtime.onInstalled.addListener(async () => {
-  const { enabled, whitelist } = await chrome.storage.local.get(['enabled', 'whitelist']);
-  if (enabled === undefined) {
-    await chrome.storage.local.set({ enabled: true });
-  }
+  const {whitelist } = await chrome.storage.local.get(['whitelist']);
   if (!whitelist) {
     await chrome.storage.local.set({ whitelist: [] });
   }
-  await updateDNRRules();
+  await updateDNRRule();
 });
 
 // Function to create a rule for a domain with exact format
@@ -426,74 +423,53 @@ function createAllowRule(domain, ruleId) {
   };
 }
 
-// Function to enable DNR rules
-async function enableDNRRules() {
-  try {
-    const { whitelist = [] } = await chrome.storage.local.get('whitelist');
-    
-    // Get existing rules to remove them
-    const existingRules = await chrome.declarativeNetRequest.getDynamicRules();
-    const existingRuleIds = existingRules.map(rule => rule.id);
-
-    // Create rules array with exact format
-    const newRules = whitelist.map((domain, index) => 
-      createAllowRule(domain, index + RULE_ID_START)
-    );
-
-    // Update rules
-    await chrome.declarativeNetRequest.updateDynamicRules({
-      removeRuleIds: existingRuleIds,
-      addRules: newRules
-    });
-
-  } catch (error) {
-    console.error('Error enabling DNR rules:', error);
-  }
-}
-
-// Function to disable all DNR rules
-async function disableDNRRules() {
+// Function to update DNR rules based on enabled state
+async function updateDNRRules(enabled) {
   try {
     const existingRules = await chrome.declarativeNetRequest.getDynamicRules();
     const existingRuleIds = existingRules.map(rule => rule.id);
-    
-    await chrome.declarativeNetRequest.updateDynamicRules({
-      removeRuleIds: existingRuleIds,
-      addRules: []
-    });
 
+    if (enabled) {
+      const { whitelist = [] } = await chrome.storage.local.get('whitelist');
+      const newRules = whitelist.map((domain, index) => 
+        createAllowRule(domain, index + RULE_ID_START)
+      );
+
+      await chrome.declarativeNetRequest.updateDynamicRules({
+        removeRuleIds: existingRuleIds,
+        addRules: newRules
+      });
+      console.log('dynamic rules updated:', enabled);
+    } else {
+      await chrome.declarativeNetRequest.updateDynamicRules({
+        removeRuleIds: existingRuleIds,
+        addRules: []
+      });
+      console.log('dynamic rules updated:', enabled);
+    }
   } catch (error) {
-    console.error('Error disabling DNR rules:', error);
-  }
-}
-
-// Main function to update DNR rules based on enabled state
-async function updateDNRRules() {
-  const { enabled = true } = await chrome.storage.local.get('enabled');
-  if (enabled) {
-    await enableDNRRules();
-  } else {
-    await disableDNRRules();
+    console.error('Error updating DNR rules:', error);
   }
 }
 
 // Listen for storage changes
-chrome.storage.local.onChanged.addListener((changes) => {
-  if (changes.enabled) {
-    const isEnabled = changes.enabled.newValue;
-    if (isEnabled) {
-      enableDNRRules();
-    } else {
-      disableDNRRules();
+chrome.storage.onChanged.addListener(async (changes) => {
+  if (changes.whitelist) {
+    updateDNRRule();
+      }
     }
-  } else if (changes.whitelist && changes.enabled?.newValue !== false) {
-    enableDNRRules();
-  }
-});
+  )
 
-// Handle browser startup
-chrome.runtime.onStartup.addListener(async () => {
-  await updateDNRRules();
-});
+// Listen for storage changes
+async function updateDNRRule() {
+  const settings = await new Promise((resolve) => {
+    chrome.storage.local.get(SETTINGS_KEY, (result) => {
+      resolve(result[SETTINGS_KEY]);
+    });
+  });
 
+  console.log('Settings retrieved:', settings);
+  
+  updateDNRRules(settings.status);
+}
 // ===== Linkumori Engine Ends =====//
