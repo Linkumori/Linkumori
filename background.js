@@ -409,7 +409,7 @@ function createAllowRule(domain, ruleId) {
     id: ruleId,
     priority: 1,
     action: {
-      type: "block"
+      type: "allow"
     },
     condition: {
       requestDomains: [domain],
