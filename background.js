@@ -400,7 +400,6 @@ chrome.runtime.onInstalled.addListener(async () => {
   if (!whitelist) {
     await chrome.storage.local.set({ whitelist: [] });
   }
-  await updateDNRRule();
 });
 
 // Function to create a rule for a domain with exact format
