@@ -269,7 +269,6 @@ function cleanUrl(url) {
 }
 
 loadConfigAndCleanUrl();
-/// end this here
 
 
 // Inject content script
@@ -296,15 +295,23 @@ async function injectContentScript(tabId) {
       return;
     }
 
+    const { whitelist } = await chrome.storage.local.get('whitelist');
+
+    const isWhitelisted = whitelist.some(domain => url.includes(domain));
+    if (isWhitelisted) {
+      return; 
+    }
+
     await chrome.scripting.executeScript({
       target: { tabId: tabId },
       files: ['content.js']
     });
-  } catch (none) {
+  } catch (error) {
+    console.error('Error in injectContentScript:', error);
   }
 }
 
-// Handle tab updates
+
 chrome.tabs.onUpdated.addListener(handleTabUpdate);
 
 async function handleTabUpdate(tabId, changeInfo, tab) {
