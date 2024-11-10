@@ -1,4 +1,151 @@
-name: Linkumori CRX Packaging and Release
+name: Linkumori CRX name: Linkumori CRX Packaging and Release
+
+permissions:
+  contents: write  
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag Name (e.g., v1.0.0)'
+        required: true
+      release_title:
+        description: 'Release Title'
+        required: true
+      release_notes:
+        description: 'Release Notes'
+        required: true
+
+jobs:
+  pack-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create signing key
+        run: |
+          # Decode base64 key and ensure proper line endings
+          echo "${{ secrets.EXTENSION_KEY }}" | base64 -d > key.pem
+          # Ensure proper permissions
+          chmod 600 key.pem
+          # Debug key format (optional - remove in production)
+          echo "Key file contents (first line):"
+          head -n 1 key.pem
+          echo "Key file permissions:"
+          ls -l key.pem
+        
+      - name: Prepare clean directory
+        run: |
+          mkdir clean_ext
+          rsync -av \
+            --exclude='.git*' \
+            --exclude='.github' \
+            --exclude='*.pem' \
+            --exclude='key.pem' \
+            . clean_ext/
+          # Debug directory contents (optional - remove in production)
+          echo "Clean directory contents:"
+          ls -la clean_ext/
+
+      - name: Install Chrome
+        run: |
+          wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+          # Print Chrome version for debugging
+          google-chrome --version
+
+      - name: Pack Extension
+        run: |
+          # Verify paths before packing
+          echo "Current directory: $(pwd)"
+          echo "Extension directory exists: $(test -d "$(pwd)/clean_ext" && echo "Yes" || echo "No")"
+          echo "Key file exists: $(test -f "$(pwd)/key.pem" && echo "Yes" || echo "No")"
+          
+          # Pack the extension
+          google-chrome --pack-extension="$(pwd)/clean_ext" --pack-extension-key="$(pwd)/key.pem"
+          
+          # Check if CRX file was created
+          if [ -f "clean_ext.crx" ]; then
+            mv clean_ext.crx "${{ github.event.repository.name }}.crx"
+            echo "Extension packed successfully"
+          else
+            echo "Failed to create CRX file"
+            exit 1
+          fi
+          
+      - name: Create Release
+        if: github.event_name == 'workflow_dispatch'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.tag_name }}
+          name: ${{ github.event.inputs.release_title }}
+          body: |
+            ${{ github.event.inputs.release_notes }}
+            
+            ## Installation Instructions
+            
+            ### Method 1: Load Unpacked (Chrome, MS Edge, or Brave - Desktop)
+            1. Clone this repository or download the source code to a permanent location (do not delete the folder after installation)
+            2. Open your Chromium-based browser (Chrome, Edge, or Brave)
+            3. Navigate to the extensions page:
+               - Chrome: chrome://extensions
+               - Edge: edge://extensions
+               - Brave: brave://extensions
+            4. Enable "Developer mode" in the top right corner
+            5. Click "Load unpacked" and select the directory containing the extension files
+
+            ### Method 2: CRX File (Opera, Vivaldi, Yandex)
+            1. Download the extension (.crx file) from this release (right-click > save link as)
+            2. In your browser navigate to the extensions page
+            3. Enable "Developer mode" in the top right corner
+            4. Drag the downloaded .crx file anywhere on the extensions page to import it
+
+            Note: Keep the source directory if using Method 1, as the extension needs these files to function.
+          files: ${{ github.event.repository.name }}.crx
+          draft: false
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update Existing Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ github.event.repository.name }}.crx
+          body: |
+            ## Installation Instructions
+            
+            ### Method 1: Load Unpacked (Chrome, MS Edge, or Brave - Desktop)
+            1. Clone this repository or download the source code to a permanent location (do not delete the folder after installation)
+            2. Open your Chromium-based browser (Chrome, Edge, or Brave)
+            3. Navigate to the extensions page:
+               - Chrome: chrome://extensions
+               - Edge: edge://extensions
+               - Brave: brave://extensions
+            4. Enable "Developer mode" in the top right corner
+            5. Click "Load unpacked" and select the directory containing the extension files
+
+            ### Method 2: CRX File (Opera, Vivaldi, Yandex)
+            1. Download the extension (.crx file) from this release (right-click > save link as)
+            2. In your browser navigate to the extensions page
+            3. Enable "Developer mode" in the top right corner
+            4. Drag the downloaded .crx file anywhere on the extensions page to import it
+
+            Note: Keep the source directory if using Method 1, as the extension needs these files to function.
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -rf clean_ext
+          rm -f key.pem and Release
 
 permissions:
   contents: write  
