@@ -33,11 +33,6 @@ jobs:
           mkdir clean_ext
           rsync -av --exclude='*.pem' --exclude='.git*' --exclude='.github' . clean_ext/
 
-      - name: Set up private key
-        run: |
-          echo "${{ secrets.EXTENSION_PRIVATE_KEY }}" | base64 -d > private_key.pem
-          chmod 600 private_key.pem
-
       - name: Install Chrome
         run: |
           wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
@@ -47,8 +42,7 @@ jobs:
 
       - name: Pack Extension
         run: |
-          # Pack with the private key to maintain extension ID
-          google-chrome --pack-extension="$(pwd)/clean_ext" --pack-extension-key="$(pwd)/private_key.pem"
+          google-chrome --pack-extension="$(pwd)/clean_ext"
           mv clean_ext.crx "${{ github.event.repository.name }}.crx"
           
       - name: Create Release
@@ -113,6 +107,4 @@ jobs:
 
       - name: Cleanup
         if: always()
-        run: |
-          rm -f private_key.pem
-          rm -rf clean_ext
+        run: rm -rf clean_ext
