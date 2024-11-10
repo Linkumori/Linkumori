@@ -2,6 +2,7 @@
   "manifest_version": 3,
   "name": "Linkumori (URLs Purifier)",
   "version": "1.0",
+    "key": "lAiiD3ecY1cTXLuNdClVqPQSLVsLKmYl7C0iw8u5S6REPhXZRqEJm7Seo5DFjpnBRxtv4J1yHDZBJBL5GiIjaYSr8iAtaZ0J94SrKs87iyAtMIFvbYSn2W5BCjjWbKDPz5sIaltGupzvnYObeJe7JU2JHpAkjbESNymtx4avZJYHLCabpjYoCm61mlBYNTzJ4nKXXcUf4yNUMSF1fpRdFRnlBQ1T7U2EvEre1zMhIWsEN01lcCEOjpIWn6PCC5Fl",
   "description": "Clean tracking query parameters from URLs",
   
   "icons": {
