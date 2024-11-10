@@ -1,35 +1,112 @@
-name: Build and Release (Manual Trigger)
+name: Linkumori crx packaging and Release
+
+permissions:
+  contents: write  
 
 on:
+  release:
+    types: [created]
   workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag Name (e.g., v1.0.0)'
+        required: true
+      release_title:
+        description: 'Release Title'
+        required: true
+      release_notes:
+        description: 'Release Notes'
+        required: true
 
 jobs:
-  manual-build:
-    # Use macos-14 for arm64 architecture: https://github.blog/changelog/2024-01-30-github-actions-introducing-the-new-m1-macos-runner-available-to-open-source/
-    # macos-latest refers to the macos-12 (x86_64) runner image until April–June 2024: https://github.blog/changelog/2024-01-30-github-actions-macos-14-sonoma-is-now-available/ and https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners/about-github-hosted-runners#standard-github-hosted-runners-for-public-repositories
+  pack-and-release:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          node-version: "20.x"
-          # Cache the global `yarn cache dir` for faster builds by reusing dependencies.
-          # NOTE: Avoid caching the project-specific node_modules directory to prevent dependency conflicts and ensure proper cache updates. As the documentation to actions/cache states: "it can break across Node versions and won't work with npm ci."
-          cache: "yarn"
+          fetch-depth: 0
 
-      - name: Build Sign Chrome Extension crx file
-        uses: emilymclean/pack-chromium-extension@v1
-        env:
-          EXTENSION_KEY: ${{ secrets.CHROME_SIGNING_KEY }}
-        with:
-          input-folder: .
-          output-file: extension.crx
+      - name: Prepare clean directory
+        run: |
+          mkdir clean_ext
+          # Don't exclude .pem this time since we need it for signing
+          rsync -av --exclude='.git*' --exclude='.github' . clean_ext/
 
-      - name: Upload crx file
-        uses: actions/upload-artifact@v4
+      - name: Install Chrome
+        run: |
+          wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Pack Extension
+        run: |
+          # Assuming your .pem file is named 'key.pem' and is in the root directory
+          google-chrome --pack-extension="$(pwd)/clean_ext" --pack-extension-key="$(pwd)/key.pem"
+          mv clean_ext.crx "${{ github.event.repository.name }}.crx"
+          
+      - name: Create Release
+        if: github.event_name == 'workflow_dispatch'
+        uses: softprops/action-gh-release@v1
         with:
-          name: CRX File
-          path: "extension.crx"
-          # Minimum artifact retention is 1 day
-          retention-days: 1
+          tag_name: ${{ github.event.inputs.tag_name }}
+          name: ${{ github.event.inputs.release_title }}
+          body: |
+            ${{ github.event.inputs.release_notes }}
+            
+            ## Installation Instructions
+
+            ### Method 1: Load Unpacked (Chrome, MS Edge, or Brave - Desktop)
+            1. Clone this repository or download the source code to a permanent location (do not delete the folder after installation)
+            2. Open your Chromium-based browser (Chrome, Edge, or Brave)
+            3. Navigate to the extensions page:
+               - Chrome: chrome://extensions
+               - Edge: edge://extensions
+               - Brave: brave://extensions
+            4. Enable "Developer mode" in the top right corner
+            5. Click "Load unpacked" and select the directory containing the extension files
+
+            ### Method 2: CRX File (Opera, Vivaldi, Yandex)
+            1. Download the extension (.crx file) from this release (right-click > save link as)
+            2. In your browser navigate to the extensions page
+            3. Enable "Developer mode" in the top right corner
+            4. Drag the downloaded .crx file anywhere on the extensions page to import it
+
+            Note: Keep the source directory if using Method 1, as the extension needs these files to function.
+          files: ${{ github.event.repository.name }}.crx
+          draft: false
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update Existing Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ github.event.repository.name }}.crx
+          body: |
+            ## Installation Instructions
+
+            ### Method 1: Load Unpacked (Chrome, MS Edge, or Brave - Desktop)
+            1. Clone this repository or download the source code to a permanent location (do not delete the folder after installation)
+            2. Open your Chromium-based browser (Chrome, Edge, or Brave)
+            3. Navigate to the extensions page:
+               - Chrome: chrome://extensions
+               - Edge: edge://extensions
+               - Brave: brave://extensions
+            4. Enable "Developer mode" in the top right corner
+            5. Click "Load unpacked" and select the directory containing the extension files
+
+            ### Method 2: CRX File (Opera, Vivaldi, Yandex)
+            1. Download the extension (.crx file) from this release (right-click > save link as)
+            2. In your browser navigate to the extensions page
+            3. Enable "Developer mode" in the top right corner
+            4. Drag the downloaded .crx file anywhere on the extensions page to import it
+
+            Note: Keep the source directory if using Method 1, as the extension needs these files to function.
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cleanup
+        if: always()
+        run: rm -rf clean_ext
