@@ -35,7 +35,7 @@ jobs:
 
       - name: Set up private key
         run: |
-          echo "${{ secrets.EXTENSION_PRIVATE_KEY }}" > private_key.pem
+          echo "${{ secrets.EXTENSION_PRIVATE_KEY }}" | base64 -d > private_key.pem
           chmod 600 private_key.pem
 
       - name: Install Chrome
