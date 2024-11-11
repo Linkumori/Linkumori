@@ -15,8 +15,9 @@ on:
         description: 'Release Title'
         required: true
       release_notes:
-        description: |
+        description: >-
           Release Notes - Support Markdown formatting
+
           Example:
           ## What's New
           - Added feature X
