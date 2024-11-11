@@ -393,12 +393,6 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 
 // Initialize badge text when extension loads
 
-
-
-
-
-
-// const RULE_ID_START = 1; // Unused constant, consider removing if not needed
 const RULE_ID_START = 1;
 
 // Initialize default state
@@ -411,7 +405,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 
 // Function to create a rule for a domain with exact format
 function createAllowRule(domain, ruleId) {
-  return {
+  return [{
     id: ruleId,
     priority: 1,
     action: {
@@ -426,7 +420,23 @@ function createAllowRule(domain, ruleId) {
         "xmlhttprequest"
       ]
     }
-  };
+  },
+  {
+    id: ruleId + 1,
+    priority: 1,
+    action: {
+      type: "allow"
+    },
+    condition: {
+      initiatorDomains: [domain],
+      resourceTypes: [
+        "main_frame",
+        "sub_frame",
+        "ping",
+        "xmlhttprequest"
+      ]
+    }
+  }];
 }
 
 // Function to update DNR rules based on enabled state
@@ -437,8 +447,8 @@ async function updateDNRRules(enabled) {
 
     if (enabled) {
       const { whitelist = [] } = await chrome.storage.local.get('whitelist');
-      const newRules = whitelist.map((domain, index) => 
-        createAllowRule(domain, index + RULE_ID_START)
+      const newRules = whitelist.flatMap((domain, index) => 
+        createAllowRule(domain, (index * 2) + RULE_ID_START)
       );
 
       await chrome.declarativeNetRequest.updateDynamicRules({
@@ -478,4 +488,3 @@ async function updateDNRRule() {
   
   updateDNRRules(settings.status);
 }
-// ===== Linkumori Engine Ends =====//
