@@ -17,6 +17,9 @@ on:
       release_notes:
         description: 'Release Notes'
         required: true
+      additional_comments:
+        description: 'Additional Comments'
+        required: false
 
 jobs:
   pack-and-release:
@@ -89,6 +92,8 @@ jobs:
           body: |
             ${{ github.event.inputs.release_notes }}
             
+            ${{ github.event.inputs.additional_comments }}
+            
             ## Installation Instructions
 
             ### Method 1: Load Unpacked (Chrome, MS Edge, or Brave - Desktop)
@@ -113,12 +118,25 @@ jobs:
           prerelease: false
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Get Release Body
+        if: github.event_name == 'release'
+        id: get_release_body
+        run: |
+          body=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }}" \
+            | jq -r .body)
+          echo "RELEASE_BODY<<EOF" >> $GITHUB_ENV
+          echo "$body" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
       - name: Update Existing Release
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ github.event.repository.name }}.crx
           body: |
+            ${{ env.RELEASE_BODY }}
+            
             ## Installation Instructions
 
             ### Method 1: Load Unpacked (Chrome, MS Edge, or Brave - Desktop)
