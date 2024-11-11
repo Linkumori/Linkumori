@@ -1,4 +1,4 @@
-name: Linkumori crx packaging and Release
+name: Linkumori Builds and release
 
 permissions:
   contents: write  
