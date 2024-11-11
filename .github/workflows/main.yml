@@ -31,7 +31,9 @@ on:
           - Updated dependencies
           - Code cleanup
         required: true
-
+        release_notes:
+        description1: >-
+        required: true
 jobs:
   pack-and-release:
     runs-on: ubuntu-latest
