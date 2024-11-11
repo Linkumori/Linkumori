@@ -5,7 +5,7 @@ Modification Details:
 
 Files modified: rules5.json, rules6.json, rules7.json, rules4.json
 
-1st modification date: October 16, 2024
+first modification date: October 16, 2024
 Modified by: Subham Mahesh
 Second Modification
 Date: October 22, 2024
