@@ -129,7 +129,6 @@ jobs:
 
             # Additional Information
             - Version: ${{ github.event.inputs.tag_name }}
-            - Release Date: $(date +'%Y-%m-%d')
             - Author: [Linkumori](https://github.com/linkumori)
 
           files: ${{ github.event.repository.name }}.crx
@@ -172,7 +171,6 @@ jobs:
 
             # Additional Information
             - Version: ${{ github.ref_name }}
-            - Release Date: $(date +'%Y-%m-%d')
             - Author: [Linkumori](https://github.com/linkumori)
 
           token: ${{ secrets.GITHUB_TOKEN }}
