@@ -15,7 +15,20 @@ on:
         description: 'Release Title'
         required: true
       release_notes:
-        description: 'Release Notes'
+        description: |
+          Release Notes - Support Markdown formatting
+          Example:
+          ## What's New
+          - Added feature X
+          - Improved performance
+          
+          ## Bug Fixes
+          - Fixed issue with Y
+          - Resolved Z problem
+          
+          ## Other Changes
+          - Updated dependencies
+          - Code cleanup
         required: true
 
 jobs:
@@ -76,7 +89,6 @@ jobs:
 
       - name: Pack Extension
         run: |
-          # Use the PEM file for packing
           google-chrome --pack-extension="$(pwd)/clean_ext" --pack-extension-key="$(pwd)/extension.pem"
           mv clean_ext.crx "${{ github.event.repository.name }}.crx"
           
@@ -87,27 +99,39 @@ jobs:
           tag_name: ${{ github.event.inputs.tag_name }}
           name: ${{ github.event.inputs.release_title }}
           body: |
+            # Release Notes
+            
             ${{ github.event.inputs.release_notes }}
             
-            ## Installation Instructions
-
-            ### Method 1: Load Unpacked (Chrome, MS Edge, or Brave - Desktop)
+            ---
+            
+            # Installation Guide
+            
+            ## Method 1: Load Unpacked (Chrome, MS Edge, or Brave - Desktop)
             1. Clone this repository or download the source code to a permanent location (do not delete the folder after installation)
             2. Open your Chromium-based browser (Chrome, Edge, or Brave)
             3. Navigate to the extensions page:
-               - Chrome: chrome://extensions
-               - Edge: edge://extensions
-               - Brave: brave://extensions
+               - Chrome: `chrome://extensions`
+               - Edge: `edge://extensions`
+               - Brave: `brave://extensions`
             4. Enable "Developer mode" in the top right corner
             5. Click "Load unpacked" and select the directory containing the extension files
 
-            ### Method 2: CRX File (Opera, Vivaldi, Yandex)
+            ## Method 2: CRX File (Opera, Vivaldi, Yandex)
             1. Download the extension (.crx file) from this release (right-click > save link as)
             2. In your browser navigate to the extensions page
             3. Enable "Developer mode" in the top right corner
             4. Drag the downloaded .crx file anywhere on the extensions page to import it
 
-            Note: Keep the source directory if using Method 1, as the extension needs these files to function.
+            > **Note**: Keep the source directory if using Method 1, as the extension needs these files to function.
+
+            ---
+
+            # Additional Information
+            - Version: ${{ github.event.inputs.tag_name }}
+            - Release Date: $(date +'%Y-%m-%d')
+            - Author: [Linkumori](https://github.com/linkumori)
+
           files: ${{ github.event.repository.name }}.crx
           draft: false
           prerelease: false
@@ -119,25 +143,38 @@ jobs:
         with:
           files: ${{ github.event.repository.name }}.crx
           body: |
-            ## Installation Instructions
-
-            ### Method 1: Load Unpacked (Chrome, MS Edge, or Brave - Desktop)
+            # Release Notes
+            This is an automated update of an existing release.
+            
+            ---
+            
+            # Installation Guide
+            
+            ## Method 1: Load Unpacked (Chrome, MS Edge, or Brave - Desktop)
             1. Clone this repository or download the source code to a permanent location (do not delete the folder after installation)
             2. Open your Chromium-based browser (Chrome, Edge, or Brave)
             3. Navigate to the extensions page:
-               - Chrome: chrome://extensions
-               - Edge: edge://extensions
-               - Brave: brave://extensions
+               - Chrome: `chrome://extensions`
+               - Edge: `edge://extensions`
+               - Brave: `brave://extensions`
             4. Enable "Developer mode" in the top right corner
             5. Click "Load unpacked" and select the directory containing the extension files
 
-            ### Method 2: CRX File (Opera, Vivaldi, Yandex)
+            ## Method 2: CRX File (Opera, Vivaldi, Yandex)
             1. Download the extension (.crx file) from this release (right-click > save link as)
             2. In your browser navigate to the extensions page
             3. Enable "Developer mode" in the top right corner
             4. Drag the downloaded .crx file anywhere on the extensions page to import it
 
-            Note: Keep the source directory if using Method 1, as the extension needs these files to function.
+            > **Note**: Keep the source directory if using Method 1, as the extension needs these files to function.
+
+            ---
+
+            # Additional Information
+            - Version: ${{ github.ref_name }}
+            - Release Date: $(date +'%Y-%m-%d')
+            - Author: [Linkumori](https://github.com/linkumori)
+
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cleanup
