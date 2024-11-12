@@ -4,7 +4,7 @@
 
 ![Linkumori Extension Version](https://img.shields.io/badge/dynamic/json?color=blue&label=Linkumori%20Extension&prefix=v&query=version&url=https://raw.githubusercontent.com/subham8907/Linkumori/main/manifest.json)
 
-![GitHub release of extension (latest by date)](https://img.shields.io/github/v/release/subham8907/Linkumori?style=flat&label=Linkumori%20Extension&color=blue)
+![GitHub release of extension (latest by date)](https://img.shields.io/github/v/release/subham8907/Linkumori?style=flat&label=Extension%20Github%20Release&color=blue)
 
 
 ![Linkumori](https://github.com/subham8907/Linkumori/blob/main/icons/icon48.png)
