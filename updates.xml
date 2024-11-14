@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<gupdate xmlns='http://www.google.com/update2/response' protocol='2.0'>
-  <app appid="kcpfnbjlimolkcjllfooaipdpdjmjigg">
-    <updatecheck 
-      codebase='https://github.com/subham8907/Linkumori/releases/download/B28.0/Linkumori.crx' 
-      version='1.0' 
-    />
-  </app>
-</gupdate>
