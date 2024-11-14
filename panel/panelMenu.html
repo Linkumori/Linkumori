@@ -1,3 +1,4 @@
+
 <!--/*
 Linkumori(URLs Purifier)
 Copyright (C) 2024 Subham Mahesh
@@ -47,7 +48,7 @@ MIT License:
             margin: 0;
             padding: 0;
             font-family: "Liberation Serif";
-            width: 250px;
+            width: 370px;
             height: 300px;
             overflow: hidden;
         }
@@ -235,6 +236,20 @@ MIT License:
             background-color: #3182ce;
         }
 
+        #addCurrentDomain {
+            background-color: #4299e1;
+            border: none;
+            padding: 2px 2px;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: "Liberation Serif";
+        }
+
+        #addCurrentDomain:hover {
+            background-color: #3182ce;
+        }
+
         .whitelist-container {
             flex: 1;
             overflow-y: auto;
@@ -337,6 +352,7 @@ MIT License:
             <div class="domain-input-container">
                 <input type="text" id="domainInput" placeholder="Enter domain">
                 <button id="addDomain">Add</button>
+                <button id="addCurrentDomain">Add domain from this tab</button>
             </div>
             <div id="whitelistContainer" class="whitelist-container">
                 <!-- Whitelist items will be dynamically inserted here -->

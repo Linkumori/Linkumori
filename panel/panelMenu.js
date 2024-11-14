@@ -31,8 +31,7 @@ class PanelMenuController {
         this.state = {
             isEnabled: false,
             whitelist: [],
-            activeTab: 'mainTab',
-            currentDomain: ''
+            activeTab: 'mainTab'
         };
         
         this.domElements = {
@@ -43,22 +42,11 @@ class PanelMenuController {
             mainContent: null,
             whitelistContent: null,
             licenseContent: null,
+            addCurrentButton: null,
             tabs: {}
         };
-
-        // List of protocols/URLs that should not be prefilled
-        this.restrictedUrls = [
-            'chrome://',
-            'chrome-extension://',
-            'edge://',
-            'file://',
-        ];
         
         this.init();
-    }
-
-    isRestrictedUrl(url) {
-        return this.restrictedUrls.some(restricted => url.toLowerCase().startsWith(restricted));
     }
     
     async init() {
@@ -72,52 +60,8 @@ class PanelMenuController {
         // Initialize storage listeners
         chrome.storage.onChanged.addListener(this.handleStorageChanges.bind(this));
         
-        // Load initial state first, then check current domain
+        // Load initial state
         await this.loadInitialState();
-        await this.loadCurrentDomain();
-    }
-    
-    async loadCurrentDomain() {
-        try {
-            // Query for the active tab in the current window
-            const [tab] = await chrome.tabs.query({ 
-                active: true, 
-                currentWindow: true 
-            });
-            
-            if (tab?.url && !this.isRestrictedUrl(tab.url)) {
-                const url = new URL(tab.url);
-                const domain = url.hostname;
-
-                // Only set currentDomain and prefill if it's a valid URL
-                if (domain) {
-                    this.state.currentDomain = domain;
-                    
-                    // Only prefill if the domain is not already in whitelist
-                    if (this.domElements.domainInput && !this.state.whitelist.includes(domain)) {
-                        this.domElements.domainInput.value = domain;
-                        this.domElements.domainInput.placeholder = "Enter domain (e.g., example.com)";
-                    } else if (this.domElements.domainInput) {
-                        this.domElements.domainInput.value = '';
-                        this.domElements.domainInput.placeholder = "Enter domain (e.g., example.com)";
-                    }
-                } else {
-                    this.clearDomainInput();
-                }
-            } else {
-                this.clearDomainInput();
-            }
-        } catch (error) {
-            console.error('Failed to load current domain:', error);
-            this.clearDomainInput();
-        }
-    }
-
-    clearDomainInput() {
-        if (this.domElements.domainInput) {
-            this.domElements.domainInput.value = '';
-            this.domElements.domainInput.placeholder = "Enter domain (e.g., example.com)";
-        }
     }
     
     setupDOM() {
@@ -130,6 +74,7 @@ class PanelMenuController {
             mainContent: document.getElementById('mainContent'),
             whitelistContent: document.getElementById('whitelistContent'),
             licenseContent: document.getElementById('licenseContent'),
+            addCurrentButton: document.getElementById('addCurrentDomain'),
             tabs: {
                 mainTab: document.getElementById('mainTab'),
                 whitelistTab: document.getElementById('whitelistTab'),
@@ -138,22 +83,18 @@ class PanelMenuController {
         };
         
         // Set up event listeners
-        document.getElementById('toggleButton')?.addEventListener('click', 
+        document.getElementById('toggleButton').addEventListener('click', 
             () => this.togglePurifyUrlsSettings());
             
-        document.getElementById('addDomain')?.addEventListener('click',
+        document.getElementById('addDomain').addEventListener('click',
             () => this.handleAddDomain());
+            
+        this.domElements.addCurrentButton?.addEventListener('click',
+            () => this.handleAddCurrentDomain());
             
         this.domElements.domainInput?.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 this.handleAddDomain();
-            }
-        });
-        
-        // Add focus event for better UX
-        this.domElements.domainInput?.addEventListener('focus', () => {
-            if (this.domElements.domainInput.value === this.state.currentDomain) {
-                this.domElements.domainInput.select();
             }
         });
         
@@ -164,18 +105,50 @@ class PanelMenuController {
         });
     }
     
-    handleStorageChanges(changes, area) {
-        if (Object.hasOwn(changes, SETTINGS_KEY)) {
-            const { newValue } = changes[SETTINGS_KEY];
-            this.state.isEnabled = newValue.status;
-            this.updateToggleUI();
+    async getCurrentTabDomain() {
+        try {
+            const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+            if (!tab?.url) return null;
+            
+            // Check for special URL protocols
+            const specialProtocols = [
+                'chrome://',
+                'edge://',
+                'chrome-extension://',
+                'file:///'
+            ];
+            
+            if (specialProtocols.some(protocol => tab.url.startsWith(protocol))) {
+                return null;
+            }
+            
+            const url = new URL(tab.url);
+            return url.hostname.toLowerCase();
+        } catch (error) {
+            console.error('Failed to get current tab domain:', error);
+            return null;
         }
-        
-        if (Object.hasOwn(changes, 'whitelist')) {
-            this.state.whitelist = changes.whitelist.newValue;
-            this.renderWhitelist();
-            // Recheck current domain against new whitelist
-            this.loadCurrentDomain();
+    }
+    
+    async handleAddCurrentDomain() {
+        try {
+            const domain = await this.getCurrentTabDomain();
+            if (!domain) {
+                alert('Could not get domain from current tab');
+                return;
+            }
+            
+            if (!this.state.whitelist.includes(domain)) {
+                const newWhitelist = [...this.state.whitelist, domain];
+                await chrome.storage.local.set({ whitelist: newWhitelist });
+                this.state.whitelist = newWhitelist;
+                this.renderWhitelist();
+            } else {
+                alert('Current domain is already in the whitelist');
+            }
+        } catch (error) {
+            console.error('Failed to add current domain:', error);
+            alert('Failed to add current domain to whitelist');
         }
     }
     
@@ -204,6 +177,19 @@ class PanelMenuController {
             this.updateUI();
         } catch (error) {
             console.error('Failed to load initial state:', error);
+        }
+    }
+    
+    handleStorageChanges(changes, area) {
+        if (Object.hasOwn(changes, SETTINGS_KEY)) {
+            const { newValue } = changes[SETTINGS_KEY];
+            this.state.isEnabled = newValue.status;
+            this.updateToggleUI();
+        }
+        
+        if (Object.hasOwn(changes, 'whitelist')) {
+            this.state.whitelist = changes.whitelist.newValue;
+            this.renderWhitelist();
         }
     }
     
@@ -248,15 +234,11 @@ class PanelMenuController {
                 await chrome.storage.local.set({ whitelist: newWhitelist });
                 this.state.whitelist = newWhitelist;
                 this.renderWhitelist();
-                
-                // Clear input and update placeholder
-                if (this.domElements.domainInput) {
-                    this.domElements.domainInput.value = '';
-                    this.domElements.domainInput.placeholder = "Domain added to whitelist";
-                }
             } else {
-                alert('Please enter a valid domain (e.g., example.com)');
+                alert('Domain is already in the whitelist');
             }
+            
+            this.domElements.domainInput.value = '';
         } catch (error) {
             console.error('Failed to add domain:', error);
         }
@@ -268,11 +250,6 @@ class PanelMenuController {
             await chrome.storage.local.set({ whitelist: newWhitelist });
             this.state.whitelist = newWhitelist;
             this.renderWhitelist();
-            
-            // If this was the current domain, we can now prefill it again
-            if (domain === this.state.currentDomain) {
-                this.loadCurrentDomain();
-            }
         } catch (error) {
             console.error('Failed to remove domain:', error);
         }
