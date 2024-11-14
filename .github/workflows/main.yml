@@ -10,6 +10,8 @@ on:
 jobs:
   pack-and-release:
     runs-on: ubuntu-latest
+    env:
+      EXTENSION_ID: mfedlkokfjjhjlmpddhphlnechbedmnp
     
     steps:
       - name: Checkout code
@@ -17,6 +19,7 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Your existing PEM file step remains the same
       - name: Create PEM file
         run: |
           cat > extension.pem << 'EOL'
@@ -54,7 +57,7 @@ jobs:
       - name: Prepare clean directory
         run: |
           mkdir clean_ext
-          rsync -av --exclude='*.pem' --exclude='.git*' --exclude='.github' . clean_ext/
+          rsync -av --exclude='*.pem' --exclude='.git*' --exclude='.github' --exclude='*.crx' . clean_ext/
 
       - name: Install Chrome
         run: |
@@ -65,46 +68,61 @@ jobs:
 
       - name: Pack Extension
         run: |
-          # Use the PEM file for packing
           google-chrome --pack-extension="$(pwd)/clean_ext" --pack-extension-key="$(pwd)/extension.pem"
-          mv clean_ext.crx "${{ github.event.repository.name }}.crx"
-
-      - name: Get Release Body
-        id: get_release_body
-        run: |
-          body=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }}" \
-            | jq -r .body)
-          echo "RELEASE_BODY<<EOF" >> $GITHUB_ENV
-          echo "$body" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          mv clean_ext.crx "Linkumori.crx"
+          
+          # Generate updates.xml with the correct version from the release tag
+          cat > updates.xml << EOL
+          <?xml version='1.0' encoding='UTF-8'?>
+          <gupdate xmlns='http://www.google.com/update2/response' protocol='2.0'>
+            <app appid="${EXTENSION_ID}">
+              <updatecheck 
+                codebase='https://github.com/subham8907/Linkumori/releases/download/${{ github.event.release.tag_name }}/Linkumori.crx' 
+                version='${GITHUB_REF#refs/tags/v}' />
+            </app>
+          </gupdate>
+          EOL
 
       - name: Update Release
         uses: softprops/action-gh-release@v1
         with:
-          files: ${{ github.event.repository.name }}.crx
+          files: |
+            Linkumori.crx
+            updates.xml
           body: |
+            ## 🚀 Linkumori URLs Purifier Extension
+            
             ${{ env.RELEASE_BODY }}
             
-            ## Installation Instructions
-
-            ### Method 1: Load Unpacked (Chrome, MS Edge, or Brave - Desktop)
-            1. Clone this repository or download the source code to a permanent location (do not delete the folder after installation)
-            2. Open your Chromium-based browser (Chrome, Edge, or Brave)
-            3. Navigate to the extensions page:
-               - Chrome: chrome://extensions
-               - Edge: edge://extensions
-               - Brave: brave://extensions
-            4. Enable "Developer mode" in the top right corner
-            5. Click "Load unpacked" and select the directory containing the extension files
-
-            ### Method 2: CRX File (Opera, Vivaldi, Yandex)
-            1. Download the extension (.crx file) from this release (right-click > save link as)
-            2. In your browser navigate to the extensions page
-            3. Enable "Developer mode" in the top right corner
-            4. Drag the downloaded .crx file anywhere on the extensions page to import it
-
-            Note: Keep the source directory if using Method 1, as the extension needs these files to function.
+            ## ⚡ Quick Installation
+            
+            ### Method 1: One-Click Install (Recommended)
+            1. Download `Linkumori.crx` from above
+            2. Open chrome://extensions (or edge://extensions)
+            3. Enable "Developer mode" (top-right corner)
+            4. Drag & drop the .crx file into the extensions page
+            
+            ### Method 2: Developer Installation
+            1. Download source code (zip)
+            2. Extract to a folder
+            3. Go to chrome://extensions
+            4. Enable "Developer mode"
+            5. Click "Load unpacked" → select the extracted folder
+            
+            ## 🔄 Auto-Updates
+            * The extension will automatically check for and install updates
+            * Updates are delivered through GitHub releases
+            
+            ## 🌐 Supported Browsers
+            * ✅ Google Chrome
+            * ✅ Microsoft Edge
+            * ✅ Brave
+            * ✅ Opera GX
+            * ✅ Vivaldi
+            
+            ## ⚠️ Keep in Mind
+            * If using Method 2, keep the source folder (required for the extension to work)
+            * First-time installation may show a warning - this is normal for developer mode extensions
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cleanup
@@ -112,3 +130,4 @@ jobs:
         run: |
           rm -rf clean_ext
           rm -f extension.pem
+          rm -f *.crx
