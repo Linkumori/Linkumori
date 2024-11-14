@@ -78,7 +78,7 @@ jobs:
             <app appid="kcpfnbjlimolkcjllfooaipdpdjmjigg">
               <updatecheck 
                 codebase='https://github.com/subham8907/Linkumori/releases/download/${{ github.event.release.tag_name }}/Linkumori.crx' 
-                version='${GITHUB_REF#refs/tags/v}' />
+                version='2.0' />
             </app>
           </gupdate>
           EOL
