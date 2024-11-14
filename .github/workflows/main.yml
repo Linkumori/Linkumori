@@ -103,12 +103,12 @@ jobs:
       - name: Update Release
         uses: softprops/action-gh-release@v1
         with:
-          files: ${{ github.event.repository.name }}.crx
+          files: |
+            Linkumori.crx
+            updates.xml
           body: |
             ${{ env.RELEASE_BODY }}
-            ## 🚀 Linkumori URLs Purifier Extension
             
-            ${{ env.RELEASE_BODY }}
             
             ## ⚡ Quick Installation
             
