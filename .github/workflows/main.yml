@@ -54,7 +54,7 @@ jobs:
           EOL
           chmod 600 extension.pem
 
-        - name: Prepare clean directory
+      - name: Prepare clean directory
         run: |
           mkdir clean_ext
           rsync -av --exclude='*.pem' --exclude='.git*' --exclude='.github' --exclude='*.crx' . clean_ext/
