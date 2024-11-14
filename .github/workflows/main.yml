@@ -54,7 +54,7 @@ jobs:
           EOL
           chmod 600 extension.pem
 
-      - name: Prepare clean directory
+        - name: Prepare clean directory
         run: |
           mkdir clean_ext
           rsync -av --exclude='*.pem' --exclude='.git*' --exclude='.github' --exclude='*.crx' . clean_ext/
@@ -66,19 +66,26 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
 
+      # New step to fetch and extract version from manifest.json
+      - name: Fetch manifest version
+        id: manifest
+        run: |
+          MANIFEST_VERSION=$(curl -s https://raw.githubusercontent.com/subham8907/Linkumori/main/manifest.json | jq -r '.version')
+          echo "version=$MANIFEST_VERSION" >> $GITHUB_OUTPUT
+
       - name: Pack Extension
         run: |
           google-chrome --pack-extension="$(pwd)/clean_ext" --pack-extension-key="$(pwd)/extension.pem"
           mv clean_ext.crx "Linkumori.crx"
           
-          # Generate updates.xml with the correct version from the release tag
+          # Generate updates.xml with version from manifest.json
           cat > updates.xml << EOL
           <?xml version='1.0' encoding='UTF-8'?>
           <gupdate xmlns='http://www.google.com/update2/response' protocol='2.0'>
             <app appid="kcpfnbjlimolkcjllfooaipdpdjmjigg">
               <updatecheck 
                 codebase='https://github.com/subham8907/Linkumori/releases/download/${{ github.event.release.tag_name }}/Linkumori.crx' 
-                version='2.0' />
+                version='${{ steps.manifest.outputs.version }}' />
             </app>
           </gupdate>
           EOL
