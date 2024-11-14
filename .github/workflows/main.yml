@@ -90,13 +90,22 @@ jobs:
           </gupdate>
           EOL
 
+      - name: Get Release Body
+        id: get_release_body
+        run: |
+          body=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }}" \
+            | jq -r .body)
+          echo "RELEASE_BODY<<EOF" >> $GITHUB_ENV
+          echo "$body" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
       - name: Update Release
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            Linkumori.crx
-            updates.xml
+          files: ${{ github.event.repository.name }}.crx
           body: |
+            ${{ env.RELEASE_BODY }}
             ## 🚀 Linkumori URLs Purifier Extension
             
             ${{ env.RELEASE_BODY }}
