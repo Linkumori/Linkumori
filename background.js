@@ -488,4 +488,69 @@ async function updateDNRRule() {
   
   updateDNRRules(settings.status);
 }
+
+// Create context menu item for updating whitelist based on domain
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.contextMenus.create({
+    id: "toggleWhitelistDomain",
+    title: "Loading...", // Initial placeholder title
+    contexts: ["all"]
+  });
+});
+
+// Update context menu title based on current domain's whitelist status
+async function updateContextMenuTitle(domain) {
+  const { whitelist } = await chrome.storage.local.get('whitelist') || { whitelist: [] };
+  const isWhitelisted = whitelist.includes(domain);
+  const newTitle = isWhitelisted ? 
+    `Remove ${domain} from whitelist` : 
+    `Add ${domain} to whitelist`;
+  
+  chrome.contextMenus.update("toggleWhitelistDomain", {
+    title: newTitle
+  });
+}
+
+// Listen for tab updates to refresh the context menu title
+chrome.tabs.onActivated.addListener(async (activeInfo) => {
+  const tab = await chrome.tabs.get(activeInfo.tabId);
+  if (tab.url) {
+    const url = new URL(tab.url);
+    updateContextMenuTitle(url.hostname);
+  }
+});
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.url) {
+    const url = new URL(changeInfo.url);
+    updateContextMenuTitle(url.hostname);
+  }
+});
+
+// Handle context menu clicks
+chrome.contextMenus.onClicked.addListener(async (info, tab) => {
+  const url = new URL(tab.url);
+  const domain = url.hostname;
+
+  const { whitelist } = await chrome.storage.local.get('whitelist') || { whitelist: [] };
+
+  if (whitelist.includes(domain)) {
+    // Remove domain from whitelist
+    const index = whitelist.indexOf(domain);
+    if (index > -1) {
+      whitelist.splice(index, 1);
+      await chrome.storage.local.set({ whitelist });
+      console.log(`Domain unwhitelisted: ${domain}`);
+    }
+  } else {
+    // Add domain to whitelist
+    whitelist.push(domain);
+    await chrome.storage.local.set({ whitelist });
+    console.log(`Domain whitelisted: ${domain}`);
+  }
+
+  // Update the context menu title after changing the whitelist
+  updateContextMenuTitle(domain);
+});
+
 // ===== Linkumori Engine Ends =====//

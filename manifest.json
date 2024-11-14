@@ -27,7 +27,9 @@
     "scripting",
     "alarms",
     "unlimitedStorage",
-    "webRequest"
+    "webRequest",
+    "contextMenus",
+    "notifications"
   ],
   
   "host_permissions": [
