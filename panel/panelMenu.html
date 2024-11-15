@@ -25,8 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <meta charset="UTF-8">
     <title>Linkumori Settings</title>
     <style>
-
-@font-face {
+      @font-face {
             font-family: 'Liberation Serif';
             src:url('../liberation-fonts/LiberationSerif-Regular.ttf') format('truetype');
             font-weight: normal;
@@ -265,6 +264,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             outline: none;
             box-shadow: 0 0 0 2px rgba(44, 82, 130, 0.3);
         }
+            /* Additional dark mode styles can be added here */
+        
     </style>
 </head>
 <body>
@@ -284,11 +285,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <button id="licenseTab" class="tab">License</button>
     </nav>
     
-    <div id="mainContent" class="content">
+    <div id="mainContent" class="content">           
+        
         <div class="toggle-container">
-            <button id="toggleButton" class="toggle-switch"></button>
-            <span class="toggle-label">Off</span>
+            <div id="toggleButton" class="toggle-button">
+                <span class="toggle-label">Off</span>
+                <div class="toggle-switch">
+                    <div class="toggle-slider"></div>
+                </div>
+
+            </div>
+
         </div>
+        <button id="singledynamicwhitelistunwhitelistbutton" "></button>
+
     </div>
     
     <div id="whitelistContent" class="content">
@@ -1124,8 +1134,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <p>&ldquo;This License&rdquo; refers to version 3 of the GNU General Public License.</p>
     
     <p>&ldquo;Copyright&rdquo; also means copyright-like laws that apply to other kinds of
-    works, such as semiconductor masks.</p>
-     
+    works, such as semiconductor masks.</p> 
+
     <p>&ldquo;The Program&rdquo; refers to any copyrightable work licensed under this
     License.  Each licensee is addressed as &ldquo;you&rdquo;.  &ldquo;Licensees&rdquo; and
     &ldquo;recipients&rdquo; may be individuals or organizations.</p>
@@ -1563,8 +1573,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     actual knowledge that, but for the patent license, your conveying the
     covered work in a country, or your recipient's use of the covered work
     in a country, would infringe one or more identifiable patents in that
-    country that you have reason to believe are valid.</p>
-      
+    country that you have reason to believe are valid.</p>  
+
     <p>If, pursuant to or in connection with a single transaction or
     arrangement, you convey, or propagate by procuring conveyance of, a
     covered work, and grant a patent license to some of the parties
@@ -1572,7 +1582,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     or convey a specific copy of the covered work, then the patent license
     you grant is automatically extended to all recipients of the covered
     work and works based on it.</p>
-    
+
     <p>A patent license is &ldquo;discriminatory&rdquo; if it does not include within
     the scope of its coverage, prohibits the exercise of, or is
     conditioned on the non-exercise of one or more of the rights that are
@@ -1587,7 +1597,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     for and in connection with specific products or compilations that
     contain the covered work, unless you entered into that arrangement,
     or that patent license was granted, prior to 28 March 2007.</p>
-    
+
     <p>Nothing in this License shall be construed as excluding or limiting
     any implied license or other defenses to infringement that may
     otherwise be available to you under applicable patent law.</p>
@@ -1755,15 +1765,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <p>The OFL allows the licensed fonts to be used, studied, modified and redistributed freely as long as they are not sold by themselves. The fonts, including any derivative works, can be bundled, embedded, redistributed and/or sold with any software provided that any reserved names are not used by derivative works. The fonts and derivatives, however, cannot be released under any other type of license. The requirement for fonts to remain under this license does not apply to any document created using the fonts or their derivatives.</p>
 
 <p>DEFINITIONS
-<br />“Font Software” refers to the set of files released by the Copyright Holder(s) under this license and clearly marked as such. This may include source files, build scripts and documentation.</p>
+<br />"Font Software" refers to the set of files released by the Copyright Holder(s) under this license and clearly marked as such. This may include source files, build scripts and documentation.</p>
 
-<p>“Reserved Font Name” refers to any names specified as such after the copyright statement(s).</p>
+<p>"Reserved Font Name" refers to any names specified as such after the copyright statement(s).</p>
 
-<p>“Original Version” refers to the collection of Font Software components as distributed by the Copyright Holder(s).</p>
+<p>"Original Version" refers to the collection of Font Software components as distributed by the Copyright Holder(s).</p>
 
-<p>“Modified Version” refers to any derivative made by adding to, deleting, or substituting—in part or in whole—any of the components of the Original Version, by changing formats or by porting the Font Software to a new environment.</p>
+<p>"Modified Version" refers to any derivative made by adding to, deleting, or substituting—in part or in whole—any of the components of the Original Version, by changing formats or by porting the Font Software to a new environment.</p>
 
-<p>“Author” refers to any designer, engineer, programmer, technical writer or other person who contributed to the Font Software.</p>
+<p>"Author" refers to any designer, engineer, programmer, technical writer or other person who contributed to the Font Software.</p>
 
 <p>PERMISSION &amp; CONDITIONS
 <br />Permission is hereby granted, free of charge, to any person obtaining a copy of the Font Software, to use, study, copy, merge, embed, modify, redistribute, and sell modified and unmodified copies of the Font Software, subject to the following conditions:</p>
@@ -1782,7 +1792,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <br />This license becomes null and void if any of the above conditions are not met.</p>
 
 <p>DISCLAIMER
-<br />THE FONT SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM OTHER DEALINGS IN THE FONT SOFTWARE.</p></p>
+<br />THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM OTHER DEALINGS IN THE FONT SOFTWARE.</p></p>
 
         
 
