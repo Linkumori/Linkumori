@@ -69,7 +69,7 @@ class PanelMenuController {
         await this.loadInitialState();
     }
     
-    setupDOM() {
+    async setupDOM() {
         this.domElements = {
             toggleSwitch: document.querySelector('.toggle-switch'),
             toggleLabel: document.querySelector('.toggle-label'),
@@ -86,6 +86,14 @@ class PanelMenuController {
                 licenseTab: document.getElementById('licenseTab')
             }
         };
+        
+        const currentDomain = await this.getCurrentTabDomain();
+        if (currentDomain) {
+            this.domElements.addCurrentButton.textContent = `Add ${currentDomain} to Whitelist`;
+        } else {
+            this.domElements.addCurrentButton.style.display = 'none';
+
+        }
         
         document.getElementById('toggleButton').addEventListener('click', 
             () => this.togglePurifyUrlsSettings());
@@ -136,6 +144,8 @@ class PanelMenuController {
             return null;
         }
     }
+
+   
     
     async handleAddCurrentDomain() {
         try {
