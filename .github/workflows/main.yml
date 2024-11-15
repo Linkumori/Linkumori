@@ -11,7 +11,7 @@ jobs:
   pack-and-release:
     runs-on: ubuntu-latest
     env:
-      EXTENSION_ID: mfedlkokfjjhjlmpddhphlnechbedmnp
+      EXTENSION_ID: kcpfnbjlimolkcjllfooaipdpdjmjigg
     
     steps:
       - name: Checkout code
