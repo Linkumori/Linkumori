@@ -129,6 +129,8 @@ This project uses multiple licenses:
 The following files are completely under the GNU General Public License v3:
 
 - `/content.js`
+- `/panel/panelMenu.html`
+
 - `/Linkumori-Artifact/Artifact.json`
 - `/rules/original/rules1.json` to `/rules/original/rules3.json`
 - `/rules/original/rules8.json` to `/rules/original/rules10.json`
@@ -142,7 +144,6 @@ The following files contain a mix of GPLv3 and MIT licensed code:
 
 - `manifest.json`
 - `background.js`
-- `/panel/panelMenu.html`
 - `/panel/panelMenu.js`
 - `common/constants.js`
 - `common/utils.js`
