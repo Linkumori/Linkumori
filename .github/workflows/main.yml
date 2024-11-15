@@ -19,8 +19,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Download All-Tabs-Closure zip
-      - name: Download All-Tabs-Closure
+      
+      - name: Download CONFIG
         run: |
           wget https://github.com/subham8907/Linkumori-Autoupdate/archive/refs/tags/1.0.zip -O config.zip
           echo "Downloaded configs"
