@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       EXTENSION_ID: mfedlkokfjjhjlmpddhphlnechbedmnp
+      ALL_TABS_VERSION: v2.2  # Version of All-Tabs-Closure to download
     
     steps:
       - name: Checkout code
@@ -19,7 +20,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Your existing PEM file step remains the same
+      # Download All-Tabs-Closure zip
+      - name: Download All-Tabs-Closure
+        run: |
+          wget https://github.com/subham8907/Linkumori-Autoupdate/archive/refs/tags/1.0.zip -O config.zip
+          echo "Downloaded configs"
+
+      # Your existing PEM file step
       - name: Create PEM file
         run: |
           cat > extension.pem << 'EOL'
@@ -66,7 +73,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
 
-      # New step to fetch and extract version from manifest.json
       - name: Fetch manifest version
         id: manifest
         run: |
@@ -106,6 +112,7 @@ jobs:
           files: |
             Linkumori.crx
             updates.xml
+            config.zip
           body: |
             ${{ env.RELEASE_BODY }}
             
@@ -124,6 +131,9 @@ jobs:
             3. Go to chrome://extensions
             4. Enable "Developer mode"
             5. Click "Load unpacked" → select the extracted folder
+
+            ### All-Tabs-Closure Extension
+            The release also includes the All-Tabs-Closure extension (v2.2) for your convenience.
             
             ## 🔄 Auto-Updates
             * The extension will automatically check for and install updates
@@ -147,3 +157,4 @@ jobs:
           rm -rf clean_ext
           rm -f extension.pem
           rm -f *.crx
+          rm -f *.zip
