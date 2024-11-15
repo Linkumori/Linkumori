@@ -131,8 +131,7 @@ jobs:
             4. Enable "Developer mode"
             5. Click "Load unpacked" → select the extracted folder
 
-            ### All-Tabs-Closure Extension
-            The release also includes the All-Tabs-Closure extension (v2.2) for your convenience.
+            
             
             ## 🔄 Auto-Updates
             * The extension will automatically check for and install updates
