@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       EXTENSION_ID: mfedlkokfjjhjlmpddhphlnechbedmnp
-      ALL_TABS_VERSION: v2.2  # Version of config to download
     
     steps:
       - name: Checkout code
