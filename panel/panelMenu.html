@@ -25,248 +25,247 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <meta charset="UTF-8">
     <title>Linkumori Settings</title>
     <style>
-      @font-face {
-            font-family: 'Liberation Serif';
-            src:url('../liberation-fonts/LiberationSerif-Regular.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-        .centered {
-            text-align: center;
-        }
-        body {
-            width: 300px;
-            margin: 0;
-            font-family: "Liberation Serif";
-            background: #fafafa;
-        }
+    @font-face {
+        font-family: 'Liberation Serif';
+        src: url('../liberation-fonts/LiberationSerif-Regular.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+    
+    .centered {
+        text-align: center;
+    }
+    
+    body {
+        width: 300px;
+        margin: 0;
+        font-family: "Liberation Serif";
+        background: #1a2639;
+    }
+    
+    .header {
+        background: #2c4163;
+        padding: 12px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .logo {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .header h1 {
+        color: #ffffff;
+        font-size: 16px;
+        margin: 0;
+    }
+    
+    .tab-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        background: rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .tab {
+        padding: 10px;
+        border: none;
+        background: none;
+        font-size: 14px;
+        color: #e0e0e0;
+    }
+    
+    .tab.active {
+        background-color: #2c5282;
+        color: white;
 
-        .header {
-            background: #2c5282;
-            padding: 12px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
 
-        .logo {
-            width: 24px;
-            height: 24px;
-        }
+    }
+    
+    .content {
+        display: none;
+        padding: 12px;
+    }
+    
+    #mainContent {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .toggle-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    
+    .toggle-switch {
+        width: 44px;
+        height: 24px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        position: relative;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    
+    .toggle-switch.active {
+        background: #2c5282;
+    }
+    
+    .toggle-switch:before {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: #ffffff;
+        border-radius: 50%;
+        top: 2px;
+        left: 2px;
+        transition: 0.2s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    
+    .toggle-switch.active:before {
+        transform: translateX(20px);
+    }
+    
+    .toggle-label {
+        font-size: 14px;
+        color: #e0e0e0;
+    }
+    
+    .domain-input {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        font-family: "Liberation Serif";
+        padding: 12px;
+    }
+    
+    #domainInput {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+        font-size: 13px;
+        font-family: "Liberation Serif";
 
-        .header h1 {
-            color: white;
-            font-size: 16px;
-            margin: 0;
-        }
+        background: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+    }
+    
+    #whitelistContainer {
+        height: 300px;
+        overflow-y: auto;
+        padding-right: 6px;
+        overflow-y: auto;
+        max-height: calc(100% - 80px);
+}
 
-        .tab-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            background: white;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .tab {
-            padding: 10px;
-            border: none;
-            background: none;
-            font-size: 14px;
-            color: #4a5568;
-        }
-        
-        .tab.active {
-            color: #2c5282;
-            font-weight: 500;
-            border-bottom: 2px solid #2c5282;
-        }
-        
-        .content {
-            display: none;
-            padding: 12px;
-        }
-        
-        #mainContent {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .toggle-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
-            background: white;
-            border-radius: 4px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
-        
-        .toggle-switch {
-            width: 44px;
-            height: 24px;
-            background: #cbd5e0;
-            border-radius: 12px;
-            position: relative;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        
-        .toggle-switch.active {
-            background: #2c5282;
-        }
-        
-        .toggle-switch:before {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: 0.2s;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        .toggle-switch.active:before {
-            transform: translateX(20px);
-        }
 
-        .toggle-label {
-            font-size: 14px;
-            color: #4a5568;
-        }
-        
-        .domain-input {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-            background: #fafafa;
-            padding: 12px;
-        }
-        
-        #domainInput {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #e2e8f0;
-            border-radius: 4px;
-            font-size: 13px;
-        }
-        
-        #whitelistContainer {
-            height: 300px;
-            overflow-y: auto;
-            padding-right: 6px;
-            scrollbar-width: thin;
-            scrollbar-color: #cbd5e0 transparent;
-        }
-
-        #whitelistContainer::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        #whitelistContainer::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        #whitelistContainer::-webkit-scrollbar-thumb {
-            background-color: #cbd5e0;
-            border-radius: 3px;
-        }
-        
-        .domain-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 12px;
-            background: white;
-            border-radius: 4px;
-            margin-bottom: 6px;
-            font-size: 13px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            animation: fadeIn 0.2s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .empty-message {
-            text-align: center;
-            color: #718096;
-            padding: 16px;
-            font-size: 13px;
-        }
-        
-        button {
-            padding: 8px 12px;
-            background: #2c5282;
-            color: white;
-            border: none;
-            font-family: "Liberation Serif";
-
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: 0.2s;
-        }
-        
-       
-        
-        .domain-item button {
-            background: #e53e3e;
-            font-family: "Liberation Serif";
-
-            padding: 4px 8px;
-            font-size: 12px;
-        }
-
-        #licenseContent {
-            font-size: 12px;
-            line-height: 1.5;
-            color: #4a5568;
-            background: white;
-            border-radius: 4px;
-            padding: 12px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            height: 300px;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #cbd5e0 transparent;
-        }
-
-        #licenseContent::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        #licenseContent::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        #licenseContent::-webkit-scrollbar-thumb {
-            background-color: #cbd5e0;
-            border-radius: 3px;
-        }
-
-        #licenseContent p {
-            margin-bottom: 8px;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #2c5282;
-        }
-
-        button:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(44, 82, 130, 0.3);
-        }
-            /* Additional dark mode styles can be added here */
-        
-    </style>
+  
+    
+    #whitelistContainer::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+    }
+    
+    .domain-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        margin-bottom: 6px;
+        font-size: 13px;
+        color: #e0e0e0;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 0.2s ease-out;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-4px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .empty-message {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.5);
+        padding: 16px;
+        font-size: 13px;
+    }
+    
+    button {
+        padding: 8px 12px;
+        background: #2c5282;
+        color: #ffffff;
+        border: none;
+        font-family: "Liberation Serif";
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: 0.2s;
+    }
+    
+    button:hover {
+        background: #2c5282;
+    }
+    
+    .domain-item button {
+        background: #e53e3e;
+        font-family: "Liberation Serif";
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+    
+    .domain-item button:hover {
+        background: #c53030;
+    }
+    
+    #licenseContent {
+        font-size: 12px;
+        line-height: 1.5;
+        color: #e0e0e0;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        padding: 12px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        height: 300px;
+        overflow-y: auto;
+        max-height: calc(100% - 80px);
+    }
+    
+  
+    
+    #licenseContent::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+    }
+    
+    #licenseContent p {
+        margin-bottom: 8px;
+    }
+    
+    input:focus {
+        outline: none;
+        border-color: #4299e1;
+    }
+    
+    button:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.3);
+    }
+      </style>
 </head>
 <body>
     <header class="header">
