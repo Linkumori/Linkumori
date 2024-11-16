@@ -59,10 +59,10 @@ class PanelMenuController {
         
         chrome.storage.onChanged.addListener(this.handleStorageChanges.bind(this));
         
-        chrome.tabs.onActivated.addListener(() => this.updateDynamicWhitelistButton());
+        chrome.tabs.onActivated.addListener(() => this.updateAllDynamicButtons());
         chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
             if (changeInfo.status === 'complete') {
-                this.updateDynamicWhitelistButton();
+                this.updateAllDynamicButtons();
             }
         });
         
@@ -87,22 +87,11 @@ class PanelMenuController {
             }
         };
         
-        const currentDomain = await this.getCurrentTabDomain();
-        if (currentDomain) {
-            this.domElements.addCurrentButton.textContent = `Add ${currentDomain} to Whitelist`;
-        } else {
-            this.domElements.addCurrentButton.style.display = 'none';
-
-        }
-        
-        document.getElementById('toggleButton').addEventListener('click', 
+        document.getElementById('toggleButton')?.addEventListener('click', 
             () => this.togglePurifyUrlsSettings());
             
-        document.getElementById('addDomain').addEventListener('click',
+        document.getElementById('addDomain')?.addEventListener('click',
             () => this.handleAddDomain());
-            
-        this.domElements.addCurrentButton?.addEventListener('click',
-            () => this.handleAddCurrentDomain());
             
         this.domElements.domainInput?.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
@@ -112,13 +101,23 @@ class PanelMenuController {
         
         this.domElements.dynamicWhitelistButton?.addEventListener('click',
             () => this.handleDynamicWhitelistToggle());
+            
+        this.domElements.addCurrentButton?.addEventListener('click',
+            () => this.handlecurrentbutton());
         
         Object.keys(this.domElements.tabs).forEach(tabId => {
             this.domElements.tabs[tabId]?.addEventListener('click', 
                 () => this.switchTab(tabId));
         });
         
-        this.updateDynamicWhitelistButton();
+        // Initial update of all dynamic buttons
+        await this.updateAllDynamicButtons();
+    }
+
+    // New method to update all dynamic buttons
+    async updateAllDynamicButtons() {
+        await this.updateDynamicWhitelistButton();
+        await this.updatedynamicurrentbutton();
     }
     
     async getCurrentTabDomain() {
@@ -145,27 +144,20 @@ class PanelMenuController {
         }
     }
 
-   
-    
-    async handleAddCurrentDomain() {
-        try {
-            const domain = await this.getCurrentTabDomain();
-            if (!domain) {
-                alert('Could not get domain from current tab');
-                return;
+    async updatedynamicurrentbutton() {
+        const domain = await this.getCurrentTabDomain();
+        if (!domain || !this.domElements.addCurrentButton) {
+            if (this.domElements.addCurrentButton) {
+                this.domElements.addCurrentButton.style.display = 'none';
             }
-            
-            if (!this.state.whitelist.includes(domain)) {
-                const newWhitelist = [...this.state.whitelist, domain];
-                await chrome.storage.local.set({ whitelist: newWhitelist });
-                this.state.whitelist = newWhitelist;
-                this.renderWhitelist();
-            } else {
-                alert('Current domain is already in the whitelist');
-            }
-        } catch (error) {
-            console.error('Failed to add current domain:', error);
-            alert('Failed to add current domain to whitelist');
+            return;
+        }
+        
+        const isWhitelisted = this.state.whitelist.includes(domain);
+        if (this.domElements.addCurrentButton) {
+            this.domElements.addCurrentButton.textContent = isWhitelisted ? 
+                `Remove ${domain} from Whitelist` : `Add ${domain} to Whitelist`;
+            this.domElements.addCurrentButton.style.display = 'block';
         }
     }
     
@@ -205,7 +197,7 @@ class PanelMenuController {
         if (Object.hasOwn(changes, 'whitelist')) {
             this.state.whitelist = changes.whitelist.newValue;
             this.renderWhitelist();
-            this.updateDynamicWhitelistButton();
+            this.updateAllDynamicButtons();
         }
     }
     
@@ -245,33 +237,37 @@ class PanelMenuController {
         
         try {
             if (!this.state.whitelist.includes(domain)) {
-                const newWhitelist = [...this.state.whitelist, domain];
-                await chrome.storage.local.set({ whitelist: newWhitelist });
-                this.state.whitelist = newWhitelist;
-                this.renderWhitelist();
-                this.updateDynamicWhitelistButton();
+                await this.handleWhitelistChange(domain, true);
             } else {
                 alert('Domain is already in the whitelist');
             }
             
-            this.domElements.domainInput.value = '';
+            if (this.domElements.domainInput) {
+                this.domElements.domainInput.value = '';
+            }
         } catch (error) {
             console.error('Failed to add domain:', error);
         }
     }
     
-    async handleRemoveDomain(domain) {
+    async handleWhitelistChange(domain, shouldAdd) {
         try {
-            const newWhitelist = this.state.whitelist.filter(d => d !== domain);
+            let newWhitelist;
+            if (shouldAdd) {
+                newWhitelist = [...this.state.whitelist, domain];
+            } else {
+                newWhitelist = this.state.whitelist.filter(d => d !== domain);
+            }
+            
             await chrome.storage.local.set({ whitelist: newWhitelist });
             this.state.whitelist = newWhitelist;
             this.renderWhitelist();
-            this.updateDynamicWhitelistButton();
+            await this.updateAllDynamicButtons();
         } catch (error) {
-            console.error('Failed to remove domain:', error);
+            console.error('Failed to update whitelist:', error);
         }
     }
-
+    
     async handleDynamicWhitelistToggle() {
         const domain = await this.getCurrentTabDomain();
         if (!domain) {
@@ -280,17 +276,18 @@ class PanelMenuController {
         }
 
         const isWhitelisted = this.state.whitelist.includes(domain);
-        if (isWhitelisted) {
-            await this.handleRemoveDomain(domain);
-        } else {
-            if (!this.state.whitelist.includes(domain)) {
-                const newWhitelist = [...this.state.whitelist, domain];
-                await chrome.storage.local.set({ whitelist: newWhitelist });
-                this.state.whitelist = newWhitelist;
-                this.renderWhitelist();
-            }
+        await this.handleWhitelistChange(domain, !isWhitelisted);
+    }
+
+    async handlecurrentbutton() {
+        const domain = await this.getCurrentTabDomain();
+        if (!domain) {
+            alert('Could not get domain from current tab');
+            return;
         }
-        this.updateDynamicWhitelistButton();
+
+        const isWhitelisted = this.state.whitelist.includes(domain);
+        await this.handleWhitelistChange(domain, !isWhitelisted);
     }
     
     async updateDynamicWhitelistButton() {
@@ -303,9 +300,11 @@ class PanelMenuController {
         }
         
         const isWhitelisted = this.state.whitelist.includes(domain);
-        this.domElements.dynamicWhitelistButton.textContent = isWhitelisted ? 
-            `Remove ${domain} from Whitelist` : `Add ${domain} to Whitelist`;
-        this.domElements.dynamicWhitelistButton.style.display = 'block';
+        if (this.domElements.dynamicWhitelistButton) {
+            this.domElements.dynamicWhitelistButton.textContent = isWhitelisted ? 
+                `Remove ${domain} from Whitelist` : `Add ${domain} to Whitelist`;
+            this.domElements.dynamicWhitelistButton.style.display = 'block';
+        }
     }
     
     switchTab(tabId) {
@@ -329,7 +328,7 @@ class PanelMenuController {
     updateUI() {
         this.updateToggleUI();
         this.renderWhitelist();
-        this.updateDynamicWhitelistButton();
+        this.updateAllDynamicButtons();
         this.switchTab(this.state.activeTab);
     }
     
@@ -370,7 +369,7 @@ class PanelMenuController {
             
             const removeBtn = document.createElement('button');
             removeBtn.textContent = 'Remove';
-            removeBtn.onclick = () => this.handleRemoveDomain(domain);
+            removeBtn.onclick = () => this.handleWhitelistChange(domain, false);
             
             item.appendChild(text);
             item.appendChild(removeBtn);
