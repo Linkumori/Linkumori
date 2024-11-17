@@ -1,7 +1,7 @@
-name: Linkumori Builds and Release
+name: Linkumori Builds and release
 
 permissions:
-  contents: write
+  contents: write  
 
 on:
   release:
@@ -19,6 +19,7 @@ jobs:
         with:
           fetch-depth: 0
 
+      
       - name: Download CONFIG
         run: |
           wget https://github.com/subham8907/Linkumori-Autoupdate/archive/refs/tags/1.0.zip -O config.zip
@@ -113,52 +114,40 @@ jobs:
             config.zip
           body: |
             ${{ env.RELEASE_BODY }}
+            
+            
             ## ⚡ Quick Installation
+            
             ### Method 1: One-Click Install (Recommended)
             1. Download `Linkumori.crx` from above
             2. Open chrome://extensions (or edge://extensions)
             3. Enable "Developer mode" (top-right corner)
             4. Drag & drop the .crx file into the extensions page
+            
             ### Method 2: Developer Installation
             1. Download source code (zip)
             2. Extract to a folder
             3. Go to chrome://extensions
             4. Enable "Developer mode"
             5. Click "Load unpacked" → select the extracted folder
+
+            
+            
             ## 🔄 Auto-Updates
             * The extension will automatically check for and install updates
             * Updates are delivered through GitHub releases
+            
             ## 🌐 Supported Browsers
             * ✅ Google Chrome
             * ✅ Microsoft Edge
             * ✅ Brave
             * ✅ Opera GX
             * ✅ Vivaldi
+            
             ## ⚠️ Keep in Mind
             * If using Method 2, keep the source folder (required for the extension to work)
             * First-time installation may show a warning - this is normal for developer mode extensions
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Commit and Push to Another Repo (web.linkumori)
-        run: |
-          # Configure git with your user name and email for commits
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          
-          # Clone the target repository (web.linkumori)
-          git clone https://github.com/subham8907/web.linkumori.git
-          
-          # Copy the .crx file into the repository
-          cp Linkumori.crx web.linkumori/
-          
-          # Commit and push the .crx file to the main branch of web.linkumori
-          cd web.linkumori
-          git checkout main
-          git add Linkumori.crx
-          git commit -m "Add latest Linkumori extension .crx file"
-          
-          # Use GITHUB_TOKEN for authentication
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/subham8907/web.linkumori.git main
 
       - name: Cleanup
         if: always()
