@@ -156,7 +156,9 @@ jobs:
           git checkout main
           git add Linkumori.crx
           git commit -m "Add latest Linkumori extension .crx file"
-          git push origin main
+          
+          # Use GITHUB_TOKEN for authentication
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/subham8907/web.linkumori.git main
 
       - name: Cleanup
         if: always()
