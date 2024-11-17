@@ -1,7 +1,7 @@
-name: Linkumori Builds and release
+name: Linkumori Builds and Release
 
 permissions:
-  contents: write  
+  contents: write
 
 on:
   release:
@@ -19,7 +19,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      
       - name: Download CONFIG
         run: |
           wget https://github.com/subham8907/Linkumori-Autoupdate/archive/refs/tags/1.0.zip -O config.zip
@@ -31,31 +30,7 @@ jobs:
           cat > extension.pem << 'EOL'
           -----BEGIN PRIVATE KEY-----
           MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCp8Q+kavs7radl
-          cNbSkJFovhnAkg0v3CMKdoiVK26CvSEkuJXfLB3FOPlFkSPo1cj9Zwld2fW59V5/
-          Z6gQ28+pxf2o0N+1Pyi80JtbT5DME9gW1GiTqX41Jm/wYINMSBGqhpUhklwcZZSB
-          Fox+Fkxz7j4pm64f95HKa6ETMlrhZ5p1a6KhzMHnl83jdB/E61cSaWKo1ZjvWJO6
-          Ap075d5MscKS1pAsrd9EnN3FcxICokD1GpTmkoNsDyWcF8A+kKXotUb+Ix0TwirK
-          4IKV3IpJqpIVwdPPmcG1/87SgsOOkP/8EIAAsGfRjLc0/Bqhf+ej5sOEgEJqrhoj
-          uu81Svr3AgMBAAECggEAFfMNbX5mhftp5uTqJOGIm8S3QsjFF0IRlzpewxWMUn/n
-          Ff0ZWRfeSH48A/Y5HcuZstEUw/XGPTHUoL6yAGtuU6PqSAb3vfXdvHVye3ANaFka
-          dz28EXEPh1c4Qg3VJ4xva7Jc9KxuD+Thh21y0UjusFKR3iyTaDbrslSwcJr3uKvD
-          ZKMrjTWnFhevYGA82rLJGIbZsCATlDCEHsJlFXPZLcUlSV+amNJ0AdWWyBDsSp9P
-          ydE+DH304GgTZz9t/ukIpLHvtcsEYsnLCA90Xn8hdmvcL4FiFXltjEhRMM5+hXya
-          wyBcPxzeWS6vYZ1kOz/p+xBU6kVSCnGp+6XoOJiJcQKBgQDqyvp+4nCV/kgppeQz
-          1AT/EuoLgDpZ9COtRFtQnpmIqKzRdwG+85OnnRbAWmDj7GUWbAaGGYVWpmZb822w
-          rE9B04gucesfbgn4uMME37RRXuSoVtIxAqBsOrF/FBvDcnJCu5ai4Pws3uAKlfv6
-          rI2ZUP0y1pBVHpLGmUJcEJZaKwKBgQC5So2vBEx0yRGJqjAX95rC/+wmS9EbuskQ
-          LVDjfj2EL8tYv0J7CWg4Xx0Cu968PpNOl3u8cj2VV7nkHKw9tmANEhgN7i9qnCg+
-          HK+IikdvSbzSW06sSpRPcRZ1NifKva+36sCm9r2ut89Q7y65c+dcaGqA2qE5arjS
-          I+izcsA4ZQKBgEMR4oaWZrTiI3kKM2r+uMKog4Tvhzuk+wAG09Luy0r3bA6V4UDL
-          0bUCsboW1zCkmafTCfYKmkVLWVgQ7JeYUTerlm42CoU66MxM8yCUSq0n30ebLYXk
-          izD/fy6e7uNg8PTRI1G51S94JyW+/HD6E6TlNr7r/eTiy+jBZOxprJlrAoGAVkTI
-          3LCirEklWjQbujz1GE8xcs8f58o6bMa8f366Q35BLeu2lzRVCtH13tz7oid8TD4p
-          RR7nX0395aAX7Y+o/szq2CmKeBeGgQy4CVlgUwdA26vZYExE6wvbCe2R70oLsxSg
-          Z9w/ikZYRvVlisDU+mg/Fgk0wVfX/zbq1AncRyUCgYBNPr4TIfkENQ/wB5HglRFr
-          ihtBkEMJM0dP4Jl3cKnqq7Knrx52geP9UaCY602VCSJCLtT38yM+a+v840Nqt7oM
-          ZhgCiRMf/ZQcdD7wlrveGmQY7cNiaFIHq/kR/naEQiF90fJ9O2Lcd0apt4Tv1HPB
-          2kKLtm7EJ3+XwevH94MxsA==
+          ...
           -----END PRIVATE KEY-----
           EOL
           chmod 600 extension.pem
@@ -114,40 +89,50 @@ jobs:
             config.zip
           body: |
             ${{ env.RELEASE_BODY }}
-            
-            
             ## ⚡ Quick Installation
-            
             ### Method 1: One-Click Install (Recommended)
             1. Download `Linkumori.crx` from above
             2. Open chrome://extensions (or edge://extensions)
             3. Enable "Developer mode" (top-right corner)
             4. Drag & drop the .crx file into the extensions page
-            
             ### Method 2: Developer Installation
             1. Download source code (zip)
             2. Extract to a folder
             3. Go to chrome://extensions
             4. Enable "Developer mode"
             5. Click "Load unpacked" → select the extracted folder
-
-            
-            
             ## 🔄 Auto-Updates
             * The extension will automatically check for and install updates
             * Updates are delivered through GitHub releases
-            
             ## 🌐 Supported Browsers
             * ✅ Google Chrome
             * ✅ Microsoft Edge
             * ✅ Brave
             * ✅ Opera GX
             * ✅ Vivaldi
-            
             ## ⚠️ Keep in Mind
             * If using Method 2, keep the source folder (required for the extension to work)
             * First-time installation may show a warning - this is normal for developer mode extensions
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and Push to Another Repo (web.linkumori)
+        run: |
+          # Configure git with your user name and email for commits
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          
+          # Clone the target repository (web.linkumori)
+          git clone https://github.com/subham8907/web.linkumori.git
+          
+          # Copy the .crx file into the repository
+          cp Linkumori.crx web.linkumori/
+          
+          # Commit and push the .crx file to the main branch of web.linkumori
+          cd web.linkumori
+          git checkout main
+          git add Linkumori.crx
+          git commit -m "Add latest Linkumori extension .crx file"
+          git push origin main
 
       - name: Cleanup
         if: always()
