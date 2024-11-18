@@ -521,24 +521,18 @@ async function createContextMenu(domain) {
 // Update context menu title based on current domain's whitelist status
 async function updateContextMenuTitle(domain) {
   try {
-    const { whitelist = [] } = await chrome.storage.sync.get('whitelist');
+    // Ensure we retrieve the whitelist correctly
+    const { whitelist = [] } = await chrome.storage.local.get('whitelist') || { whitelist: [] };
     const isWhitelisted = whitelist.includes(domain);
-    const newTitle = isWhitelisted ?
-      `Remove ${domain} from whitelist` :
+    const newTitle = isWhitelisted ? 
+      `Remove ${domain} from whitelist` : 
       `Add ${domain} to whitelist`;
-
-    // Only update if the context menu exists
-    if (contextMenuCreated) {
-      chrome.contextMenus.update("toggleWhitelistDomain", {
-        title: newTitle
-      }, () => {
-        if (chrome.runtime.lastError) {
-          console.error('Error updating context menu:', chrome.runtime.lastError);
-        }
-      });
-    }
+    
+    chrome.contextMenus.update("toggleWhitelistDomain", {
+      title: newTitle
+    });
   } catch (error) {
-    console.error('Error getting whitelist:', error);
+    console.error('Error updating context menu title:', error);
   }
 }
 
@@ -647,3 +641,4 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
     await handleTabUrl(tabs[0].url);
   }
 });
+
