@@ -583,39 +583,16 @@ function removeContextMenu() {
 // Toggle domain in whitelist
 async function toggleDomainWhitelist(domain) {
   try {
-    // Get current whitelist
-    const result = await chrome.storage.sync.get('whitelist');
-    const currentWhitelist = result.whitelist || [];
+    const { whitelist = [] } = await chrome.storage.sync.get('whitelist');
     
-    // Check if domain is already in whitelist
-    const isWhitelisted = currentWhitelist.includes(domain);
-    
-    // Create new whitelist array
-    const updatedWhitelist = isWhitelisted 
-      ? currentWhitelist.filter(d => d !== domain)
-      : [...currentWhitelist, domain];
-    
-    // Save the updated whitelist
+    const updatedWhitelist = whitelist.includes(domain) 
+      ? whitelist.filter(d => d !== domain)
+      : [...whitelist, domain];
+
     await chrome.storage.sync.set({ whitelist: updatedWhitelist });
-    
-    // Debug log
-    console.log('Whitelist updated:', {
-      domain,
-      wasWhitelisted: isWhitelisted,
-      oldWhitelist: currentWhitelist,
-      newWhitelist: updatedWhitelist
-    });
     
     // Update context menu after whitelist change
     await updateContextMenuTitle(domain);
-    
-    // Notify any listeners about the whitelist change
-    chrome.runtime.sendMessage({
-      action: 'whitelistUpdated',
-      whitelist: updatedWhitelist,
-      domain: domain,
-      isWhitelisted: !isWhitelisted
-    });
   } catch (error) {
     console.error('Error toggling whitelist:', error);
   }
@@ -640,33 +617,33 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 });
 
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
-  if (info.menuItemId === 'toggleWhitelistDomain') {
-    const url = info.linkUrl || info.pageUrl;
-    try {
-      const domain = new URL(url).hostname;
-      await toggleDomainWhitelist(domain);
-    } catch (error) {
-      console.error('Error parsing URL:', error);
+  const url = new URL(tab.url);
+  const domain = url.hostname;
+
+  const { whitelist } = await chrome.storage.local.get('whitelist') || { whitelist: [] };
+
+  if (whitelist.includes(domain)) {
+    // Remove domain from whitelist
+    const index = whitelist.indexOf(domain);
+    if (index > -1) {
+      whitelist.splice(index, 1);
+      await chrome.storage.local.set({ whitelist });
+      console.log(`Domain unwhitelisted: ${domain}`);
     }
+  } else {
+    // Add domain to whitelist
+    whitelist.push(domain);
+    await chrome.storage.local.set({ whitelist });
+    console.log(`Domain whitelisted: ${domain}`);
   }
+
+  // Update the context menu title after changing the whitelist
+  updateContextMenuTitle(domain);
 });
 
 // Initialize context menu state on extension startup
 chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
   if (tabs[0]?.url) {
     await handleTabUrl(tabs[0].url);
-  }
-});
-
-// Listen for whitelist sync changes from other instances
-chrome.storage.onChanged.addListener((changes, namespace) => {
-  if (namespace === 'sync' && changes.whitelist) {
-    // Update UI if needed
-    chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
-      if (tabs[0]?.url) {
-        const domain = new URL(tabs[0].url).hostname;
-        await updateContextMenuTitle(domain);
-      }
-    });
   }
 });
