@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Linkumori (URLs Purifier)",
-  "version": "50.0",
+  "version": "51.0",
   "description": "Clean tracking query parameters from URLs",
   "update_url": "https://github.com/subham8907/Linkumori/releases/latest/download/updates.xml",
   
