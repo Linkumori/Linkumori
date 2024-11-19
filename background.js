@@ -492,51 +492,64 @@ async function updateDNRRule() {
 // Create context menu item for updating whitelist based on domain
 let contextMenuCreated = false;
 
+// Use local storage exclusively for faster operations
+const STORAGE = chrome.storage.local;
+
 async function createContextMenu(domain) {
   if (!contextMenuCreated) {
-    // Get whitelist status before creating menu
-    const { whitelist = [] } = await chrome.storage.sync.get('whitelist');
-    const isWhitelisted = whitelist.includes(domain);
-    const initialTitle = isWhitelisted ?
-      `Remove ${domain} from whitelist` :
-      `Add ${domain} to whitelist`;
+    try {
+      const { whitelist = [] } = await STORAGE.get('whitelist');
+      const isWhitelisted = whitelist.includes(domain);
+      const initialTitle = isWhitelisted ?
+        `Remove ${domain} from whitelist` :
+        `Add ${domain} to whitelist`;
 
-    chrome.contextMenus.create({
-      id: "toggleWhitelistDomain",
-      title: initialTitle,
-      contexts: ["all"]
-    }, () => {
-      if (chrome.runtime.lastError) {
-        console.error('Error creating context menu:', chrome.runtime.lastError);
-        return;
-      }
-      contextMenuCreated = true;
-    });
+      await new Promise((resolve, reject) => {
+        chrome.contextMenus.create({
+          id: "toggleWhitelistDomain",
+          title: initialTitle,
+          contexts: ["all"]
+        }, () => {
+          if (chrome.runtime.lastError) {
+            reject(chrome.runtime.lastError);
+          } else {
+            contextMenuCreated = true;
+            resolve();
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Error creating context menu:', error);
+    }
   } else {
-    // If menu exists, just update the title
     await updateContextMenuTitle(domain);
   }
 }
 
-// Update context menu title based on current domain's whitelist status
 async function updateContextMenuTitle(domain) {
   try {
-    // Ensure we retrieve the whitelist correctly
-    const { whitelist = [] } = await chrome.storage.local.get('whitelist') || { whitelist: [] };
+    const { whitelist = [] } = await STORAGE.get('whitelist');
     const isWhitelisted = whitelist.includes(domain);
     const newTitle = isWhitelisted ? 
       `Remove ${domain} from whitelist` : 
       `Add ${domain} to whitelist`;
     
-    chrome.contextMenus.update("toggleWhitelistDomain", {
-      title: newTitle
+    await new Promise((resolve, reject) => {
+      chrome.contextMenus.update("toggleWhitelistDomain", {
+        title: newTitle
+      }, () => {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
+        } else {
+          resolve();
+        }
+      });
     });
   } catch (error) {
     console.error('Error updating context menu title:', error);
   }
 }
 
-// Check if URL is valid for context menu
 function isValidUrl(url) {
   return url && 
          !url.startsWith('chrome:') && 
@@ -544,7 +557,6 @@ function isValidUrl(url) {
          !url.startsWith('edge:');
 }
 
-// Handle tab URL changes
 async function handleTabUrl(url) {
   if (!url) return;
   
@@ -553,40 +565,46 @@ async function handleTabUrl(url) {
     if (isValidUrl(url)) {
       await createContextMenu(parsedUrl.hostname);
     } else {
-      removeContextMenu();
+      await removeContextMenu();
     }
   } catch (error) {
     console.error('Error handling tab URL:', error);
-    removeContextMenu();
+    await removeContextMenu();
   }
 }
 
-// Remove the context menu
-function removeContextMenu() {
+async function removeContextMenu() {
   if (contextMenuCreated) {
-    chrome.contextMenus.remove('toggleWhitelistDomain', () => {
-      if (chrome.runtime.lastError) {
-        console.error('Error removing context menu:', chrome.runtime.lastError);
-        return;
-      }
-      contextMenuCreated = false;
-    });
+    try {
+      await new Promise((resolve, reject) => {
+        chrome.contextMenus.remove('toggleWhitelistDomain', () => {
+          if (chrome.runtime.lastError) {
+            reject(chrome.runtime.lastError);
+          } else {
+            contextMenuCreated = false;
+            resolve();
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Error removing context menu:', error);
+    }
   }
 }
 
-// Toggle domain in whitelist
 async function toggleDomainWhitelist(domain) {
   try {
-    const { whitelist = [] } = await chrome.storage.sync.get('whitelist');
+    const { whitelist = [] } = await STORAGE.get('whitelist');
     
     const updatedWhitelist = whitelist.includes(domain) 
       ? whitelist.filter(d => d !== domain)
       : [...whitelist, domain];
 
-    await chrome.storage.sync.set({ whitelist: updatedWhitelist });
-    
-    // Update context menu after whitelist change
+    await STORAGE.set({ whitelist: updatedWhitelist });
     await updateContextMenuTitle(domain);
+    
+    // Log the action for debugging
+    console.log(`Domain ${whitelist.includes(domain) ? 'removed from' : 'added to'} whitelist:`, domain);
   } catch (error) {
     console.error('Error toggling whitelist:', error);
   }
@@ -611,28 +629,14 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 });
 
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
-  const url = new URL(tab.url);
-  const domain = url.hostname;
-
-  const { whitelist } = await chrome.storage.local.get('whitelist') || { whitelist: [] };
-
-  if (whitelist.includes(domain)) {
-    // Remove domain from whitelist
-    const index = whitelist.indexOf(domain);
-    if (index > -1) {
-      whitelist.splice(index, 1);
-      await chrome.storage.local.set({ whitelist });
-      console.log(`Domain unwhitelisted: ${domain}`);
-    }
-  } else {
-    // Add domain to whitelist
-    whitelist.push(domain);
-    await chrome.storage.local.set({ whitelist });
-    console.log(`Domain whitelisted: ${domain}`);
+  if (!tab?.url) return;
+  
+  try {
+    const url = new URL(tab.url);
+    await toggleDomainWhitelist(url.hostname);
+  } catch (error) {
+    console.error('Error handling context menu click:', error);
   }
-
-  // Update the context menu title after changing the whitelist
-  updateContextMenuTitle(domain);
 });
 
 // Initialize context menu state on extension startup
