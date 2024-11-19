@@ -387,6 +387,8 @@ async function badge(enabled) {
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name === 'wakeUpAlarm') {
+    await tabquery();
+
     // Removed updateRuleSet call
   }
 });
@@ -519,7 +521,6 @@ async function createContextMenu(domain) {
         });
       });
     } catch (error) {
-      console.error('Error creating context menu:', error);
     }
   } else {
     await updateContextMenuTitle(domain);
@@ -587,7 +588,6 @@ async function removeContextMenu() {
         });
       });
     } catch (error) {
-      console.error('Error removing context menu:', error);
     }
   }
 }
@@ -640,9 +640,26 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 });
 
 // Initialize context menu state on extension startup
-chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
-  if (tabs[0]?.url) {
-    await handleTabUrl(tabs[0].url);
+
+
+async function tabquery() {
+  try {
+    chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
+      if (tabs[0]?.url) {
+        await handleTabUrl(tabs[0].url);
+      }
+    });
+  } catch (error) {
+    console.error('Error in tabquery:', error);
+  }
+}
+
+// Call the tabquery function to avoid the unused declaration error
+tabquery();
+
+chrome.windows.onFocusChanged.addListener(async (windowId) => {
+  if (windowId !== chrome.windows.WINDOW_ID_NONE) {
+    await tabquery();
+    // Removed updateRuleSet call
   }
 });
-
