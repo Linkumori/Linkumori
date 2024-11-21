@@ -24,248 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <head>
     <meta charset="UTF-8">
     <title>Linkumori Settings</title>
-    <style>
-    @font-face {
-        font-family: 'Liberation Serif';
-        src: url('../liberation-fonts/LiberationSerif-Regular.ttf') format('truetype');
-        font-weight: normal;
-        font-style: normal;
-    }
-    
-    .centered {
-        text-align: center;
-    }
-    
-    body {
-        width: 300px;
-        margin: 0;
-        font-family: "Liberation Serif";
-        background: #1a2639;
-    }
-    
-    .header {
-        background: #2c4163;
-        padding: 12px;
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-    
-    .logo {
-        width: 24px;
-        height: 24px;
-    }
-    
-    .header h1 {
-        color: #ffffff;
-        font-size: 16px;
-        margin: 0;
-    }
-    
-    .tab-container {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        background: rgba(255, 255, 255, 0.1);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    .tab {
-        padding: 10px;
-        border: none;
-        background: none;
-        font-size: 14px;
-        color: #e0e0e0;
-    }
-    
-    .tab.active {
-        background-color: #2c5282;
-        color: white;
-
-
-    }
-    
-    .content {
-        display: none;
-        padding: 12px;
-    }
-    
-    #mainContent {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
-    
-    .toggle-container {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 12px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 4px;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    }
-    
-    .toggle-switch {
-        width: 44px;
-        height: 24px;
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 12px;
-        position: relative;
-        cursor: pointer;
-        transition: 0.2s;
-    }
-    
-    .toggle-switch.active {
-        background: #2c5282;
-    }
-    
-    .toggle-switch:before {
-        content: '';
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        background: #ffffff;
-        border-radius: 50%;
-        top: 2px;
-        left: 2px;
-        transition: 0.2s;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    }
-    
-    .toggle-switch.active:before {
-        transform: translateX(20px);
-    }
-    
-    .toggle-label {
-        font-size: 14px;
-        color: #e0e0e0;
-    }
-    
-    .domain-input {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 12px;
-        background: rgba(255, 255, 255, 0.1);
-        font-family: "Liberation Serif";
-        padding: 12px;
-    }
-    
-    #domainInput {
-        flex: 1;
-        padding: 8px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 4px;
-        font-size: 13px;
-        font-family: "Liberation Serif";
-
-        background: rgba(255, 255, 255, 0.1);
-        color: #ffffff;
-    }
-    
-    #whitelistContainer {
-        height: 300px;
-        overflow-y: auto;
-        padding-right: 6px;
-        overflow-y: auto;
-        max-height: calc(100% - 80px);
-}
-
-
-  
-    
-    #whitelistContainer::-webkit-scrollbar-thumb {
-        background-color: rgba(255, 255, 255, 0.2);
-        border-radius: 3px;
-    }
-    
-    .domain-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 8px 12px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 4px;
-        margin-bottom: 6px;
-        font-size: 13px;
-        color: #e0e0e0;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        animation: fadeIn 0.2s ease-out;
-    }
-    
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-4px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .empty-message {
-        text-align: center;
-        color: rgba(255, 255, 255, 0.5);
-        padding: 16px;
-        font-size: 13px;
-    }
-    
-    button {
-        padding: 8px 12px;
-        background: #2c5282;
-        color: #ffffff;
-        border: none;
-        font-family: "Liberation Serif";
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 13px;
-        transition: 0.2s;
-    }
-    
-    button:hover {
-        background: #2c5282;
-    }
-    
-    .domain-item button {
-        background: #e53e3e;
-        font-family: "Liberation Serif";
-        padding: 4px 8px;
-        font-size: 12px;
-    }
-    
-    .domain-item button:hover {
-        background: #c53030;
-    }
-    
-    #licenseContent {
-        font-size: 12px;
-        line-height: 1.5;
-        color: #e0e0e0;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 4px;
-        padding: 12px;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        height: 300px;
-        overflow-y: auto;
-        max-height: calc(100% - 80px);
-    }
-    
-  
-    
-    #licenseContent::-webkit-scrollbar-thumb {
-        background-color: rgba(255, 255, 255, 0.2);
-        border-radius: 3px;
-    }
-    
-    #licenseContent p {
-        margin-bottom: 8px;
-    }
-    
-    input:focus {
-        outline: none;
-        border-color: #4299e1;
-    }
-    
-    button:focus {
-        outline: none;
-        box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.3);
-    }
-      </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header class="header">
@@ -285,18 +44,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </nav>
     
     <div id="mainContent" class="content">           
-        
         <div class="toggle-container">
             <div id="toggleButton" class="toggle-button">
-                <span class="toggle-label">Off</span>
+                <span class="toggle-label"></span>
                 <div class="toggle-switch">
                     <div class="toggle-slider"></div>
                 </div>
-
             </div>
-
         </div>
-        <button id="singledynamicwhitelistunwhitelistbutton" "></button>
+        <div class="toggle-container">
+            <div id="newToggleButton" class="toggle-button">
+                <span class="toggle-label">History API Protection</span>
+                <div class="toggle-switch">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+        </div>
+        <div class="toggle-container">
+            <div id="blockHyperlinkAuditingToggle" class="toggle-button">
+                <span class="toggle-label">Block Hyperlink Auditing</span>
+                <div class="toggle-switch">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+        </div>
+        <button id="singledynamicwhitelistunwhitelistbutton" ></button>
 
     </div>
     
@@ -336,10 +108,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <p>THE SOFTWARE IS PROVIDED &#8220;AS IS&#8221;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
             
         <p>Full license texts for GPLv3 license here:</p>
-        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-    
-    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+        
     <head>
      <title>GNU General Public License v3.0 - GNU Project - Free Software Foundation (FSF)</title>
    
@@ -1038,6 +807,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <li>"/rules/original/rules8.json"</li>
 <li>"/rules/original/rules9.json"</li>
 <li>"/rules/original/rules10.json"</li>
+<li>"/rules/original/rules11.json"</li>
+
 <li>"/panel/panelMenu.js"</li>
 <li>"/content.js"</li>
 <li>"icons/icon48.png",</li>
@@ -1047,10 +818,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 </ul>
 <p>Copyright: (c) 2024 Subham Mahesh</p>
 <p>Full license texts for GPLv3 license here:</p>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
     
-    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
      <title>GNU General Public License v3.0 - GNU Project - Free Software Foundation (FSF)</title>
     </head>
@@ -1808,10 +1577,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <p> Copyright information of modified parts only: Copyright (c) 2024 Subham Mahesh            </P>
         <p>For more information about original work, please see the repository: <a href="https://github.com/AdguardTeam/AdguardFilters" target="_blank" rel="noopener">https://github.com/AdguardTeam/AdguardFilters</a></p>
         <p>Full license texts for GPLv3 license here:</p>
-        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 
 <title>GNU General Public License v3.0 - GNU Project - Free Software Foundation (FSF)</title>

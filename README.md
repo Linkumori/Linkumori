@@ -133,7 +133,7 @@ The following files are completely under the GNU General Public License v3:
 
 - `/Linkumori-Artifact/Artifact.json`
 - `/rules/original/rules1.json` to `/rules/original/rules3.json`
-- `/rules/original/rules8.json` to `/rules/original/rules10.json`
+- `/rules/original/rules8.json` to `/rules/original/rules11.json`
 - `icons/icon48.png`, `icons/icon96.png`, `icons/icon128.png`
 
 Copyright (c) 2024 Subham Mahesh

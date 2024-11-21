@@ -145,28 +145,30 @@ async function firstInstalled() {
 /// fuctions for update and first installation
 
 chrome.runtime.onInstalled.addListener(async () => {
-
   const isFirstInstall = await firstInstalled(); 
   if (isFirstInstall) {
-     setDefaultSettings();
-    return; 
+    setDefaultSettings();
+    chrome.storage.local.set({ updateHyperlinkAuditing: true, firstInstalled: true, historyApiProtection: true });
+    updateHyperlinkAuditing(true); // {{ edit_1 }}
+      return; 
   }
 
+  const updatesettings = await new Promise((resolve) => {
+    chrome.storage.local.get('updateHyperlinkAuditing', (result) => { // {{ edit_1 }}
+      resolve(result.updateHyperlinkAuditing);    });
+  });
   const settings = await new Promise((resolve) => {
     chrome.storage.local.get(SETTINGS_KEY, (result) => {
       resolve(result[SETTINGS_KEY]);
     });
   });
-  
-  console.log('Settings retrieved:', settings);
-  
-
+  console.log('Settings hyperlink retrieved:', updatesettings);
   updateRuleSet(settings.status);
   updateDNRRules(settings.status);
   badge(settings.status);
-
-
+  updateHyperlinkAuditing(updatesettings); // {{ edit_2 }}
 });
+
 
 
 async function updatefirstinstallruleset() {
@@ -187,18 +189,23 @@ async function updatefirstinstallruleset() {
 chrome.runtime.onInstalled.addListener(async () => {
   const isupdatefirstinstallruleset = await updatefirstinstallruleset(); 
   if (isupdatefirstinstallruleset) {
+   
+    const updatesettings = await new Promise((resolve) => {
+      chrome.storage.local.get('updateHyperlinkAuditing', (result) => { // {{ edit_1 }}
+        resolve(result.updateHyperlinkAuditing);      });
+    });
     const settings = await new Promise((resolve) => {
       chrome.storage.local.get(SETTINGS_KEY, (result) => {
         resolve(result[SETTINGS_KEY]);
       });
     });
-    
-    console.log('Settings retrieved:', settings);
-    
-  
+    console.log('Settings hyperlink retrieved:', updatesettings);
     updateRuleSet(settings.status);
     updateDNRRules(settings.status);
     badge(settings.status);
+    updateHyperlinkAuditing(updatesettings); // {{ edit_2 }}
+
+
     chrome.alarms.create('wakeUpAlarm', { periodInMinutes: 1/60 });
     return; 
   }
@@ -277,6 +284,13 @@ async function injectContentScript(tabId) {
     const tab = await chrome.tabs.get(tabId);
     const url = tab.url;
 
+    // Check if historyApiProtection is enabled
+    const { historyApiProtection } = await chrome.storage.local.get('historyApiProtection');
+    if (!historyApiProtection) {
+      console.log('History API protection is not enabled, skipping content script injection.');
+      return; // Early return if historyApiProtection is not enabled
+    }
+
     // Check if the URL is allowed for scripting
     if (url.startsWith('chrome://') || url.startsWith('https://chromewebstore.google.com/') || url.startsWith('edge://') || url.startsWith('file:///')
       || url.startsWith('chrome-extension://') || url.startsWith('https://microsoftedge.microsoft.com/addons/')) {
@@ -307,7 +321,6 @@ async function injectContentScript(tabId) {
       files: ['content.js']
     });
   } catch (error) {
-    console.error('Error in injectContentScript:', error);
   }
 }
 
@@ -356,6 +369,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     updateRuleSet(message.enabled);
     updateDNRRules(message.enabled);
     badge(message.enabled);
+    updateHyperlinkAuditing(message.enabled)
     chrome.storage.local.set({ [SETTINGS_KEY]: { status: message.enabled } });
     sendResponse({ success: true });
   } else if (message.action === "cleanUrl") {
@@ -368,6 +382,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         updateRuleSet(newStatus);
         updateDNRRules(newStatus);
         badge(newStatus);
+        updateHyperlinkAuditing(newStatus);
         sendResponse({ status: newStatus ? "activated" : "deactivated" });
       });
     });
@@ -586,3 +601,44 @@ chrome.contextMenus.onClicked.addListener((_, tab) => {
   }
 });
 
+async function updateHyperlinkAuditing(enabled) {
+  const ruleset15 = ['ruleset_11'];
+
+  // Update static ruleset for ruleset_15
+  await chrome.declarativeNetRequest.updateEnabledRulesets({
+    disableRulesetIds: enabled ? [] : ruleset15,
+    enableRulesetIds: enabled ? ruleset15 : []
+  });
+  console.log('Static rulese', enabled);  
+}
+
+
+// Add this to your background.js
+
+
+
+// Add this to your existing message listener
+
+// Update your chrome.runtime.onInstalled listener
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === 'updateHistoryApiProtection') {
+    const { enabled } = message;
+    chrome.storage.local.set({ historyApiProtection: enabled }, () => {
+      sendResponse({ success: true });
+    });
+    return true; // Indicates that the response will be sent asynchronously
+  }
+  // ... existing message handlers
+});
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === 'updateHyperlinkAuditing') {
+    const { enabled } = message;
+    chrome.storage.local.set({ updateHyperlinkAuditing: enabled }, () => {
+      updateHyperlinkAuditing(message.enabled);
+    sendResponse({ success: true });
+    });
+    return true; // Indicates that the response will be sent asynchronously
+  }
+  // ... existing message handlers
+});

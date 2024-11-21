@@ -91,6 +91,11 @@
         "id": "ruleset_10",
         "enabled": false,
         "path": "/rules/original/rules10.json"
+      },
+      {
+        "id": "ruleset_11",
+        "enabled": false,
+        "path": "/rules/original/rules11.json"
       }
     ]
   }

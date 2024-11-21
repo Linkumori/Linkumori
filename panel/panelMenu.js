@@ -30,6 +30,8 @@ class PanelMenuController {
     constructor() {
         this.state = {
             isEnabled: false,
+            historyApiProtection: false,
+            blockHyperlinkAuditing: false,
             whitelist: [],
             activeTab: 'mainTab'
         };
@@ -37,6 +39,10 @@ class PanelMenuController {
         this.domElements = {
             toggleSwitch: null,
             toggleLabel: null,
+            historyApiToggle: null,
+            historyApiLabel: null,
+            hyperlinkAuditingToggle: null,
+            hyperlinkAuditingLabel: null,
             whitelistContainer: null,
             domainInput: null,
             mainContent: null,
@@ -73,6 +79,10 @@ class PanelMenuController {
         this.domElements = {
             toggleSwitch: document.querySelector('.toggle-switch'),
             toggleLabel: document.querySelector('.toggle-label'),
+            historyApiToggle: document.querySelector('#newToggleButton .toggle-switch'),
+            historyApiLabel: document.querySelector('#newToggleButton .toggle-label'),
+            hyperlinkAuditingToggle: document.querySelector('#blockHyperlinkAuditingToggle .toggle-switch'),
+            hyperlinkAuditingLabel: document.querySelector('#blockHyperlinkAuditingToggle .toggle-label'),
             whitelistContainer: document.getElementById('whitelistContainer'),
             domainInput: document.getElementById('domainInput'),
             mainContent: document.getElementById('mainContent'),
@@ -87,8 +97,17 @@ class PanelMenuController {
             }
         };
         
+        // Main toggle button
         document.getElementById('toggleButton')?.addEventListener('click', 
             () => this.togglePurifyUrlsSettings());
+        
+        // History API Protection toggle
+        document.getElementById('newToggleButton')?.addEventListener('click',
+            () => this.toggleHistoryApiProtection());
+            
+        // Block Hyperlink Auditing toggle
+        document.getElementById('blockHyperlinkAuditingToggle')?.addEventListener('click',
+            () => this.toggleHyperlinkAuditing());
             
         document.getElementById('addDomain')?.addEventListener('click',
             () => this.handleAddDomain());
@@ -110,11 +129,135 @@ class PanelMenuController {
                 () => this.switchTab(tabId));
         });
         
-        // Initial update of all dynamic buttons
         await this.updateAllDynamicButtons();
     }
 
-    // New method to update all dynamic buttons
+    async loadInitialState() {
+        try {
+            const settings = await new Promise(resolve => 
+                readPurifyUrlsSettings(resolve));
+                
+            if (!Object.hasOwn(settings, SETTINGS_KEY)) {
+                console.log(CANT_FIND_SETTINGS_MSG);
+                await setDefaultSettings();
+                return;
+            }
+            
+            const { 
+                whitelist = [], 
+                enabled = false,
+                historyApiProtection = false,
+                updateHyperlinkAuditing = false
+            } = await chrome.storage.local.get([
+                'whitelist', 
+                'enabled',
+                'historyApiProtection',
+                'updateHyperlinkAuditing'
+            ]);
+            
+            this.state = {
+                ...this.state,
+                isEnabled: settings[SETTINGS_KEY].status,
+                historyApiProtection,
+                blockHyperlinkAuditing: updateHyperlinkAuditing,
+                whitelist
+            };
+            
+            this.updateUI();
+        } catch (error) {
+            console.error('Failed to load initial state:', error);
+        }
+    }
+
+    handleStorageChanges(changes, area) {
+        if (Object.hasOwn(changes, SETTINGS_KEY)) {
+            const { newValue } = changes[SETTINGS_KEY];
+            this.state.isEnabled = newValue.status;
+            this.updateToggleUI();
+        }
+        
+        if (Object.hasOwn(changes, 'historyApiProtection')) {
+            this.state.historyApiProtection = changes.historyApiProtection.newValue;
+            this.updateHistoryApiToggleUI();
+        }
+
+        if (Object.hasOwn(changes, 'blockHyperlinkAuditing')) {
+            this.state.blockHyperlinkAuditing = changes.blockHyperlinkAuditing.newValue;
+            this.updateHyperlinkAuditingToggleUI();
+        }
+        
+        if (Object.hasOwn(changes, 'whitelist')) {
+            this.state.whitelist = changes.whitelist.newValue;
+            this.renderWhitelist();
+            this.updateAllDynamicButtons();
+        }
+    }
+
+    async togglePurifyUrlsSettings() {
+        try {
+            const newStatus = !this.state.isEnabled;
+            
+            await chrome.storage.local.set({
+                [SETTINGS_KEY]: {
+                    ...this.state,
+                    status: newStatus,
+                }
+            });
+            
+            await chrome.runtime.sendMessage({
+                action: 'updateRuleSet', 
+                enabled: newStatus
+            });
+            
+            this.state.isEnabled = newStatus;
+            this.updateToggleUI();
+        } catch (error) {
+            console.error('Failed to toggle settings:', error);
+        }
+    }
+
+    async toggleHistoryApiProtection() {
+        try {
+            const { historyApiProtection = false } = await chrome.storage.local.get('historyApiProtection');
+            const newStatus = !historyApiProtection;
+            
+            await chrome.storage.local.set({
+                historyApiProtection: newStatus
+            });
+            
+            this.state.historyApiProtection = newStatus;
+            this.updateHistoryApiToggleUI();
+            
+            await chrome.runtime.sendMessage({
+                action: 'updateHistoryApiProtection',
+                enabled: newStatus
+            });
+        } catch (error) {
+            console.error('Failed to toggle History API Protection:', error);
+        }
+    }
+
+    async toggleHyperlinkAuditing() {
+        try {
+            const { updateHyperlinkAuditing = false } = await chrome.storage.local.get('updateHyperlinkAuditing');
+            const newStatus = !updateHyperlinkAuditing;
+            
+            await chrome.storage.local.set({
+                updateHyperlinkAuditing: newStatus
+            });
+            
+            this.state.blockHyperlinkAuditing = newStatus;
+            this.updateHyperlinkAuditingToggleUI();
+            
+            await chrome.runtime.sendMessage({
+                action: 'updateHyperlinkAuditing',
+                enabled: newStatus
+            });
+        } catch (error) {
+            console.error('Failed to toggle Hyperlink Auditing:', error);
+        }
+    }
+    
     async updateAllDynamicButtons() {
         await this.updateDynamicWhitelistButton();
         await this.updatedynamicurrentbutton();
@@ -161,69 +304,6 @@ class PanelMenuController {
         }
     }
     
-    async loadInitialState() {
-        try {
-            const settings = await new Promise(resolve => 
-                readPurifyUrlsSettings(resolve));
-                
-            if (!Object.hasOwn(settings, SETTINGS_KEY)) {
-                console.log(CANT_FIND_SETTINGS_MSG);
-                await setDefaultSettings();
-                return;
-            }
-            
-            const { whitelist = [], enabled = false } = 
-                await chrome.storage.local.get(['whitelist', 'enabled']);
-            
-            this.state = {
-                ...this.state,
-                isEnabled: settings[SETTINGS_KEY].status,
-                whitelist
-            };
-            
-            this.updateUI();
-        } catch (error) {
-            console.error('Failed to load initial state:', error);
-        }
-    }
-    
-    handleStorageChanges(changes, area) {
-        if (Object.hasOwn(changes, SETTINGS_KEY)) {
-            const { newValue } = changes[SETTINGS_KEY];
-            this.state.isEnabled = newValue.status;
-            this.updateToggleUI();
-        }
-        
-        if (Object.hasOwn(changes, 'whitelist')) {
-            this.state.whitelist = changes.whitelist.newValue;
-            this.renderWhitelist();
-            this.updateAllDynamicButtons();
-        }
-    }
-    
-    async togglePurifyUrlsSettings() {
-        try {
-            const newStatus = !this.state.isEnabled;
-            
-            await chrome.storage.local.set({
-                [SETTINGS_KEY]: {
-                    ...this.state,
-                    status: newStatus,
-                }
-            });
-            
-            await chrome.runtime.sendMessage({
-                action: 'updateRuleSet', 
-                enabled: newStatus
-            });
-            
-            this.state.isEnabled = newStatus;
-            this.updateToggleUI();
-        } catch (error) {
-            console.error('Failed to toggle settings:', error);
-        }
-    }
-    
     async handleAddDomain() {
         const domain = this.domElements.domainInput?.value.trim().toLowerCase();
         
@@ -249,7 +329,7 @@ class PanelMenuController {
             console.error('Failed to add domain:', error);
         }
     }
-    
+
     async handleWhitelistChange(domain, shouldAdd) {
         try {
             let newWhitelist;
@@ -306,6 +386,57 @@ class PanelMenuController {
             this.domElements.dynamicWhitelistButton.style.display = 'block';
         }
     }
+
+    updateUI() {
+        this.updateToggleUI();
+        this.updateHistoryApiToggleUI();
+        this.updateHyperlinkAuditingToggleUI();
+        this.renderWhitelist();
+        this.updateAllDynamicButtons();
+        this.switchTab(this.state.activeTab);
+    }
+    
+    updateToggleUI() {
+        if (!this.domElements.toggleSwitch || !this.domElements.toggleLabel) {
+            return;
+        }
+        
+        if (this.state.isEnabled) {
+            this.domElements.toggleSwitch.classList.add('active');
+            this.domElements.toggleLabel.textContent = 'Extension status:On with DNR protection';
+        } else {
+            this.domElements.toggleSwitch.classList.remove('active');
+            this.domElements.toggleLabel.textContent = 'Extension status:Off';
+        }
+    }
+
+    updateHistoryApiToggleUI() {
+        if (!this.domElements.historyApiToggle || !this.domElements.historyApiLabel) {
+            return;
+        }
+        
+        if (this.state.historyApiProtection) {
+            this.domElements.historyApiToggle.classList.add('active');
+            this.domElements.historyApiLabel.textContent = 'History API Protection: On';
+        } else {
+            this.domElements.historyApiToggle.classList.remove('active');
+            this.domElements.historyApiLabel.textContent = 'History API Protection: Off';
+        }
+    }
+
+    updateHyperlinkAuditingToggleUI() {
+        if (!this.domElements.hyperlinkAuditingToggle || !this.domElements.hyperlinkAuditingLabel) {
+            return;
+        }
+        
+        if (this.state.blockHyperlinkAuditing) {
+            this.domElements.hyperlinkAuditingToggle.classList.add('active');
+            this.domElements.hyperlinkAuditingLabel.textContent = 'Block Hyperlink Auditing:On';
+        } else {
+            this.domElements.hyperlinkAuditingToggle.classList.remove('active');
+            this.domElements.hyperlinkAuditingLabel.textContent = 'Block Hyperlink Auditing:Off';
+        }
+    }
     
     switchTab(tabId) {
         this.state.activeTab = tabId;
@@ -323,27 +454,6 @@ class PanelMenuController {
                 tab.classList.toggle('active', key === tabId);
             }
         });
-    }
-    
-    updateUI() {
-        this.updateToggleUI();
-        this.renderWhitelist();
-        this.updateAllDynamicButtons();
-        this.switchTab(this.state.activeTab);
-    }
-    
-    updateToggleUI() {
-        if (!this.domElements.toggleSwitch || !this.domElements.toggleLabel) {
-            return;
-        }
-        
-        if (this.state.isEnabled) {
-            this.domElements.toggleSwitch.classList.add('active');
-            this.domElements.toggleLabel.textContent = 'On';
-        } else {
-            this.domElements.toggleSwitch.classList.remove('active');
-            this.domElements.toggleLabel.textContent = 'Off';
-        }
     }
     
     renderWhitelist() {
