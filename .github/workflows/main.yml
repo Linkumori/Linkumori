@@ -116,6 +116,20 @@ jobs:
           </gupdate>
           EOL
 
+      - name: Get Commit History
+        id: get_commit_history
+        run: |
+          # Get commit history since last tag
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "none")
+          if [ "$PREV_TAG" = "none" ]; then
+            HISTORY=$(git log --pretty=format:"* %h - %s (%an)" -10)
+          else
+            HISTORY=$(git log --pretty=format:"* %h - %s (%an)" $PREV_TAG..HEAD)
+          fi
+          echo "history<<EOF" >> $GITHUB_OUTPUT
+          echo "$HISTORY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
       - name: Get Release Body
         id: get_release_body
         run: |
@@ -137,6 +151,11 @@ jobs:
             ${{ env.RELEASE_BODY }}
             
             Version Status: ${{ steps.version_check.outputs.update || steps.version_check.outputs.warning }}
+            
+            ## 📝 Commit History
+            ```
+            ${{ steps.get_commit_history.outputs.history }}
+            ```
             
             ## ⚡ Quick Installation
             
