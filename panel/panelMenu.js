@@ -103,7 +103,7 @@ class PanelMenuController {
         
         // History API Protection toggle
         document.getElementById('newToggleButton')?.addEventListener('click',
-            () => this.toggleHistoryApiProtection());
+            this.toggleHistoryApiProtection.bind(this));
             
         // Block Hyperlink Auditing toggle
         document.getElementById('blockHyperlinkAuditingToggle')?.addEventListener('click',
@@ -210,40 +210,43 @@ class PanelMenuController {
             });
             
             this.state.isEnabled = newStatus;
-            this.updateToggleUI();
+            this.updateUI();
         } catch (error) {
             console.error('Failed to toggle settings:', error);
         }
     }
 
-    async toggleHistoryApiProtection() {
-        try {
-            const { historyApiProtection = false } = await chrome.storage.local.get('historyApiProtection');
-            const newStatus = !historyApiProtection;
-            
-            await chrome.storage.local.set({
-                historyApiProtection: newStatus
-            });
-            
-            this.state.historyApiProtection = newStatus;
-            this.updateHistoryApiToggleUI();
-            
-            await chrome.runtime.sendMessage({
-                action: 'updateHistoryApiProtection',
-                enabled: newStatus
-            });
-        } catch (error) {
-            console.error('Failed to toggle History API Protection:', error);
+    updateHistoryApiToggleUI() {
+        if (!this.domElements.historyApiToggle || !this.domElements.historyApiLabel) {
+            return;
+        }
+        
+        if (!this.state.isEnabled) {
+            if (this.state.historyApiProtection) {
+                this.domElements.historyApiToggle.classList.add('active');
+            } else {
+                this.domElements.historyApiToggle.classList.remove('active');
+            }
+            this.domElements.historyApiLabel.textContent = 'History API Protection: Inactive (Extension Off)';
+            return;
+        }
+        
+        if (this.state.historyApiProtection) {
+            this.domElements.historyApiToggle.classList.add('active');
+            this.domElements.historyApiLabel.textContent = 'History API Protection: On';
+        } else {
+            this.domElements.historyApiToggle.classList.remove('active');
+            this.domElements.historyApiLabel.textContent = 'History API Protection: Off';
         }
     }
 
     async toggleHyperlinkAuditing() {
         try {
-            const { updateHyperlinkAuditing = false } = await chrome.storage.local.get('updateHyperlinkAuditing');
-            const newStatus = !updateHyperlinkAuditing;
+            const { blockHyperlinkAuditing = false } = await chrome.storage.local.get('blockHyperlinkAuditing');
+            const newStatus = !blockHyperlinkAuditing;
             
             await chrome.storage.local.set({
-                updateHyperlinkAuditing: newStatus
+                blockHyperlinkAuditing: newStatus
             });
             
             this.state.blockHyperlinkAuditing = newStatus;
@@ -387,7 +390,7 @@ class PanelMenuController {
         }
     }
 
-    updateUI() {
+   async updateUI() {
         this.updateToggleUI();
         this.updateHistoryApiToggleUI();
         this.updateHyperlinkAuditingToggleUI();
@@ -415,26 +418,45 @@ class PanelMenuController {
             return;
         }
         
+        // Update toggle class based on state regardless of extension status
         if (this.state.historyApiProtection) {
             this.domElements.historyApiToggle.classList.add('active');
-            this.domElements.historyApiLabel.textContent = 'History API Protection: On';
         } else {
             this.domElements.historyApiToggle.classList.remove('active');
-            this.domElements.historyApiLabel.textContent = 'History API Protection: Off';
+        }
+
+        // Only update the text based on extension status
+        if (!this.state.isEnabled) {
+            this.domElements.historyApiLabel.textContent = this.state.historyApiProtection ? 
+                'History API Protection: On (Inactive - Extension Off)' : 
+                'History API Protection: Off (Inactive - Extension Off)';
+        } else {
+            this.domElements.historyApiLabel.textContent = this.state.historyApiProtection ?
+                'History API Protection: On' : 
+                'History API Protection: Off';
         }
     }
-
     updateHyperlinkAuditingToggleUI() {
         if (!this.domElements.hyperlinkAuditingToggle || !this.domElements.hyperlinkAuditingLabel) {
             return;
         }
         
+        // Update toggle class based on state regardless of extension status
         if (this.state.blockHyperlinkAuditing) {
             this.domElements.hyperlinkAuditingToggle.classList.add('active');
-            this.domElements.hyperlinkAuditingLabel.textContent = 'Block Hyperlink Auditing:On';
         } else {
             this.domElements.hyperlinkAuditingToggle.classList.remove('active');
-            this.domElements.hyperlinkAuditingLabel.textContent = 'Block Hyperlink Auditing:Off';
+        }
+
+        // Only update the text based on extension status
+        if (!this.state.isEnabled) {
+            this.domElements.hyperlinkAuditingLabel.textContent = this.state.blockHyperlinkAuditing ?
+                'Block Hyperlink Auditing: On (Inactive - Extension Off)' :
+                'Block Hyperlink Auditing: Off (Inactive - Extension Off)';
+        } else {
+            this.domElements.hyperlinkAuditingLabel.textContent = this.state.blockHyperlinkAuditing ?
+                'Block Hyperlink Auditing: On' :
+                'Block Hyperlink Auditing: Off';
         }
     }
     
@@ -485,6 +507,12 @@ class PanelMenuController {
             item.appendChild(removeBtn);
             container.appendChild(item);
         });
+    }
+
+    async toggleHistoryApiProtection() {
+        this.state.historyApiProtection = !this.state.historyApiProtection;
+        await chrome.storage.local.set({ historyApiProtection: this.state.historyApiProtection });
+        this.updateUI();
     }
 }
 
