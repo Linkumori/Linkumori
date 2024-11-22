@@ -523,11 +523,11 @@ async function updateMenu(domain) {
 
   try {
     // Remove existing menu items
-    await chrome.contextMenus.removeAll();
+    await chrome.contextMenus.removeAll(); // Ensure this is called before creating a new item
 
     // Create new menu item
     chrome.contextMenus.create({
-      id: 'whitelist-toggle',
+      id: 'whitelist-toggle', // Ensure this ID is unique and not used elsewhere
       title,
       contexts: ['all'],
     });
@@ -594,12 +594,13 @@ chrome.contextMenus.onClicked.addListener((_, tab) => {
   if (tab?.url) {
     try {
       const domain = new URL(tab.url).hostname;
-      toggleWhitelist(domain);
+      toggleWhitelist(domain); // Ensure this function handles the whitelist correctly
     } catch (err) {
       console.error('Failed to toggle whitelist from context menu:', err);
     }
   }
 });
+
 
 async function updateHyperlinkAuditing(enabled) {
   const ruleset15 = ['ruleset_11'];
