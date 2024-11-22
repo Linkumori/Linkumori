@@ -27,6 +27,7 @@ jobs:
 
       - name: Compare versions
         id: version_check
+        continue-on-error: false
         run: |
           CURRENT_VERSION=$(jq -r .version manifest.json)
           PREVIOUS_VERSION=$(curl -s "https://raw.githubusercontent.com/${{ github.repository }}/${{ steps.previoustag.outputs.tag }}/manifest.json" | jq -r .version 2>/dev/null || echo "0.0.0")
@@ -35,8 +36,8 @@ jobs:
           echo "Previous version: $PREVIOUS_VERSION"
           
           if [ "$CURRENT_VERSION" = "$PREVIOUS_VERSION" ]; then
-            echo "⚠️ Warning: Manifest version has not been updated"
-            echo "warning=Version not updated from $PREVIOUS_VERSION" >> $GITHUB_OUTPUT
+            echo "::error::Manifest version has not been updated from $PREVIOUS_VERSION"
+            exit 1
           else
             echo "✅ Manifest version updated from $PREVIOUS_VERSION to $CURRENT_VERSION"
             echo "update=Updated from $PREVIOUS_VERSION to $CURRENT_VERSION" >> $GITHUB_OUTPUT
@@ -46,7 +47,7 @@ jobs:
         run: |
           wget https://github.com/subham8907/Linkumori-Autoupdate/archive/refs/tags/1.0.zip -O config.zip
           echo "Downloaded configs"
-      # Your existing PEM file step
+
       - name: Create PEM file
         run: |
           cat > extension.pem << 'EOL'
@@ -81,7 +82,6 @@ jobs:
           EOL
           chmod 600 extension.pem
 
-    
       - name: Prepare clean directory
         run: |
           mkdir clean_ext
