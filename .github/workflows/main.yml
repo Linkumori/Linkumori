@@ -19,12 +19,33 @@ jobs:
         with:
           fetch-depth: 0
 
-      
+      - name: Get previous tag
+        id: previoustag
+        run: |
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "none")
+          echo "tag=$PREVIOUS_TAG" >> $GITHUB_OUTPUT
+
+      - name: Compare versions
+        id: version_check
+        run: |
+          CURRENT_VERSION=$(jq -r .version manifest.json)
+          PREVIOUS_VERSION=$(curl -s "https://raw.githubusercontent.com/${{ github.repository }}/${{ steps.previoustag.outputs.tag }}/manifest.json" | jq -r .version 2>/dev/null || echo "0.0.0")
+          
+          echo "Current manifest version: $CURRENT_VERSION"
+          echo "Previous version: $PREVIOUS_VERSION"
+          
+          if [ "$CURRENT_VERSION" = "$PREVIOUS_VERSION" ]; then
+            echo "⚠️ Warning: Manifest version has not been updated"
+            echo "warning=Version not updated from $PREVIOUS_VERSION" >> $GITHUB_OUTPUT
+          else
+            echo "✅ Manifest version updated from $PREVIOUS_VERSION to $CURRENT_VERSION"
+            echo "update=Updated from $PREVIOUS_VERSION to $CURRENT_VERSION" >> $GITHUB_OUTPUT
+          fi
+
       - name: Download CONFIG
         run: |
           wget https://github.com/subham8907/Linkumori-Autoupdate/archive/refs/tags/1.0.zip -O config.zip
           echo "Downloaded configs"
-
       # Your existing PEM file step
       - name: Create PEM file
         run: |
@@ -60,6 +81,7 @@ jobs:
           EOL
           chmod 600 extension.pem
 
+    
       - name: Prepare clean directory
         run: |
           mkdir clean_ext
@@ -75,7 +97,7 @@ jobs:
       - name: Fetch manifest version
         id: manifest
         run: |
-          MANIFEST_VERSION=$(curl -s https://raw.githubusercontent.com/subham8907/Linkumori/main/manifest.json | jq -r '.version')
+          MANIFEST_VERSION=$(curl -s https://raw.githubusercontent.com/${{ github.repository }}/main/manifest.json | jq -r '.version')
           echo "version=$MANIFEST_VERSION" >> $GITHUB_OUTPUT
 
       - name: Pack Extension
@@ -83,13 +105,12 @@ jobs:
           google-chrome --pack-extension="$(pwd)/clean_ext" --pack-extension-key="$(pwd)/extension.pem"
           mv clean_ext.crx "Linkumori.crx"
           
-          # Generate updates.xml with version from manifest.json
           cat > updates.xml << EOL
           <?xml version='1.0' encoding='UTF-8'?>
           <gupdate xmlns='http://www.google.com/update2/response' protocol='2.0'>
             <app appid="kcpfnbjlimolkcjllfooaipdpdjmjigg">
               <updatecheck 
-                codebase='https://github.com/subham8907/Linkumori/releases/download/${{ github.event.release.tag_name }}/Linkumori.crx' 
+                codebase='https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/Linkumori.crx' 
                 version='${{ steps.manifest.outputs.version }}' />
             </app>
           </gupdate>
@@ -115,6 +136,7 @@ jobs:
           body: |
             ${{ env.RELEASE_BODY }}
             
+            Version Status: ${{ steps.version_check.outputs.update || steps.version_check.outputs.warning }}
             
             ## ⚡ Quick Installation
             
@@ -130,8 +152,6 @@ jobs:
             3. Go to chrome://extensions
             4. Enable "Developer mode"
             5. Click "Load unpacked" → select the extracted folder
-
-            
             
             ## 🔄 Auto-Updates
             * The extension will automatically check for and install updates
