@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Linkumori (URLs Purifier)",
-  "version": "54.0",
+  "version": "55.0",
   "description": "Clean tracking query parameters from URLs",
   "update_url": "https://github.com/subham8907/Linkumori/releases/latest/download/updates.xml",
   
@@ -43,58 +43,58 @@
     
       {
         "id": "ruleset_1",
-        "enabled": false,
+        "enabled": true,
         "path": "/rules/original/rules1.json"
       },
       {
         "id": "ruleset_2",
-        "enabled": false,
+        "enabled": true,
         "path": "rules/original/rules2.json"
       },
       {
         "id": "ruleset_3",
-        "enabled": false,
+        "enabled": true,
         "path": "rules/original/rules3.json"
       },
       {
         "id": "ruleset_4",
-        "enabled": false,
+        "enabled": true,
         "path": "rules/adguard-modifed/rules4.json"
       },
       {
         "id": "ruleset_5",
-        "enabled": false,
+        "enabled": true,
         "path": "rules/adguard-modifed/rules5.json"
       },
       {
         "id": "ruleset_6",
-        "enabled": false,
+        "enabled": true,
         "path": "rules/adguard-modifed/rules6.json"
       },
       {
         "id": "ruleset_7",
-        "enabled": false,
+        "enabled": true,
         "path": "rules/adguard-modifed/rules7.json"
       },
       {
         "id": "ruleset_8",
-        "enabled": false,
+        "enabled": true,
         "path": "/rules/original/rules8.json"
       },
 
       {
         "id": "ruleset_9",
-        "enabled": false,
+        "enabled": true,
         "path": "/rules/original/rules9.json"
       },
       {
         "id": "ruleset_10",
-        "enabled": false,
+        "enabled": true,
         "path": "/rules/original/rules10.json"
       },
       {
         "id": "ruleset_11",
-        "enabled": false,
+        "enabled": true,
         "path": "/rules/original/rules11.json"
       }
     ]
