@@ -39,7 +39,6 @@ async function start() {
   try {
     const rulesets = await chrome.declarativeNetRequest.getEnabledRulesets();
     if (rulesets.length > 0) {
-      console.log('Start function executed');
       await linkumoriwrite({ LinkumoriEngineStart: true });
     } else {
       console.log('Start not executed');
@@ -117,7 +116,6 @@ initialize().then(() => {
 
 // Main execution
 initialize().then(() => {
-  console.log('Initialization complete');
 }).catch(reason => {
   console.trace(reason);
   linkumoriread('LinkumoriEngineStart').then((value) => {
@@ -166,8 +164,7 @@ chrome.runtime.onInstalled.addListener(async () => {
       resolve(result[SETTINGS_KEY]);
     });
   });
-  console.log('Settings hyperlink retrieved:', updatesettings);
-  console.log('Settings hyperlink retrieved:', badgesettings);
+ 
 
   updateRuleSet(settings.status);
   updateDNRRules(settings.status);
@@ -210,8 +207,7 @@ chrome.runtime.onInstalled.addListener(async () => {
       chrome.storage.local.get('updateBadgeOnOff', (result) => { // {{ edit_1 }}
         resolve(result.updateBadgeOnOff);    });
     });
-    console.log('Settings hyperlink retrieved:', updatesettings);
-    console.log('Settings hyperlink retrieved:', badgesettings);
+   
         updateRuleSet(settings.status);
     updateDNRRules(settings.status);
     badge(badgesettings);
@@ -235,7 +231,6 @@ async function updateRuleSet(enabled) {
     disableRulesetIds: enabled ? [] : allRulesets,
     enableRulesetIds: enabled ? allRulesets : []
   });
-  console.log('Static rules updated:', enabled);  
 }
 
 
@@ -299,7 +294,6 @@ async function injectContentScript(tabId) {
     // Check if historyApiProtection is enabled
     const { historyApiProtection } = await chrome.storage.local.get('historyApiProtection');
     if (!historyApiProtection) {
-      console.log('History API protection is not enabled, skipping content script injection.');
       return; // Early return if historyApiProtection is not enabled
     }
 
@@ -317,7 +311,6 @@ async function injectContentScript(tabId) {
     });
 
     if (!settings || !settings.status) {
-      console.log('Extension is disabled, skipping content script injection.');
       return;
     }
 
@@ -409,9 +402,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
       displayActionCountAsBadgeText: changes.updateBadgeOnOff.newValue
     });
     if (changes.updateBadgeOnOff.newValue === true) {
-      console.log('Badge counter display enabled');
     } else {
-      console.log('Badge counter display disabled');
     }
   }
 });
@@ -420,7 +411,6 @@ async function badge(enabled) {
   if (enabled) {
     const badgesettings = await new Promise((resolve) => {
       chrome.storage.local.get('updateBadgeOnOff', (result) => {
-        console.log('Initial badge settings:', result.updateBadgeOnOff);
         resolve(result.updateBadgeOnOff);
       });
     });
@@ -495,16 +485,13 @@ async function updateDNRRules(enabled) {
         removeRuleIds: existingRuleIds,
         addRules: newRules
       });
-      console.log('dynamic rules updated:', enabled);
     } else {
       await chrome.declarativeNetRequest.updateDynamicRules({
         removeRuleIds: existingRuleIds,
         addRules: []
       });
-      console.log('dynamic rules updated:', enabled);
     }
   } catch (error) {
-    console.error('Error updating DNR rules:', error);
   }
 }
 
@@ -528,7 +515,6 @@ async function updateDNRRule() {
       resolve(result.updateBadgeOnOff);    });
   });
 
-  console.log('Settings retrieved:', settings,badgesettings);
   
   updateDNRRules(settings.status);
   badge(badgesettings);
@@ -701,7 +687,6 @@ async function updateHyperlinkAuditing(enabled) {
     disableRulesetIds: enabled ? [] : ruleset15,
     enableRulesetIds: enabled ? ruleset15 : []
   });
-  console.log('Static rulese', enabled);  
 }
 
 
@@ -742,12 +727,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   if (message.action === 'updateBadgeOnOff') {
     const { enabled } = message;
-    console.log('Updating badge state to:', enabled);
     chrome.storage.local.set({ updateBadgeOnOff: enabled }, () => {
-      console.log('Badge state saved in storage:', enabled);
       badge();
       sendResponse({ success: true });
-      console.log('Badge update completed');
     });
     return true;
   }
