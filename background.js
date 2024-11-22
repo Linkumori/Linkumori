@@ -509,30 +509,67 @@ async function updateDNRRule() {
 const STORAGE = chrome.storage.local;
 const STORAGE_KEY = 'whitelist';
 
-const isValidUrl = url =>
-  url && !['chrome:', 'file:', 'edge:'].some(p => url.startsWith(p)) && !!new URL(url).hostname;
+// Improved URL validation with more robust error handling
+const isValidUrl = (url) => {
+  try {
+    if (!url) return false;
+    
+    // Check for restricted protocols
+    const restrictedProtocols = ['chrome:', 'file:', 'edge:', 'chrome-extension:'];
+    if (restrictedProtocols.some(p => url.toLowerCase().startsWith(p))) {
+      return false;
+    }
+    
+    const urlObj = new URL(url);
+    return !!urlObj.hostname && urlObj.hostname.includes('.');
+  } catch {
+    return false;
+  }
+};
 
-const getTitle = (domain, isWhitelisted) =>
+const getTitle = (domain, isWhitelisted) => 
   `${isWhitelisted ? 'Remove' : 'Add'} ${domain} ${isWhitelisted ? 'from' : 'to'} whitelist`;
 
-// Menu management
+// Improved menu management with better error handling and race condition prevention
+let menuUpdateInProgress = false;
+
 async function updateMenu(domain) {
-  const { whitelist = [] } = await STORAGE.get(STORAGE_KEY);
-  const isWhitelisted = whitelist.includes(domain);
-  const title = getTitle(domain, isWhitelisted);
-
+  if (menuUpdateInProgress) {
+    console.log('Menu update already in progress, skipping...');
+    return;
+  }
+  
+  menuUpdateInProgress = true;
+  
   try {
-    // Remove existing menu items
-    await chrome.contextMenus.removeAll(); // Ensure this is called before creating a new item
+    const { whitelist = [] } = await STORAGE.get(STORAGE_KEY);
+    const isWhitelisted = whitelist.includes(domain);
+    const title = getTitle(domain, isWhitelisted);
 
+    // Wait for menu removal to complete
+    await chrome.contextMenus.removeAll();
+    
+    // Add small delay to ensure removal is complete
+    await new Promise(resolve => setTimeout(resolve, 50));
+    
     // Create new menu item
-    chrome.contextMenus.create({
-      id: 'whitelist-toggle', // Ensure this ID is unique and not used elsewhere
-      title,
-      contexts: ['all'],
+    await new Promise((resolve, reject) => {
+      chrome.contextMenus.create({
+        id: 'whitelist-toggle',
+        title,
+        contexts: ['all'],
+      }, () => {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
+        } else {
+          resolve();
+        }
+      });
     });
   } catch (err) {
     console.error('Failed to update context menu:', err);
+  } finally {
+    menuUpdateInProgress = false;
   }
 }
 
@@ -544,13 +581,18 @@ async function removeMenu() {
   }
 }
 
-// Whitelist operations
+// Improved whitelist operations with validation
 async function toggleWhitelist(domain) {
+  if (!domain || typeof domain !== 'string') {
+    console.error('Invalid domain provided to toggleWhitelist');
+    return;
+  }
+
   try {
     const { whitelist = [] } = await STORAGE.get(STORAGE_KEY);
     const newList = whitelist.includes(domain)
       ? whitelist.filter(d => d !== domain)
-      : [...whitelist, domain];
+      : [...new Set([...whitelist, domain])]; // Use Set to ensure uniqueness
 
     await STORAGE.set({ [STORAGE_KEY]: newList });
     await updateMenu(domain);
@@ -559,22 +601,42 @@ async function toggleWhitelist(domain) {
   }
 }
 
-// URL handling
-async function handleUrl(url) {
-  if (!url) return;
+// Improved URL handling with debouncing
+let urlHandlerTimeout;
 
-  try {
-    const domain = new URL(url).hostname;
-    if (isValidUrl(url)) {
-      await updateMenu(domain);
-    } else {
+async function handleUrl(url) {
+  // Clear any pending URL handler
+  if (urlHandlerTimeout) {
+    clearTimeout(urlHandlerTimeout);
+  }
+
+  // Debounce the URL handling
+  urlHandlerTimeout = setTimeout(async () => {
+    if (!url) {
+      await removeMenu();
+      return;
+    }
+
+    try {
+      if (isValidUrl(url)) {
+        const domain = new URL(url).hostname;
+        await updateMenu(domain);
+      } else {
+        await removeMenu();
+      }
+    } catch (err) {
+      console.error('Failed to handle URL:', err);
       await removeMenu();
     }
-  } catch (err) {
-    console.error('Failed to handle URL:', err);
-    await removeMenu();
-  }
+  }, 100); // 100ms debounce delay
 }
+
+// Add cleanup function for extension unload
+chrome.runtime.onSuspend.addListener(() => {
+  if (urlHandlerTimeout) {
+    clearTimeout(urlHandlerTimeout);
+  }
+});
 
 // Event listeners
 chrome.tabs.onActivated.addListener(async ({ tabId }) => {
