@@ -101,7 +101,6 @@ chrome.runtime.onStartup.addListener(async () => {
 async function initialize() {
   await firstInstalled();
   await start();
-  await badge();
 }
 
 // Main execution
@@ -148,7 +147,7 @@ chrome.runtime.onInstalled.addListener(async () => {
   const isFirstInstall = await firstInstalled(); 
   if (isFirstInstall) {
     setDefaultSettings();
-    chrome.storage.local.set({ updateHyperlinkAuditing: true, firstInstalled: true, historyApiProtection: true });
+    chrome.storage.local.set({ updateHyperlinkAuditing: true, firstInstalled: true, historyApiProtection: true,updateBadgeOnOff: true });
     updateHyperlinkAuditing(true); // {{ edit_1 }}
       return; 
   }
@@ -157,15 +156,22 @@ chrome.runtime.onInstalled.addListener(async () => {
     chrome.storage.local.get('updateHyperlinkAuditing', (result) => { // {{ edit_1 }}
       resolve(result.updateHyperlinkAuditing);    });
   });
+
+  const badgesettings = await new Promise((resolve) => {
+    chrome.storage.local.get('updateBadgeOnOff', (result) => { // {{ edit_1 }}
+      resolve(result.updateBadgeOnOff);    });
+  });
   const settings = await new Promise((resolve) => {
     chrome.storage.local.get(SETTINGS_KEY, (result) => {
       resolve(result[SETTINGS_KEY]);
     });
   });
   console.log('Settings hyperlink retrieved:', updatesettings);
+  console.log('Settings hyperlink retrieved:', badgesettings);
+
   updateRuleSet(settings.status);
   updateDNRRules(settings.status);
-  badge(settings.status);
+  badge(badgesettings);
   updateHyperlinkAuditing(updatesettings); // {{ edit_2 }}
 });
 
@@ -199,10 +205,16 @@ chrome.runtime.onInstalled.addListener(async () => {
         resolve(result[SETTINGS_KEY]);
       });
     });
+
+    const badgesettings = await new Promise((resolve) => {
+      chrome.storage.local.get('updateBadgeOnOff', (result) => { // {{ edit_1 }}
+        resolve(result.updateBadgeOnOff);    });
+    });
     console.log('Settings hyperlink retrieved:', updatesettings);
-    updateRuleSet(settings.status);
+    console.log('Settings hyperlink retrieved:', badgesettings);
+        updateRuleSet(settings.status);
     updateDNRRules(settings.status);
-    badge(settings.status);
+    badge(badgesettings);
     updateHyperlinkAuditing(updatesettings); // {{ edit_2 }}
 
 
@@ -356,12 +368,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         sendResponse(defaultSettings);
         updateRuleSet(defaultSettings.status);
         updateDNRRules(defaultSettings.status);
-        badge(defaultSettings.status);
       } else {
         sendResponse(settings);
         updateRuleSet(settings[SETTINGS_KEY].status);
         updateDNRRules(settings[SETTINGS_KEY].status);
-        badge(settings[SETTINGS_KEY].status);
       }
     });
     return true; // Indicates that the response is sent asynchronously
@@ -392,20 +402,34 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 
 
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (changes.updateBadgeOnOff) {
+    console.log('Badge state changed:', changes.updateBadgeOnOff.newValue);
+    chrome.declarativeNetRequest.setExtensionActionOptions({
+      displayActionCountAsBadgeText: changes.updateBadgeOnOff.newValue
+    });
+    if (changes.updateBadgeOnOff.newValue === true) {
+      console.log('Badge counter display enabled');
+    } else {
+      console.log('Badge counter display disabled');
+    }
+  }
+});
+
 async function badge(enabled) {
   if (enabled) {
+    const badgesettings = await new Promise((resolve) => {
+      chrome.storage.local.get('updateBadgeOnOff', (result) => {
+        console.log('Initial badge settings:', result.updateBadgeOnOff);
+        resolve(result.updateBadgeOnOff);
+      });
+    });
+    
     await chrome.declarativeNetRequest.setExtensionActionOptions({
-      displayActionCountAsBadgeText: true
+      displayActionCountAsBadgeText: badgesettings
     });
   }
 }
-
-chrome.alarms.onAlarm.addListener(async (alarm) => {
-  if (alarm.name === 'wakeUpAlarm') {
-
-    // Removed updateRuleSet call
-  }
-});
 
 // Initialize badge text when extension loads
 
@@ -499,10 +523,15 @@ async function updateDNRRule() {
       resolve(result[SETTINGS_KEY]);
     });
   });
+  const badgesettings = await new Promise((resolve) => {
+    chrome.storage.local.get('updateBadgeOnOff', (result) => { // {{ edit_1 }}
+      resolve(result.updateBadgeOnOff);    });
+  });
 
-  console.log('Settings retrieved:', settings);
+  console.log('Settings retrieved:', settings,badgesettings);
   
   updateDNRRules(settings.status);
+  badge(badgesettings);
 }
 
 
@@ -702,6 +731,25 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     sendResponse({ success: true });
     });
     return true; // Indicates that the response will be sent asynchronously
+  }
+  // ... existing message handlers
+});
+
+
+
+
+
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+  if (message.action === 'updateBadgeOnOff') {
+    const { enabled } = message;
+    console.log('Updating badge state to:', enabled);
+    chrome.storage.local.set({ updateBadgeOnOff: enabled }, () => {
+      console.log('Badge state saved in storage:', enabled);
+      badge();
+      sendResponse({ success: true });
+      console.log('Badge update completed');
+    });
+    return true;
   }
   // ... existing message handlers
 });
