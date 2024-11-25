@@ -15,13 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
-* Based on:
-*   ERASER
-*   <https://github.com/Psychosynthesis/Eraser/blob/main/src/chrome/panel/panelMenu.js>
-*   Copyright (c) 2022 Nick
-MIT License:
-*   You should have received a copy of the MIT License
-*  If not <https://github.com/subham8907/Linkumori/blob/main/LICENSE-MAIN>
+* 
 */
 import { readPurifyUrlsSettings, setDefaultSettings } from '../common/utils.js';
 import { defaultSettings, SETTINGS_KEY, CANT_FIND_SETTINGS_MSG } from '../common/constants.js';
