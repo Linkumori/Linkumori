@@ -6,9 +6,9 @@
   "update_url": "https://github.com/subham8907/Linkumori/releases/latest/download/updates.xml",
   
   "icons": {
-    "48": "icons/icon128.png",
-    "96": "icons/icon128.png",
-    "128": "icons/action.png"
+    "48": "icons/icon48.png",
+    "96": "icons/icon96.png",
+    "128": "icons/icon128.png"
   },
   "background": {
     "service_worker": "background.js",
