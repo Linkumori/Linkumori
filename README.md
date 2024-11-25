@@ -1,6 +1,6 @@
 # Linkumori (URLs Purifier)
 
-(https://github.com/subham8907/Linkumori/actions/workflows/main.yml)
+
 
 ![Linkumori Extension Version](https://img.shields.io/badge/dynamic/json?color=blue&label=Linkumori%20Extension&prefix=v&query=version&url=https://raw.githubusercontent.com/subham8907/Linkumori/main/manifest.json)
 
