@@ -1,0 +1,496 @@
+<!--/*
+Linkumori(URLs Purifier)
+Copyright (C) 2024 Subham Mahesh
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*
+
+
+*/-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Cleaner</title>
+    <script src="options.js"></script>
+    <style>
+        @font-face {
+            font-family: 'Liberation Serif';
+            src: url('../liberation-fonts/LiberationSerif-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        :root {
+            /* Primary Background Colors */
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --bg-gradient: linear-gradient(135deg, #1e293b, #0f172a);
+
+            /* Interactive Elements */
+            --button-primary: #2563eb;
+            --button-hover: #3b82f6;
+            --button-gradient: linear-gradient(135deg, #2563eb, #1d4ed8);
+            --button-danger: #dc2626;
+            --button-danger-hover: #ef4444;
+
+            /* Text Colors */
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+
+            /* Border and Shadow Colors */
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --glow-color: rgba(37, 99, 235, 0.1);
+
+            /* Input and Interactive Element Colors */
+            --input-bg: rgba(255, 255, 255, 0.03);
+            --input-border: rgba(255, 255, 255, 0.1);
+            --input-focus: #3b82f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Liberation Serif", serif;
+            background: var(--bg-primary);
+            background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            padding: 2rem 1rem;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 48rem;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background: linear-gradient(135deg, var(--button-primary) 0%, transparent 400%);
+            opacity: 0.1;
+            z-index: -1;
+            border-radius: 2rem;
+            filter: blur(40px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: var(--bg-gradient);
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--button-primary), var(--button-hover));
+        }
+
+        .card-header {
+            padding: 2rem 2rem 0;
+        }
+
+        .badges {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .badge {
+            font-size: 0.875rem;
+            padding: 0.35rem 1rem;
+            border-radius: 999px;
+            background: var(--input-bg);
+            color: var(--button-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            letter-spacing: 0.02em;
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .card-content {
+            padding: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 2.5rem;
+        }
+
+        .input-label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .input-label svg {
+            color: var(--button-primary);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            border: 1px solid var(--input-border);
+            border-radius: 0.75rem;
+            font-family: "Liberation Serif", monospace;
+            font-size: 1rem;
+            resize: vertical;
+            transition: all 0.3s ease;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 4px var(--glow-color);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .hint {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            opacity: 0.8;
+        }
+
+        kbd {
+            padding: 0.3rem 0.6rem;
+            border-radius: 0.5rem;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .separator {
+            position: relative;
+            height: 1px;
+            background: var(--border-color);
+            margin: 2.5rem 0;
+        }
+
+        .separator-icon {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-secondary);
+            padding: 0.75rem;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-footer {
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            border: none;
+            letter-spacing: 0.01em;
+        }
+
+        .btn svg {
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover svg {
+            transform: scale(1.1);
+        }
+
+        .btn-primary {
+            background: var(--button-gradient);
+            color: var(--text-primary);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-outline {
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--bg-tertiary);
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        #copyStatus {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            display: none;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+            animation: slideIn 0.3s ease-out;
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(2rem);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .processing .separator-icon {
+            animation: spin 1s linear infinite;
+        }
+
+        .processing .separator-icon svg {
+            color: var(--button-primary);
+        }
+
+        @keyframes spin {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .card-footer {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .card-content {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Scrollbar Styling */
+        textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        textarea::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+        }
+
+        textarea::-webkit-scrollbar-thumb {
+            background: var(--button-primary);
+            border-radius: 4px;
+        }
+
+        textarea::-webkit-scrollbar-thumb:hover {
+            background: var(--button-hover);
+        }
+
+        /* Focus Ring */
+        .btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px var(--glow-color);
+        }
+
+        /* Smooth transitions */
+        .card, .btn, textarea, .badge {
+            will-change: transform, opacity;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                </svg>
+                URL Cleaner
+            </h1>
+            <p>Transform and clean your URLs with ease</p>
+        </header>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="badges">
+                    <span class="badge badge-outline">v1.0</span>
+                </div>
+                <p class="card-description">Enter your URLs below, one per line. We'll clean and format them automatically.</p>
+            </div>
+
+            <div class="card-content">
+                <div class="input-group">
+                    <label class="input-label" for="inputUrl">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M11.4 3.3c.3-.3.7-.3 1 0l8.3 8.3c.3.3.3.7 0 1l-8.3 8.3c-.3.3-.7.3-1 0l-8.3-8.3c-.3-.3-.3-.7 0-1l8.3-8.3z"></path>
+                        </svg>
+                        Input URLs
+                    </label>
+                    <textarea 
+                        id="inputUrl" 
+                        placeholder="https://example.com/long-url?param=value..."
+                        spellcheck="false"
+                    ></textarea>
+                    <div class="hint">
+                        <kbd>Ctrl/⌘ + Enter</kbd>
+                        to process URLs
+                    </div>
+                </div>
+
+                <div class="separator">
+                    <div class="separator-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label" for="outputUrl">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Cleaned URLs
+                    </label>
+                    <textarea 
+                        id="outputUrl" 
+                        placeholder="Your cleaned URLs will appear here..." 
+                        readonly
+                    ></textarea>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button id="cleanButton" class="btn btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                    </svg>
+                    Clean URLs
+                </button>
+
+                <button id="copyButton" class="btn btn-outline">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                    </svg>
+                    Copy URLs
+                </button>
+            </div>
+        </div>
+
+        <div id="copyStatus"></div>
+    </div>
+
+</body>
+</html>

@@ -130,7 +130,10 @@ The following files are completely under the GNU General Public License v3:
 
 - `/content.js`
 - `/panel/panelMenu.html`
-
+- `common/rules.js`
+- `panel/options.js`
+- `panel/option.html`
+-`/panel/style.css`
 - `/Linkumori-Artifact/Artifact.json`
 - `/rules/original/rules1.json` to `/rules/original/rules3.json`
 - `/rules/original/rules8.json` to `/rules/original/rules11.json`
@@ -144,7 +147,6 @@ The following files contain a mix of GPLv3 and MIT licensed code:
 
 - `manifest.json`
 - `background.js`
-- `/panel/panelMenu.js`
 - `common/constants.js`
 - `common/utils.js`
 
@@ -167,6 +169,9 @@ For more information about modifications, please see `rules/adguard-modifed/noti
 
 This project uses the Liberation Serif Regular font, which is licensed under the SIL Open Font License, Version 1.1. The font is located in the `./liberation-fonts` directory.
 
+
+### Unmodified MPL 2.0 licensed works 
+File containing MPL 2.0 licensed code from the MDN Web Extension repository (https://github.com/mdn/webextensions-examples/blob/main/context-menu-copy-link-with-types/clipboard-helper.js) - The location of MPL licensed code work in the Linkumori extension source code is './clipboard-helper.js'
 ## license
 
 For full license texts, please see the [LICENSE](LICENSE) file in the project repository.

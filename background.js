@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ===== Linkumori Engine Start =====//
 import { readPurifyUrlsSettings, setDefaultSettings } from './common/utils.js';
 import { defaultSettings, SETTINGS_KEY, CANT_FIND_SETTINGS_MSG } from './common/constants.js';
+import { parameterRules,urlPatternRules  } from './common/rules.js';
 
 let hasStarted = false;
 
@@ -102,7 +103,6 @@ async function initialize() {
   await start();
 }
 
-// Main execution
 initialize().then(() => {
 }).catch(reason => {
   console.trace(reason);
@@ -114,18 +114,7 @@ initialize().then(() => {
   });
 });
 
-// Main execution
-initialize().then(() => {
-}).catch(reason => {
-  console.trace(reason);
-  linkumoriread('LinkumoriEngineStart').then((value) => {
-    if (value === false) { return; }
-    linkumoriwrite({ LinkumoriEngineStart: false }).then(() => {
-      chrome.runtime.reload();
-    });
-  });
-});
-/// fuction for first start ///
+
 async function firstInstalled() {
   return new Promise((resolve) => {
     chrome.storage.local.get('firstInstalled', (result) => {
@@ -139,24 +128,23 @@ async function firstInstalled() {
     });
   });
 }
-/// fuctions for update and first installation
 
 chrome.runtime.onInstalled.addListener(async () => {
   const isFirstInstall = await firstInstalled(); 
   if (isFirstInstall) {
     setDefaultSettings();
     chrome.storage.local.set({ updateHyperlinkAuditing: true, firstInstalled: true, historyApiProtection: true,updateBadgeOnOff: true });
-    updateHyperlinkAuditing(true); // {{ edit_1 }}
+    updateHyperlinkAuditing(true); 
       return; 
   }
 
   const updatesettings = await new Promise((resolve) => {
-    chrome.storage.local.get('updateHyperlinkAuditing', (result) => { // {{ edit_1 }}
+    chrome.storage.local.get('updateHyperlinkAuditing', (result) => { 
       resolve(result.updateHyperlinkAuditing);    });
   });
 
   const badgesettings = await new Promise((resolve) => {
-    chrome.storage.local.get('updateBadgeOnOff', (result) => { // {{ edit_1 }}
+    chrome.storage.local.get('updateBadgeOnOff', (result) => { 
       resolve(result.updateBadgeOnOff);    });
   });
   const settings = await new Promise((resolve) => {
@@ -169,7 +157,7 @@ chrome.runtime.onInstalled.addListener(async () => {
   updateRuleSet(settings.status);
   updateDNRRules(settings.status);
   badge(badgesettings);
-  updateHyperlinkAuditing(updatesettings); // {{ edit_2 }}
+  updateHyperlinkAuditing(updatesettings); 
 });
 
 
@@ -188,13 +176,12 @@ async function updatefirstinstallruleset() {
   });
 }
 
-//// for updating rules on first installtatopn
 chrome.runtime.onInstalled.addListener(async () => {
   const isupdatefirstinstallruleset = await updatefirstinstallruleset(); 
   if (isupdatefirstinstallruleset) {
    
     const updatesettings = await new Promise((resolve) => {
-      chrome.storage.local.get('updateHyperlinkAuditing', (result) => { // {{ edit_1 }}
+      chrome.storage.local.get('updateHyperlinkAuditing', (result) => { 
         resolve(result.updateHyperlinkAuditing);      });
     });
     const settings = await new Promise((resolve) => {
@@ -204,14 +191,14 @@ chrome.runtime.onInstalled.addListener(async () => {
     });
 
     const badgesettings = await new Promise((resolve) => {
-      chrome.storage.local.get('updateBadgeOnOff', (result) => { // {{ edit_1 }}
+      chrome.storage.local.get('updateBadgeOnOff', (result) => { 
         resolve(result.updateBadgeOnOff);    });
     });
    
         updateRuleSet(settings.status);
     updateDNRRules(settings.status);
     badge(badgesettings);
-    updateHyperlinkAuditing(updatesettings); // {{ edit_2 }}
+    updateHyperlinkAuditing(updatesettings); 
 
 
     chrome.alarms.create('wakeUpAlarm', { periodInMinutes: 1/60 });
@@ -221,12 +208,10 @@ chrome.runtime.onInstalled.addListener(async () => {
 
 
 
-/// main fuction start here//
-/// here you can see it use dnr to enable and disable it//
+
 async function updateRuleSet(enabled) {
   const allRulesets = ['ruleset_1', 'ruleset_2', 'ruleset_3', 'ruleset_4', 'ruleset_5', 'ruleset_6', 'ruleset_7', 'ruleset_8','ruleset_9','ruleset_10'];
 
-  // Update static rulesets
   await chrome.declarativeNetRequest.updateEnabledRulesets({
     disableRulesetIds: enabled ? [] : allRulesets,
     enableRulesetIds: enabled ? allRulesets : []
@@ -235,10 +220,8 @@ async function updateRuleSet(enabled) {
 
 
 
-  /// load all the regex in the array for changing url without reload using history api 
   let config = [];
 
-/// proccessor of this fuction 
 async function loadConfigAndCleanUrl(url) {
   try {
     const response = await fetch(chrome.runtime.getURL('./Linkumori-Artifact/Artifact.json'));
@@ -285,25 +268,21 @@ function cleanUrl(url) {
 loadConfigAndCleanUrl();
 
 
-// Inject content script
 async function injectContentScript(tabId) {
   try {
     const tab = await chrome.tabs.get(tabId);
     const url = tab.url;
 
-    // Check if historyApiProtection is enabled
     const { historyApiProtection } = await chrome.storage.local.get('historyApiProtection');
     if (!historyApiProtection) {
-      return; // Early return if historyApiProtection is not enabled
+      return; 
     }
 
-    // Check if the URL is allowed for scripting
     if (url.startsWith('chrome://') || url.startsWith('https://chromewebstore.google.com/') || url.startsWith('edge://') || url.startsWith('file:///')
       || url.startsWith('chrome-extension://') || url.startsWith('https://microsoftedge.microsoft.com/addons/')) {
       return;
     }
 
-    // Check if the extension is enabled
     const settings = await new Promise((resolve) => {
       chrome.storage.local.get(SETTINGS_KEY, (result) => {
         resolve(result[SETTINGS_KEY]);
@@ -349,9 +328,6 @@ async function handleTabUpdate(tabId, changeInfo, tab) {
   }
 }
 
-/// all the setting fuction works here///
-
-
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message === 'get-settings') {
     readPurifyUrlsSettings((settings) => {
@@ -367,12 +343,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         updateDNRRules(settings[SETTINGS_KEY].status);
       }
     });
-    return true; // Indicates that the response is sent asynchronously
+    return true; 
   } else if (message.action === 'updateRuleSet') {
     updateRuleSet(message.enabled);
     updateDNRRules(message.enabled);
     badge(message.enabled);
-    updateHyperlinkAuditing(message.enabled)
     chrome.storage.local.set({ [SETTINGS_KEY]: { status: message.enabled } });
     sendResponse({ success: true });
   } else if (message.action === "cleanUrl") {
@@ -385,27 +360,97 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         updateRuleSet(newStatus);
         updateDNRRules(newStatus);
         badge(newStatus);
-        updateHyperlinkAuditing(newStatus);
         sendResponse({ status: newStatus ? "activated" : "deactivated" });
       });
     });
-  } 
-  return true; // Indicates that the response will be sent asynchronously
+  } else if (message.action === 'updateHistoryApiProtection') {
+    const { enabled } = message;
+    chrome.storage.local.set({ historyApiProtection: enabled }, () => {
+      sendResponse({ success: true });
+    });
+  } else if (message.action === 'updateHyperlinkAuditing') {
+    const { enabled } = message;
+    chrome.storage.local.set({ updateHyperlinkAuditing: enabled }, () => {
+      updateHyperlinkAuditing(message.enabled);
+      sendResponse({ success: true });
+    });
+  } else if (message.action === 'updateBadgeOnOff') {
+    const { enabled } = message;
+    chrome.storage.local.set({ updateBadgeOnOff: enabled }, () => {
+      badge();
+      sendResponse({ success: true });
+    });
+  }
+
+  return true; 
+});
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === 'updateRuleSet') {
+    updateRuleSet(message.enabled);
+    updateDNRRules(message.enabled);
+    badge(message.enabled);
+    
+    // Always check current hyperlink setting and update ruleset11 accordingly
+    chrome.storage.local.get(['updateHyperlinkAuditing'], (result) => {
+      // If main extension is disabled or hyperlink is disabled, disable ruleset11
+      if (!message.enabled || !result.updateHyperlinkAuditing) {
+        chrome.declarativeNetRequest.updateEnabledRulesets({
+          disableRulesetIds: ['ruleset_11'],
+          enableRulesetIds: []
+        });
+      }
+      
+      chrome.storage.local.set({ 
+        [SETTINGS_KEY]: { status: message.enabled } 
+      });
+    });
+    
+    sendResponse({ success: true });
+    return true;
+  }
+  
+  if (message.action === 'updateHyperlinkAuditing') {
+    updateHyperlinkAuditing(message.enabled)
+      .then(success => sendResponse({ success }));
+    return true;
+  }
 });
 
 
 
-chrome.storage.onChanged.addListener((changes, area) => {
-  if (changes.updateBadgeOnOff) {
-    console.log('Badge state changed:', changes.updateBadgeOnOff.newValue);
-    chrome.declarativeNetRequest.setExtensionActionOptions({
-      displayActionCountAsBadgeText: changes.updateBadgeOnOff.newValue
-    });
-    if (changes.updateBadgeOnOff.newValue === true) {
+// Listen for changes in extension status
+chrome.storage.onChanged.addListener(async (changes, area) => {
+  if (area === 'local' && changes[SETTINGS_KEY]) {
+    const newStatus = changes[SETTINGS_KEY].newValue?.status;
+    
+    // If main extension is being enabled
+    if (newStatus) {
+      // Check if hyperlink auditing was already enabled
+      const { updateHyperlinkAuditing: hyperlinkEnabled } = 
+        await chrome.storage.local.get('updateHyperlinkAuditing');
+      
+      if (hyperlinkEnabled) {
+        // Enable ruleset11 if both are now true
+        await chrome.declarativeNetRequest.updateEnabledRulesets({
+          disableRulesetIds: [],
+          enableRulesetIds: ['ruleset_11']
+        });
+      }
     } else {
+      // Main extension disabled, ensure ruleset11 is disabled
+      await chrome.declarativeNetRequest.updateEnabledRulesets({
+        disableRulesetIds: ['ruleset_11'],
+        enableRulesetIds: []
+      });
     }
   }
 });
+
+
+
+
+
 
 async function badge(enabled) {
   if (enabled) {
@@ -421,11 +466,9 @@ async function badge(enabled) {
   }
 }
 
-// Initialize badge text when extension loads
 
 const RULE_ID_START = 1;
 
-// Initialize default state
 chrome.runtime.onInstalled.addListener(async () => {
   const {whitelist } = await chrome.storage.local.get(['whitelist']);
   if (!whitelist) {
@@ -433,7 +476,6 @@ chrome.runtime.onInstalled.addListener(async () => {
   }
 });
 
-// Function to create a rule for a domain with exact format
 function createAllowRule(domain, ruleId) {
   return [{
     id: ruleId,
@@ -469,7 +511,6 @@ function createAllowRule(domain, ruleId) {
   }];
 }
 
-// Function to update DNR rules based on enabled state
 async function updateDNRRules(enabled) {
   try {
     const existingRules = await chrome.declarativeNetRequest.getDynamicRules();
@@ -495,15 +536,22 @@ async function updateDNRRules(enabled) {
   }
 }
 
-// Listen for storage changes
-chrome.storage.onChanged.addListener(async (changes) => {
+chrome.storage.onChanged.addListener(async (changes, area) => {
   if (changes.whitelist) {
-    updateDNRRule();
-      }
-    }
-  )
+    updateDNRRule();   
+  }
 
-// Listen for storage changes
+  if (changes.updateBadgeOnOff) {
+    console.log('Badge state changed:', changes.updateBadgeOnOff.newValue);
+    chrome.declarativeNetRequest.setExtensionActionOptions({
+      displayActionCountAsBadgeText: changes.updateBadgeOnOff.newValue
+    });
+    if (changes.updateBadgeOnOff.newValue === true) {
+    } else {
+    }
+  }
+});
+
 async function updateDNRRule() {
   const settings = await new Promise((resolve) => {
     chrome.storage.local.get(SETTINGS_KEY, (result) => {
@@ -511,7 +559,7 @@ async function updateDNRRule() {
     });
   });
   const badgesettings = await new Promise((resolve) => {
-    chrome.storage.local.get('updateBadgeOnOff', (result) => { // {{ edit_1 }}
+    chrome.storage.local.get('updateBadgeOnOff', (result) => { 
       resolve(result.updateBadgeOnOff);    });
   });
 
@@ -521,217 +569,195 @@ async function updateDNRRule() {
 }
 
 
-const STORAGE = chrome.storage.local;
-const STORAGE_KEY = 'whitelist';
-
-// Improved URL validation with more robust error handling
-const isValidUrl = (url) => {
-  try {
-    if (!url) return false;
-    
-    // Check for restricted protocols
-    const restrictedProtocols = ['chrome:', 'file:', 'edge:', 'chrome-extension:'];
-    if (restrictedProtocols.some(p => url.toLowerCase().startsWith(p))) {
-      return false;
-    }
-    
-    const urlObj = new URL(url);
-    return !!urlObj.hostname && urlObj.hostname.includes('.');
-  } catch {
-    return false;
-  }
-};
-
-const getTitle = (domain, isWhitelisted) => 
-  `${isWhitelisted ? 'Remove' : 'Add'} ${domain} ${isWhitelisted ? 'from' : 'to'} whitelist`;
-
-// Improved menu management with better error handling and race condition prevention
-let menuUpdateInProgress = false;
-
-async function updateMenu(domain) {
-  if (menuUpdateInProgress) {
-    console.log('Menu update already in progress, skipping...');
-    return;
-  }
-  
-  menuUpdateInProgress = true;
-  
-  try {
-    const { whitelist = [] } = await STORAGE.get(STORAGE_KEY);
-    const isWhitelisted = whitelist.includes(domain);
-    const title = getTitle(domain, isWhitelisted);
-
-    // Wait for menu removal to complete
-    await chrome.contextMenus.removeAll();
-    
-    // Add small delay to ensure removal is complete
-    await new Promise(resolve => setTimeout(resolve, 50));
-    
-    // Create new menu item
-    await new Promise((resolve, reject) => {
-      chrome.contextMenus.create({
-        id: 'whitelist-toggle',
-        title,
-        contexts: ['all'],
-      }, () => {
-        if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
-        } else {
-          resolve();
-        }
-      });
-    });
-  } catch (err) {
-    console.error('Failed to update context menu:', err);
-  } finally {
-    menuUpdateInProgress = false;
-  }
-}
-
-async function removeMenu() {
-  try {
-    await chrome.contextMenus.removeAll();
-  } catch (err) {
-    console.error('Failed to remove context menu:', err);
-  }
-}
-
-// Improved whitelist operations with validation
-async function toggleWhitelist(domain) {
-  if (!domain || typeof domain !== 'string') {
-    console.error('Invalid domain provided to toggleWhitelist');
-    return;
-  }
-
-  try {
-    const { whitelist = [] } = await STORAGE.get(STORAGE_KEY);
-    const newList = whitelist.includes(domain)
-      ? whitelist.filter(d => d !== domain)
-      : [...new Set([...whitelist, domain])]; // Use Set to ensure uniqueness
-
-    await STORAGE.set({ [STORAGE_KEY]: newList });
-    await updateMenu(domain);
-  } catch (err) {
-    console.error('Failed to toggle whitelist:', err);
-  }
-}
-
-// Improved URL handling with debouncing
-let urlHandlerTimeout;
-
-async function handleUrl(url) {
-  // Clear any pending URL handler
-  if (urlHandlerTimeout) {
-    clearTimeout(urlHandlerTimeout);
-  }
-
-  // Debounce the URL handling
-  urlHandlerTimeout = setTimeout(async () => {
-    if (!url) {
-      await removeMenu();
-      return;
-    }
-
-    try {
-      if (isValidUrl(url)) {
-        const domain = new URL(url).hostname;
-        await updateMenu(domain);
-      } else {
-        await removeMenu();
-      }
-    } catch (err) {
-      console.error('Failed to handle URL:', err);
-      await removeMenu();
-    }
-  }, 100); // 100ms debounce delay
-}
-
-// Add cleanup function for extension unload
-chrome.runtime.onSuspend.addListener(() => {
-  if (urlHandlerTimeout) {
-    clearTimeout(urlHandlerTimeout);
-  }
-});
-
-// Event listeners
-chrome.tabs.onActivated.addListener(async ({ tabId }) => {
-  try {
-    const tab = await chrome.tabs.get(tabId);
-    if (tab?.url) await handleUrl(tab.url);
-  } catch (err) {
-    console.error('Error in onActivated:', err);
-  }
-});
-
-chrome.tabs.onUpdated.addListener((_, changeInfo) => {
-  if (changeInfo.url) handleUrl(changeInfo.url);
-});
-
-chrome.contextMenus.onClicked.addListener((_, tab) => {
-  if (tab?.url) {
-    try {
-      const domain = new URL(tab.url).hostname;
-      toggleWhitelist(domain); // Ensure this function handles the whitelist correctly
-    } catch (err) {
-      console.error('Failed to toggle whitelist from context menu:', err);
-    }
-  }
-});
-
 
 async function updateHyperlinkAuditing(enabled) {
-  const ruleset15 = ['ruleset_11'];
+  const ruleset11 = ['ruleset_11'];
+  
+  try {
+    // Get main extension status
+    const settings = await chrome.storage.local.get(SETTINGS_KEY);
+    const isMainEnabled = settings[SETTINGS_KEY]?.status ?? false;
 
-  // Update static ruleset for ruleset_15
-  await chrome.declarativeNetRequest.updateEnabledRulesets({
-    disableRulesetIds: enabled ? [] : ruleset15,
-    enableRulesetIds: enabled ? ruleset15 : []
-  });
+    // If either main extension is disabled OR hyperlink setting is disabled,
+    // then disable ruleset11
+    if (!isMainEnabled || !enabled) {
+      await chrome.declarativeNetRequest.updateEnabledRulesets({
+        disableRulesetIds: ruleset11,
+        enableRulesetIds: []
+      });
+    } else {
+      // Both main extension and hyperlink setting are enabled
+      await chrome.declarativeNetRequest.updateEnabledRulesets({
+        disableRulesetIds: [],
+        enableRulesetIds: ruleset11
+      });
+    }
+    
+    await chrome.storage.local.set({ updateHyperlinkAuditing: enabled });
+    return true;
+
+  } catch (error) {
+    console.error('Error updating hyperlink auditing:', error);
+    return false;
+  }
 }
 
 
-// Add this to your background.js
 
 
 
-// Add this to your existing message listener
-
-// Update your chrome.runtime.onInstalled listener
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === 'updateHistoryApiProtection') {
-    const { enabled } = message;
-    chrome.storage.local.set({ historyApiProtection: enabled }, () => {
-      sendResponse({ success: true });
-    });
-    return true; // Indicates that the response will be sent asynchronously
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.contextMenus.create({
+    id: "Copy-clean-url",
+    title: 'Copy clean url',
+    contexts: ["link"]
+  });
+});
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  if (info.menuItemId === "Copy-clean-url") {
+      handleContextMenuClick(info, tab);
   }
-  // ... existing message handlers
 });
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === 'updateHyperlinkAuditing') {
-    const { enabled } = message;
-    chrome.storage.local.set({ updateHyperlinkAuditing: enabled }, () => {
-      updateHyperlinkAuditing(message.enabled);
-    sendResponse({ success: true });
-    });
-    return true; // Indicates that the response will be sent asynchronously
+function removeUrlParameters(url) {
+  try {
+      const urlObj = new URL(url);
+      const hostname = urlObj.hostname;
+      
+      let parametersToRemove = new Set();
+      
+      // Original functionality: Add global parameters
+      parameterRules[0].removeParams.forEach(param => parametersToRemove.add(param));
+      
+      // Original functionality: Add domain-specific parameters
+      for (let i = 1; i < parameterRules.length; i++) {
+          if (hostname.includes(parameterRules[i].domain)) {
+              parameterRules[i].removeParams.forEach(param => parametersToRemove.add(param));
+          }
+      }
+
+      // New functionality: Check URL against regex patterns
+      for (const rule of urlPatternRules) {
+          try {
+              const urlPatternRegex = new RegExp(rule.regexPattern);
+              if (urlPatternRegex.test(url)) {
+                  rule.removeParams.forEach(param => parametersToRemove.add(param));
+              }
+          } catch (patternError) {
+              console.error('Error with URL pattern:', rule.regexPattern, patternError);
+          }
+      }
+      
+      // Remove parameters
+      const searchParams = new URLSearchParams(urlObj.search);
+      
+      for (const param of parametersToRemove) {
+          if (searchParams.has(param)) {
+              searchParams.delete(param);
+          }
+          
+          // Handle regex patterns
+          try {
+              const regexPattern = new RegExp(param);
+              for (const [key] of searchParams.entries()) {
+                  if (regexPattern.test(key)) {
+                      searchParams.delete(key);
+                  }
+              }
+          } catch (regexError) {
+              console.error('Error with regex pattern:', param, regexError);
+          }
+      }
+      
+      // Rebuild URL
+      urlObj.search = searchParams.toString();
+      return urlObj.toString();
+      
+  } catch (error) {
+      console.error('Error removing URL parameters:', error);
+      return url;
   }
-  // ... existing message handlers
+}
+
+// HTML escaping utility function
+function escapeHTML(str) {
+  return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+}
+
+async function handleContextMenuClick(info, tab) {
+  try {
+      const cleanUrl = removeUrlParameters(info.linkUrl);
+      
+      const text = cleanUrl;
+      const safeUrl = escapeHTML(cleanUrl);
+      const html = `<a href="${safeUrl}">${safeUrl}</a>`;
+
+      const isFunction = await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          func: () => typeof copyToClipboard === 'function'
+      });
+
+
+      if (!isFunction[0]?.result) {
+          await chrome.scripting.executeScript({
+              target: { tabId: tab.id },
+              files: ["clipboard-helper.js"]
+          });
+      }
+
+
+      await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          func: (text, html) => copyToClipboard(text, html),
+          args: [text, html]
+      });
+  } catch (error) {
+      console.error("Failed to copy text:", error);
+  }
+}
+
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "option.html") {
+      try {
+          const cleanedUrl = removeUrlParameters(request.url);
+          // Send to options page
+          chrome.runtime.sendMessage({
+              action: "displayCleanedUrl",
+              cleanedUrl: cleanedUrl
+          });
+          sendResponse({ success: true });
+      } catch (error) {
+          console.error('Error in cleanUrl handler:', error);
+          sendResponse({ success: false, error: error.message });
+      }
+      return true;
+  }
+});
+
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.contextMenus.create({
+    id: "openHTML",
+    title: "dedicated url cleaner",
+    contexts: ["page", "selection","page_action","action"]
+  });
+});
+
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  if (info.menuItemId === "openHTML") {
+    chrome.tabs.update(tab.id, {
+      url: 'panel/option.html'
+
+    });
+  }
 });
 
 
 
 
-
-chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
-  if (message.action === 'updateBadgeOnOff') {
-    const { enabled } = message;
-    chrome.storage.local.set({ updateBadgeOnOff: enabled }, () => {
-      badge();
-      sendResponse({ success: true });
-    });
-    return true;
-  }
-  // ... existing message handlers
-});
+// New batch processing function with progress tracking

@@ -1,14 +1,14 @@
 {
   "manifest_version": 3,
   "name": "Linkumori (URLs Purifier)",
-  "version": "59.0",
+  "version": "60.0",
   "description": "Clean tracking query parameters from URLs",
   "update_url": "https://github.com/subham8907/Linkumori/releases/latest/download/updates.xml",
   
   "icons": {
-    "48": "icons/icon48.png",
-    "96": "icons/icon96.png",
-    "128": "icons/icon128.png"
+    "48": "icons/icon128.png",
+    "96": "icons/icon128.png",
+    "128": "icons/action.png"
   },
   "background": {
     "service_worker": "background.js",
@@ -28,10 +28,8 @@
     "scripting",
     "alarms",
     "unlimitedStorage",
-    "webRequest",
-    "contextMenus",
-    "notifications"
-  ],
+    "contextMenus"
+    ],
   
   "host_permissions": [
     "http://*/*",

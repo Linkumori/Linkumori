@@ -439,27 +439,37 @@ class PanelMenuController {
         
         if (this.state.isEnabled) {
             this.domElements.toggleSwitch.classList.add('active');
-            this.domElements.toggleLabel.textContent = 'Extension status:On with DNR protection';
+            this.domElements.toggleLabel.textContent = 'Extension status:On with Network level protection';
         } else {
             this.domElements.toggleSwitch.classList.remove('active');
             this.domElements.toggleLabel.textContent = 'Extension status:Off';
         }
     }
     updateBadgeOnOffToggleUI() {
-        const toggle = this.domElements.badgeOnOffToggle;
-        const label = this.domElements.badgeOnOffLabel;
-        if (!toggle || !label) return;
-    
-        if (this.state.updateBadgeOnOff) {
-            toggle.classList.add('active');
-        } else {
-            toggle.classList.remove('active');
-        }
-    
-        const status = this.state.updateBadgeOnOff ? 'On' : 'Off';
-        const suffix = !this.state.isEnabled ? ' (Inactive - Extension Off)' : '';
-        label.textContent = `Badge: ${status}${suffix}`;
+      
+
+    if (!this.domElements.badgeOnOffToggle || !this.domElements.badgeOnOffLabel) {
+        return;
     }
+    
+    // Update toggle class based on state regardless of extension status
+    if (this.state.updateBadgeOnOff) {
+        this.domElements.badgeOnOffToggle.classList.add('active');
+    } else {
+        this.domElements.badgeOnOffToggle.classList.remove('active');
+    }
+
+    // Only update the text based on extension status
+    if (!this.state.isEnabled) {
+        this.domElements.badgeOnOffLabel.textContent = this.state.updateBadgeOnOff ? 
+            'Badge:(Inactive)' : 
+            'Badge:Off';
+    } else {
+        this.domElements.badgeOnOffLabel.textContent = this.state.updateBadgeOnOff ?
+            'Badge: On' :
+            'Badge: Off';
+    }
+}
     updateHistoryApiToggleUI() {
         if (!this.domElements.historyApiToggle || !this.domElements.historyApiLabel) {
             return;
@@ -475,8 +485,8 @@ class PanelMenuController {
         // Only update the text based on extension status
         if (!this.state.isEnabled) {
             this.domElements.historyApiLabel.textContent = this.state.historyApiProtection ? 
-                'History API Protection: On (Inactive - Extension Off)' : 
-                'History API Protection: Off (Inactive - Extension Off)';
+                'History API Protection:(Inactive)' : 
+                'History API Protection: Off';
         } else {
             this.domElements.historyApiLabel.textContent = this.state.historyApiProtection ?
                 'History API Protection: On' : 
@@ -498,8 +508,8 @@ class PanelMenuController {
         // Only update the text based on extension status
         if (!this.state.isEnabled) {
             this.domElements.hyperlinkAuditingLabel.textContent = this.state.blockHyperlinkAuditing ?
-                'Block Hyperlink Auditing: On (Inactive - Extension Off)' :
-                'Block Hyperlink Auditing: Off (Inactive - Extension Off)';
+                'Block Hyperlink Auditing: (Inactive)' :
+                'Block Hyperlink Auditing: Off ';
         } else {
             this.domElements.hyperlinkAuditingLabel.textContent = this.state.blockHyperlinkAuditing ?
                 'Block Hyperlink Auditing: On' :
