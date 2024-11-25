@@ -171,8 +171,9 @@ This project uses the Liberation Serif Regular font, which is licensed under the
 
 
 ### Unmodified MPL 2.0 licensed works 
-File containing MPL 2.0 licensed code from the MDN Web Extension repository (https://github.com/mdn/webextensions-examples/blob/main/context-menu-copy-link-with-types/clipboard-helper.js) - The location of MPL licensed code work in the Linkumori extension source code is './clipboard-helper.js'
-## license
+The Linkumori (URLs Purifier) extension incorporates MPL 2.0 licensed code from the MDN Web Extensions repository, specifically the clipboard-helper.js file (original source: https://github.com/mdn/webextensions-examples/blob/main/context-menu-copy-link-with-types/clipboard-helper.js). This code is located at './clipboard-helper.js' within the Linkumori extension. In accordance with MPL 2.0 Section 3.3, recipients of this larger work have the option to receive and use this specific file under either the terms of the Mozilla Public License 2.0 or alternatively under the GNU General Public License version 3. This dual-licensing option applies exclusively to the clipboard-helper.js file and does not extend to other components of the Linkumori extension. Recipients must comply with the terms of whichever license they choose (MPL 2.0 or GPL v3) for this specific file, including maintaining appropriate notices and making the source code available as required by the chosen license.
+
+
 
 For full license texts, please see the [LICENSE](LICENSE) file in the project repository.
 
