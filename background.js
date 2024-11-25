@@ -679,14 +679,13 @@ function removeUrlParameters(url) {
   }
 }
 
-// HTML escaping utility function
 function htmlcanescape(str) {
   return String(str)
-      .replace(/&/g, "&amp;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;")
       .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
+      .replace(/>/g, "&gt;")
+      .replace(/&/g, "&amp;")
+      .replace(/'/g, "&#39;")
+      .replace(/"/g, "&quot;");
 }
 
 async function handleContextMenuClick(info, tab) {
