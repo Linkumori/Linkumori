@@ -680,7 +680,7 @@ function removeUrlParameters(url) {
 }
 
 // HTML escaping utility function
-function escapeHTML(str) {
+function htmlcanescape(str) {
   return String(str)
       .replace(/&/g, "&amp;")
       .replace(/"/g, "&quot;")
@@ -694,7 +694,7 @@ async function handleContextMenuClick(info, tab) {
       const cleanUrl = removeUrlParameters(info.linkUrl);
       
       const text = cleanUrl;
-      const safeUrl = escapeHTML(cleanUrl);
+      const safeUrl = htmlcanescape(cleanUrl);
       const html = `<a href="${safeUrl}">${safeUrl}</a>`;
 
       const isFunction = await chrome.scripting.executeScript({
