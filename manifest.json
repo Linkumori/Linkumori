@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Linkumori (URLs Purifier)",
-  "version": "63.0",
+  "version": "64.0",
   "description": "Clean tracking query parameters from URLs",
   "update_url": "https://github.com/subham8907/Linkumori/releases/latest/download/updates.xml",
   
@@ -14,6 +14,7 @@
     "service_worker": "background.js",
     "type": "module"
   },
+    "minimum_chrome_version": "121.0",
   "action": {
     "default_icon": "icons/icon128.png",
     "default_title": "Linkumori",
