@@ -11,7 +11,6 @@
 
 Linkumori (URLs Purifier) is a powerful browser extension for Chromium-based browsers that enhances your privacy by purifying URLs, removing tracking parameters, and blocking hyperlink auditing, all without interrupting your browsing experience.
 
-**Note:** This project is currently under construction and is a fork of UTM Eraser (Eraser). 
 
 ## Features
 
