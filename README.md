@@ -175,7 +175,6 @@ The Linkumori (URLs Purifier) extension incorporates MPL 2.0 licensed code from 
 
 
 
-For full license texts, please see the [LICENSE](LICENSE) file in the project repository.
 
 ## Acknowledgments
 
@@ -186,3 +185,6 @@ For full license texts, please see the [LICENSE](LICENSE) file in the project re
 ## Disclaimer
 
 Linkumori is provided "as is" without warranty of any kind. Use at your own risk.
+
+
+For full license texts, please see the [LICENSE](LICENSE) file in the project repository.
