@@ -3,7 +3,7 @@
   "name": "Linkumori (Clean URLs)",
   "version": "65.0",
   "description": "Clean tracking query parameters from URLs",
-  "update_url": "https://github.com/Linkumori/Linkumori/releases/latest/download/updates.xml",
+  "update_url": "https://github.com/Linkumori/Linkumori-Extension/releases/latest/download/updates.xml",
   
   "icons": {
     "48": "icons/icon48.png",
