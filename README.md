@@ -1,4 +1,4 @@
-# Linkumori (URLs Purifier)
+# Linkumori (Clean URLs)
 
 
 
