@@ -1,9 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Linkumori (Clean URLs)",
-  "version": "66.0",
+  "version": "67.0",
   "description": "Clean tracking query parameters from URLs",
-  "update_url": "https://github.com/Linkumori/Linkumori-Extension/releases/latest/download/updates.xml",
   
   "icons": {
     "48": "icons/icon48.png",
