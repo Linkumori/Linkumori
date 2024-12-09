@@ -194,49 +194,61 @@ jobs:
           body: |
             ${{ env.RELEASE_BODY }}
             
-            Version Status: ${{ steps.version_check.outputs.update || steps.version_check.outputs.warning }}
+            ## 🔄 Version Information
+            - Status: ${{ steps.version_check.outputs.update || steps.version_check.outputs.warning }}
+            - Current Version: ${{ steps.manifest.outputs.version }}
             
-            ## 📝 Commit History
+            ## 📦 Download Options
+            
+            ### 1️⃣ Chrome Web Store (Recommended)
+            [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/${{ env.EXTENSION_ID }}?label=Chrome%20Web%20Store&style=for-the-badge)](https://chrome.google.com/webstore/detail/linkumori/${{ env.EXTENSION_ID }})
+            - ✨ Official release channel
+            - 🔄 Automatic updates
+            - ✅ Verified by Google
+            
+            ### 2️⃣ Self-hosted Version
+            - Download: `Linkumori.crx`
+            - Updates through GitHub releases
+            - Installation:
+              1. Go to chrome://extensions
+              2. Enable "Developer mode"
+              3. Drag & drop the .crx file
+            
+            ### 3️⃣ Developer Version
+            - Download: Source code (zip)
+            - Manual installation required
+            - For development and testing
+            
+            ## 📝 Changes
+            ### Commit History
             ```
             ${{ steps.get_commit_history.outputs.history }}
             ```
             
-            ## ⚡ Quick Installation
+            ## 🌐 Browser Support
+            | Browser | Status | Tested Version |
+            |---------|--------|----------------|
+            | Google Chrome | ✅ | 121+ |
+            | Microsoft Edge | ✅ | 121+ |
+            | Brave | ✅ | 121+ |
+            | Opera GX | ✅ | Latest |
+            | Vivaldi | ✅ | Latest |
             
-            ### Method 1: One-Click Install (Self-hosted version - Recommended)
-            1. Download `Linkumori.crx` from above
-            2. Open chrome://extensions (or edge://extensions)
-            3. Enable "Developer mode" (top-right corner)
-            4. Drag & drop the .crx file into the extensions page
+            ## 🔧 Technical Details
+            - Minimum browser version: 121.0
+            - Extension ID: ${{ env.EXTENSION_ID }}
+            - Auto-update enabled: Yes
             
-            ### Method 2: Chrome Web Store Version
-            1. Download `Linkumori-webstore.zip`
-            2. Unzip the file
-            3. Go to chrome://extensions
-            4. Enable "Developer mode"
-            5. Click "Load unpacked" → select the unzipped folder
-            
-            ### Method 3: Developer Installation
-            1. Download source code (zip)
-            2. Extract to a folder
-            3. Go to chrome://extensions
-            4. Enable "Developer mode"
-            5. Click "Load unpacked" → select the extracted folder
-            
-            ## 🔄 Auto-Updates
-            * Self-hosted version: Updates through GitHub releases
-            * Web Store version: Updates through Chrome Web Store
-            
-            ## 🌐 Supported Browsers
-            * ✅ Google Chrome
-            * ✅ Microsoft Edge
-            * ✅ Brave
-            * ✅ Opera GX
-            * ✅ Vivaldi
-            
-            ## ⚠️ Keep in Mind
-            * If using Method 2 or 3, keep the source folder (required for the extension to work)
-            * First-time installation may show a warning - this is normal for developer mode extensions
+            ## ⚠️ Important Notes
+            1. If installing from source:
+               - Keep the source folder after installation
+               - Developer mode warnings are normal
+            2. Auto-updates:
+               - Web Store version: Automatic through Chrome Web Store
+               - Self-hosted: Through GitHub releases
+            3. For issues or feature requests:
+               - Use GitHub Issues
+               - Include browser and extension version
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cleanup
