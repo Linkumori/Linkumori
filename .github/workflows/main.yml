@@ -51,7 +51,8 @@ jobs:
       - name: Create PEM file
         run: |
          cat > extension.pem << 'EOL'
-         "${{ secrets.EXTENSION_PEM }}"  << 'EOL'
+         "${{ secrets.EXTENSION_PEM }}"
+         'EOL'
           chmod 600 extension.pem
 
       - name: Install Chrome
