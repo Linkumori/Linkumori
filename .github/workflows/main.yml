@@ -48,11 +48,9 @@ jobs:
           wget https://github.com/Linkumori/Linkumori-Autoupdate/archive/refs/tags/2.0.zip -O config.zip
           echo "Downloaded configs"
 
-      - name: Create PEM file
+      - name: Create PEM file (base64)
         run: |
-         cat > extension.pem << 'EOL'
-         "${{ secrets.EXTENSION_PEM }}"
-         'EOL'
+          echo "${{ secrets.EXTENSION_PEM }}" | base64 -d > extension.pem
           chmod 600 extension.pem
 
       - name: Install Chrome
