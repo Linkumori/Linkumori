@@ -100,15 +100,13 @@ jobs:
           # Create webstore directory
           mkdir webstore_ext
           
-          # Create manifest with Chrome Web Store update URL
-          jq '.update_url = "https://clients2.google.com/service/update2/crx"' manifest.json > webstore_ext/manifest.json
-          
           # Copy all files except excluded ones to webstore directory
-          rsync -av --exclude='*.pem' --exclude='.git*' --exclude='.github' --exclude='*.crx' --exclude='manifest.json' . webstore_ext/
+          rsync -av --exclude='*.pem' --exclude='.git*' --exclude='.github' --exclude='*.crx' . webstore_ext/
           
-          # Pack extension with PEM file
-          google-chrome --pack-extension="$(pwd)/webstore_ext" --pack-extension-key="$(pwd)/extension.pem"
-          mv webstore_ext.crx "Linkumori-webstore.crx"
+          # Create ZIP file for Chrome Web Store
+          cd webstore_ext
+          zip -r ../Linkumori-webstore.zip .
+          cd ..
           
           # Clean up
           rm -rf webstore_ext
@@ -167,81 +165,6 @@ jobs:
           echo "$body" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-      - name: Update Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            Linkumori.crx
-            Linkumori-webstore.crx
-            updates.xml
-            config.zip
-          body: |
-            ${{ env.RELEASE_BODY }}
-            
-            Version Status: ${{ steps.version_check.outputs.update || steps.version_check.outputs.warning }}
-            
-            ## 📝 Commit History
-            ```
-            ${{ steps.get_commit_history.outputs.history }}
-            ```
-            
-            ## ⚡ Quick Installation
-            
-            ### Method 1: One-Click Install (Self-hosted version - Recommended)
-            1. Download `Linkumori.crx` from above
-            2. Open chrome://extensions (or edge://extensions)
-            3. Enable "Developer mode" (top-right corner)
-            4. Drag & drop the .crx file into the extensions page
-            
-            ### Method 2: Chrome Web Store Version
-            1. Download `Linkumori-webstore.crx` for Chrome Web Store compatible version
-            2. Follow the same installation steps as Method 1
-            
-            ### Method 3: Developer Installation
-            1. Download source code (zip)
-            2. Extract to a folder
-            3. Go to chrome://extensions
-            4. Enable "Developer mode"
-            5. Click "Load unpacked" → select the extracted folder
-            
-            ## 🔄 Auto-Updates
-            * Self-hosted version: Updates through GitHub releases
-            * Web Store version: Updates through Chrome Web Store
-            
-            ## 🌐 Supported Browsers
-            * ✅ Google Chrome
-            * ✅ Microsoft Edge
-            * ✅ Brave
-            * ✅ Opera GX
-            * ✅ Vivaldi
-            
-            ## ⚠️ Keep in Mind
-            * If using Method 3, keep the source folder (required for the extension to work)
-            * First-time installation may show a warning - this is normal for developer mode extensions
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Cleanup
-        if: always()
-        run: |
-          rm -f extension.pem
-          rm -rf webstore_ext
-          rm -rf selfhosted_ext
-          rm -f *.zip
-
-      
-      - name: Checkout code
-        uses: actions/checkout@v4
-            
-      # Create ZIP file
-      - name: Create ZIP file
-        run: |
-          zip -r extension.zip . \
-            -x "*.git*" \
-            -x "*.github*" \
-            -x "node_modules/*" \
-            -x "tests/*"
-            
-      # Get access token using refresh token
       - name: Get access token
         id: get-token
         run: |
@@ -262,7 +185,7 @@ jobs:
           UPLOAD_RESPONSE=$(curl -s -X PUT \
             -H "Authorization: Bearer ${{ steps.get-token.outputs.access_token }}" \
             -H "x-goog-api-version: 2" \
-            -T extension.zip \
+            -T Linkumori-webstore.zip \
             "https://www.googleapis.com/upload/chromewebstore/v1.1/items/${{ secrets.EXTENSION_ID }}")
           
           # Check upload status
@@ -288,3 +211,67 @@ jobs:
           fi
           
           echo "Extension successfully uploaded and published!"
+
+      - name: Update Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            Linkumori.crx
+            Linkumori-webstore.zip
+            updates.xml
+            config.zip
+          body: |
+            ${{ env.RELEASE_BODY }}
+            
+            Version Status: ${{ steps.version_check.outputs.update || steps.version_check.outputs.warning }}
+            
+            ## 📝 Commit History
+            ```
+            ${{ steps.get_commit_history.outputs.history }}
+            ```
+            
+            ## ⚡ Quick Installation
+            
+            ### Method 1: One-Click Install (Self-hosted version - Recommended)
+            1. Download `Linkumori.crx` from above
+            2. Open chrome://extensions (or edge://extensions)
+            3. Enable "Developer mode" (top-right corner)
+            4. Drag & drop the .crx file into the extensions page
+            
+            ### Method 2: Chrome Web Store Version
+            1. Download `Linkumori-webstore.zip`
+            2. Unzip the file
+            3. Go to chrome://extensions
+            4. Enable "Developer mode"
+            5. Click "Load unpacked" → select the unzipped folder
+            
+            ### Method 3: Developer Installation
+            1. Download source code (zip)
+            2. Extract to a folder
+            3. Go to chrome://extensions
+            4. Enable "Developer mode"
+            5. Click "Load unpacked" → select the extracted folder
+            
+            ## 🔄 Auto-Updates
+            * Self-hosted version: Updates through GitHub releases
+            * Web Store version: Updates through Chrome Web Store
+            
+            ## 🌐 Supported Browsers
+            * ✅ Google Chrome
+            * ✅ Microsoft Edge
+            * ✅ Brave
+            * ✅ Opera GX
+            * ✅ Vivaldi
+            
+            ## ⚠️ Keep in Mind
+            * If using Method 2 or 3, keep the source folder (required for the extension to work)
+            * First-time installation may show a warning - this is normal for developer mode extensions
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -f extension.pem
+          rm -rf webstore_ext
+          rm -rf selfhosted_ext
+          rm -f *.zip
