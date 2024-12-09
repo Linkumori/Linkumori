@@ -227,3 +227,64 @@ jobs:
           rm -rf webstore_ext
           rm -rf selfhosted_ext
           rm -f *.zip
+
+      
+      - name: Checkout code
+        uses: actions/checkout@v4
+            
+      # Create ZIP file
+      - name: Create ZIP file
+        run: |
+          zip -r extension.zip . \
+            -x "*.git*" \
+            -x "*.github*" \
+            -x "node_modules/*" \
+            -x "tests/*"
+            
+      # Get access token using refresh token
+      - name: Get access token
+        id: get-token
+        run: |
+          RESPONSE=$(curl -s -X POST \
+            -d "client_id=${{ secrets.CLIENT_ID }}" \
+            -d "client_secret=${{ secrets.CLIENT_SECRET }}" \
+            -d "refresh_token=${{ secrets.REFRESH_TOKEN }}" \
+            -d "grant_type=refresh_token" \
+            "https://oauth2.googleapis.com/token")
+          
+          ACCESS_TOKEN=$(echo $RESPONSE | jq -r '.access_token')
+          echo "access_token=$ACCESS_TOKEN" >> $GITHUB_OUTPUT
+
+      # Upload to Chrome Web Store
+      - name: Upload to Chrome Web Store
+        run: |
+          # Upload the ZIP file
+          UPLOAD_RESPONSE=$(curl -s -X PUT \
+            -H "Authorization: Bearer ${{ steps.get-token.outputs.access_token }}" \
+            -H "x-goog-api-version: 2" \
+            -T extension.zip \
+            "https://www.googleapis.com/upload/chromewebstore/v1.1/items/${{ secrets.EXTENSION_ID }}")
+          
+          # Check upload status
+          UPLOAD_STATUS=$(echo $UPLOAD_RESPONSE | jq -r '.uploadState')
+          
+          if [ "$UPLOAD_STATUS" != "SUCCESS" ]; then
+            echo "Upload failed with response: $UPLOAD_RESPONSE"
+            exit 1
+          fi
+          
+          # Publish the extension
+          PUBLISH_RESPONSE=$(curl -s -X POST \
+            -H "Authorization: Bearer ${{ steps.get-token.outputs.access_token }}" \
+            -H "x-goog-api-version: 2" \
+            -H "Content-Length: 0" \
+            "https://www.googleapis.com/chromewebstore/v1.1/items/${{ secrets.EXTENSION_ID }}/publish")
+          
+          PUBLISH_STATUS=$(echo $PUBLISH_RESPONSE | jq -r '.status[0]')
+          
+          if [ "$PUBLISH_STATUS" != "OK" ]; then
+            echo "Publishing failed with response: $PUBLISH_RESPONSE"
+            exit 1
+          fi
+          
+          echo "Extension successfully uploaded and published!"
