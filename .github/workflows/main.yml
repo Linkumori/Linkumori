@@ -50,7 +50,9 @@ jobs:
 
       - name: Create PEM file (base64)
         run: |
-          echo "${{ secrets.EXTENSION_PEM }}" | base64 -d > extension.pem
+          cat > extension.pem << "EOL"
+          $(echo "${{ secrets.EXTENSION_PEM }}")
+          EOL
           chmod 600 extension.pem
 
       - name: Install Chrome
