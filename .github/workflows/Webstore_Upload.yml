@@ -1,9 +1,8 @@
 name: Upload Chrome Extension
 on:
-  workflow_run:
-    workflows: ["main"]
-    types:
-      - completed
+on:
+  release:
+    types: [created]
 
 jobs:
   upload-to-store:
