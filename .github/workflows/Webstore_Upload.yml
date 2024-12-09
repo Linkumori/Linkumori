@@ -1,20 +1,41 @@
-name: Upload Chrome Extension
-
+name: Upload Chrome Extension (with debugging)
 on:
-  release:
-    types: [created]
+  workflow_run:
+    workflows: ["main"]
+    types:
+      - completed
 
 jobs:
   upload-to-store:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    
     steps:
+      # Debug steps to understand workflow context
+      - name: Debug workflow context
+        run: |
+          echo "Workflow run status: ${{ github.event.workflow_run.conclusion }}"
+          echo "Workflow name: ${{ github.event.workflow_run.name }}"
+          echo "Workflow ID: ${{ github.event.workflow_run.id }}"
+          
+      # Only proceed if previous workflow succeeded
+      - name: Check workflow status
+        id: check-status
+        run: |
+          if [ "${{ github.event.workflow_run.conclusion }}" == "success" ]; then
+            echo "Previous workflow succeeded, proceeding with upload"
+            echo "should_proceed=true" >> $GITHUB_OUTPUT
+          else
+            echo "Previous workflow status: ${{ github.event.workflow_run.conclusion }}"
+            echo "Skipping upload"
+            echo "should_proceed=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Checkout code
+        if: steps.check-status.outputs.should_proceed == 'true'
         uses: actions/checkout@v4
             
-      # Create ZIP file
+      # Rest of your steps, each with the conditional
       - name: Create ZIP file
+        if: steps.check-status.outputs.should_proceed == 'true'
         run: |
           zip -r extension.zip . \
             -x "*.git*" \
@@ -22,8 +43,8 @@ jobs:
             -x "node_modules/*" \
             -x "tests/*"
             
-      # Get access token using refresh token
       - name: Get access token
+        if: steps.check-status.outputs.should_proceed == 'true'
         id: get-token
         run: |
           RESPONSE=$(curl -s -X POST \
@@ -36,8 +57,8 @@ jobs:
           ACCESS_TOKEN=$(echo $RESPONSE | jq -r '.access_token')
           echo "access_token=$ACCESS_TOKEN" >> $GITHUB_OUTPUT
 
-      # Upload to Chrome Web Store
       - name: Upload to Chrome Web Store
+        if: steps.check-status.outputs.should_proceed == 'true'
         run: |
           # Upload the ZIP file
           UPLOAD_RESPONSE=$(curl -s -X PUT \
