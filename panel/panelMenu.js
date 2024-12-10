@@ -581,7 +581,7 @@ class PanelMenuController {
     }
 }
 document.getElementById('repoLinkButton')?.addEventListener('click', () => {
-    window.open('https://github.com/Linkumori/Linkumori-Extension/tree/main', '_blank');
+    window.open('https://github.com/Linkumori/Linkumori-Extension/', '_blank');
 });
 
 document.getElementById('clipboardHelperButton')?.addEventListener('click', () => {

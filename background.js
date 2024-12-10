@@ -742,7 +742,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "openHTML",
-    title: "Dedicated Url cleaning tool page",
+    title: "Dedicated Url Cleaning Tool Page",
     contexts: ["page", "selection","page_action","action"]
   });
 });
