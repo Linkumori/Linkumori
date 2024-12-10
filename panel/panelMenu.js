@@ -56,9 +56,13 @@ class PanelMenuController {
     
     async init() {
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => this.setupDOM());
+            document.addEventListener('DOMContentLoaded', () => {
+                this.setupDOM();
+                this.setupVersion();
+            });
         } else {
             this.setupDOM();
+            this.setupVersion();
         }
         
         chrome.storage.onChanged.addListener(this.handleStorageChanges.bind(this));
@@ -72,7 +76,17 @@ class PanelMenuController {
         
         await this.loadInitialState();
     }
-    
+    async setupVersion() {
+        try {
+            const manifest = chrome.runtime.getManifest();
+            const versionSpan = document.querySelector('.header span');
+            if (versionSpan && manifest.version) {
+                versionSpan.textContent = `Version ${manifest.version}`;
+            }
+        } catch (error) {
+            console.error('Failed to fetch version:', error);
+        }
+    }
     async setupDOM() {
         this.domElements = {
             toggleSwitch: document.querySelector('.toggle-switch'),
@@ -566,6 +580,17 @@ class PanelMenuController {
         this.updateUI();
     }
 }
+document.getElementById('repoLinkButton')?.addEventListener('click', () => {
+    window.open('https://github.com/Linkumori/Linkumori-Extension/tree/main', '_blank');
+});
+
+document.getElementById('clipboardHelperButton')?.addEventListener('click', () => {
+    window.open('https://github.com/mdn/webextensions-examples/blob/main/context-menu-copy-link-with-types/clipboard-helper.js', '_blank');
+});
+document.getElementById('adguardSourceButton')?.addEventListener('click', () => {
+    window.open('https://github.com/AdguardTeam/AdguardFilters/blob/master/TrackParamFilter/sections/specific.txt', '_blank');
+});
+
 
 // Initialize the controller
 const controller = new PanelMenuController();

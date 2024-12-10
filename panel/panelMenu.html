@@ -45,7 +45,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <polygon points="75,20 78,28 86,31 78,34 75,42 72,34 64,31 72,28" 
                      fill="#2563eb"/>         
         </svg>
-        <h1>Linkumori</h1>
+        <div style="display: flex; flex-direction: column;">
+            <h1 style="color: var(--text-primary); font-size: 16px; margin: 0;">Linkumori</h1>
+            <span style="color: var(--text-secondary); font-size: 12px;">Version 1.0.0</span>
+        </div>
     </header>
     
     <nav class="tab-container">
@@ -100,8 +103,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <div id="whitelistContainer"></div>
     </div>
     
-    <div id="licenseContent" class="content" style="display: none;">
-        <h2>License Information</h2>
+        <div id="licenseContent" class="content" style="display: none;">
+            <h2>Open Source License Compliance Notice</h2>
+            <p>In accordance with the obligations under GNU General Public License v3 (GPL v3) and Mozilla Public License 2.0 (MPL 2.0), the Linkumori Extension developer and distributor hereby provides access to the extension's source code and binary downloads through the official GitHub repository:</p>
+            <button id="repoLinkButton">Source Code Repository</button>
+        <!-- Rest of your existing license content -->        <h2>License Information</h2>
         <h3>Linkumori source code is subject to many open source license</h3>
         <p>Requested you to scroll to know about your right and obligations if your are using this software </p>
         <p>The following files of linkumori source code contain a mix of GPLv3 and MIT licensed code:</p>
@@ -1585,19 +1591,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <br />THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM OTHER DEALINGS IN THE FONT SOFTWARE.</p></p>
 
         
-
-        <h3>4.file containing derivative work or modified work is located in linkumori source code :</h3>
-        <ul>
-            <li>rules/adguard-modifed/rules5.json</li>
-            <li>rules/adguard-modifed/rules6.json</li>
-            <li>rules/adguard-modifed/rules7.json</li>
-            <li>rules/adguard-modifed/rules4.json</li>
-        </ul>
-        <p>Original work: <a href="https://github.com/AdguardTeam/AdguardFilters/blob/master/TrackParamFilter/sections/specific.txt" target="_blank">https://github.com/AdguardTeam/AdguardFilters/blob/master/TrackParamFilter/sections/specific.txt</a></p>
-        <P>original work: license under General Public License v3</P>
-        <P>derivative work: also under General Public License v3</P>
-        <p> Copyright information of modified parts only: Copyright (c) 2024 Subham Mahesh            </P>
-        <p>For more information about original work, please see the repository: <a href="https://github.com/AdguardTeam/AdguardFilters" target="_blank" rel="noopener">https://github.com/AdguardTeam/AdguardFilters</a></p>
+<p style="color: var(--text-secondary); margin: 20px 0 12px 0;">4) The following files contain derivative work or modified work in Linkumori source code:</p>
+    <ul style="color: var(--text-secondary); margin-bottom: 12px; padding-left: 20px;">
+        <li>rules/adguard-modifed/rules5.json</li>
+        <li>rules/adguard-modifed/rules6.json</li>
+        <li>rules/adguard-modifed/rules7.json</li>
+        <li>rules/adguard-modifed/rules4.json</li>
+    </ul>
+    <p style="color: var(--text-secondary); margin-bottom: 12px;">Original work is licensed under General Public License v3, and the derivative work continues under the same license. Copyright for modified parts only: Copyright (c) 2024 Subham Mahesh</p>
+    <button id="adguardSourceButton" class="domain-item button" style="width: calc(100% - 24px); margin: -8px auto 12px auto; display: block; background: var(--button-primary); color: var(--text-primary); font-family: 'Liberation Serif';">View Original AdGuard Source Code</button>
         <p>Full license texts for GPLv3 license here:</p>
 
 <head>
@@ -2291,9 +2293,8 @@ Public License instead of this License.  But first, please read
 
 </body></html>
 
-<p>
-   5. The Linkumori extension incorporates MPL 2.0 licensed code from the MDN Web Extensions example repository, specifically the clipboard-helper.js file (original source: <a href="https://github.com/mdn/webextensions-examples/blob/main/context-menu-copy-link-with-types/clipboard-helper.js">https://github.com/mdn/webextensions-examples/blob/main/context-menu-copy-link-with-types/clipboard-helper.js</a>). This code is located at '<code>./clipboard-helper.js</code>' within the Linkumori extension. In accordance with MPL 2.0 Section 3.3, recipients of this larger work have the option to receive and use this specific file under either the terms of the Mozilla Public License 2.0 or alternatively under the GNU General Public License version 3. This dual-licensing option applies exclusively to the clipboard-helper.js file and does not extend to other components of the Linkumori extension. Recipients must comply with the terms of whichever license they choose (MPL 2.0 or GPL v3) for this specific file, including maintaining appropriate notices and making the source code available as required by the chosen license.
-</p>
+<p style="color: var(--text-secondary); margin: 20px 0 12px 0;">5) The Linkumori extension incorporates MPL 2.0 licensed code from the MDN Web Extensions example repository, specifically the clipboard-helper.js file (original source: <code style="color: var(--text-primary);">./clipboard-helper.js</code>). This code is located at '<code style="color: var(--text-primary);">./clipboard-helper.js</code>' within the Linkumori extension. In accordance with MPL 2.0 Section 3.3, recipients of this larger work have the option to receive and use this specific file under either the terms of the Mozilla Public License 2.0 or alternatively under the GNU General Public License version 3. This dual-licensing option applies exclusively to the clipboard-helper.js file and does not extend to other components of the Linkumori extension. Recipients must comply with the terms of whichever license they choose (MPL 2.0 or GPL v3) for this specific file, including maintaining appropriate notices and making the source code available as required by the chosen license.</p>
+    <button id="clipboardHelperButton" class="domain-item button" style="width: calc(100% - 24px); margin: -8px auto 12px auto; display: block; background: var(--button-primary); color: var(--text-primary); font-family: 'Liberation Serif';">View Original MDN Source Code</button>
 </head>
 <body>
 <h1 id="mozilla-public-license-version-2.0">Mozilla Public License<br>Version 2.0</h1>
