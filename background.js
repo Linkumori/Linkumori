@@ -609,7 +609,7 @@ async function updateHyperlinkAuditing(enabled) {
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "Copy-clean-url",
-    title: 'Copy clean url',
+    title: 'Copy Cleaned Url',
     contexts: ["link"]
   });
 });
@@ -742,7 +742,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "openHTML",
-    title: "dedicated url cleaner",
+    title: "Dedicated Url cleaning tool page",
     contexts: ["page", "selection","page_action","action"]
   });
 });
