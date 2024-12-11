@@ -51,6 +51,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     --input-bg: rgba(255, 255, 255, 0.05);
     --input-border: rgba(255, 255, 255, 0.1);
     --input-focus: #3b82f6;
+    --button-primary-toogle:rgba(255, 255, 255, 0.2);
 }
 
 /* Light theme */
@@ -75,7 +76,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     --button-danger-hover: #ef4444;
     --input-focus: #2563eb;
     --logo-bg: #2563eb;          /* Navy blue background in light mode */
-    --logo-accent: #f1f5f9;   
+    --logo-accent: #f1f5f9;
+    --button-primary-toogle: #71a7ff;
+   
 }
 
 .centered {
@@ -199,7 +202,7 @@ body {
 .toggle-switch {
     width: 44px;
     height: 24px;
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--button-primary-toogle); 
     border-radius: 12px;
     position: relative;
     cursor: pointer;
