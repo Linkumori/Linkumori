@@ -144,7 +144,6 @@ Copyright (c) 2024 Subham Mahesh
 
 The following files contain a mix of GPLv3 and MIT licensed code:
 
-- `manifest.json`
 - `background.js`
 - `common/constants.js`
 - `common/utils.js`

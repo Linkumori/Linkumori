@@ -3,7 +3,6 @@ Linkumori source code is subject to many open source license
 
 The following files contain a mix of GPLv3 and MIT licensed code:
 
-"manifest.json"
 "background.js"
 "common/constants.js"
 "common/utils.js"

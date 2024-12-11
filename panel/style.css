@@ -27,7 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     --bg-primary: #0f172a;      /* Darker slate blue for main background */
     --bg-secondary: #1e293b;    /* Slightly lighter blue for header */
     --bg-tertiary: #334155;     /* Even lighter blue for active states */
-
+    --bg-tertiary-license:#334155;
+    --bg-primary-theme:#1e293b; 
     /* Interactive Elements */
     --button-primary: #2563eb;  /* Bright blue for primary buttons */
     --button-hover: #3b82f6;    /* Lighter blue for hover states */
@@ -35,7 +36,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     --button-danger-hover: #ef4444;
 
     /* Text Colors */
-    --text-primary: #f8fafc;    /* Almost white for primary text */
+    --text-primary: #f8fafc; 
+    --text-primary-domain: #f8fafc;    /* Almost white for primary text */
+    /* Almost white for primary text */
     --text-secondary: #cbd5e1;  /* Slightly dimmed for secondary text */
     --text-muted: #94a3b8;      /* More muted for less important text */
 
@@ -49,6 +52,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     --input-focus: #3b82f6;
 }
 
+/* Light theme */
+:root[data-theme="light"] {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f1f5f9;
+    --bg-tertiary: #2563eb;
+    --bg-primary-theme:#f1f5f9;
+
+    --bg-tertiary-license:#818892;
+    --text-primary: #ffffff;
+    --text-secondary: #334155;
+    --text-primary-domain:#334155;
+    --text-muted: #64748b;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --input-bg: rgba(0, 0, 0, 0.05);
+    --input-border: rgba(0, 0, 0, 0.1);
+    --button-primary: #2563eb;
+    --button-hover: #3b82f6;
+    --button-danger: #dc2626;
+    --button-danger-hover: #ef4444;
+    --input-focus: #2563eb;
+
+}
+
 .centered {
     text-align: center;
 }
@@ -58,6 +85,7 @@ body {
     margin: 0;
     font-family: "Liberation Serif";
     background: var(--bg-primary);
+    transition: background-color 0.2s;
 }
 
 .header {
@@ -78,6 +106,49 @@ body {
     color: var(--text-primary);
     font-size: 16px;
     margin: 0;
+}
+
+/* Theme Toggle Styles */
+/* Theme Toggle Styles */
+.theme-toggle-btn {
+    background: var(--bg-primary-theme);  /* Match with header background */
+    padding: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+    margin-left: auto;
+}
+
+.theme-toggle-btn:hover {
+    background: var(--bg-primary-theme);  /* Subtle hover effect */
+}
+
+.theme-toggle-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--bg-primary-theme);
+}
+.sun-icon,
+.moon-icon {
+    display: none;
+}
+
+:root[data-theme="light"] .sun-icon {
+    display: block;
+}
+
+:root[data-theme="light"] .moon-icon {
+    display: none;
+}
+
+:root:not([data-theme="light"]) .sun-icon {
+    display: none;
+}
+
+:root:not([data-theme="light"]) .moon-icon {
+    display: block;
 }
 
 .tab-container {
@@ -177,7 +248,7 @@ body {
     font-size: 13px;
     font-family: "Liberation Serif";
     background: var(--input-bg);
-    color: var(--text-primary);
+    color: var(--text-primary-domain);
     transition: border-color 0.2s;
 }
 
@@ -198,7 +269,7 @@ body {
 }
 
 #whitelistContainer::-webkit-scrollbar-thumb {
-    background-color: var(--bg-tertiary);
+    background-color: var(--bg-tertiary-license);
     border-radius: 3px;
 }
 
@@ -278,7 +349,7 @@ button:hover {
 }
 
 #licenseContent::-webkit-scrollbar-thumb {
-    background-color: var(--bg-tertiary);
+    background-color: var(--bg-tertiary-license);
     border-radius: 3px;
 }
 
@@ -294,4 +365,9 @@ input:focus {
 button:focus {
     outline: none;
     box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.3);
+}
+
+/* Add smooth transitions for theme changes */
+body * {
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
