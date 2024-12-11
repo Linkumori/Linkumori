@@ -34,7 +34,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     --button-hover: #3b82f6;    /* Lighter blue for hover states */
     --button-danger: #dc2626;   /* Red for delete/danger actions */
     --button-danger-hover: #ef4444;
-
+    --logo-bg: #ffffff;          /* White in dark mode */
+    --logo-accent: #2563eb; 
     /* Text Colors */
     --text-primary: #f8fafc; 
     --text-primary-domain: #f8fafc;    /* Almost white for primary text */
@@ -73,7 +74,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     --button-danger: #dc2626;
     --button-danger-hover: #ef4444;
     --input-focus: #2563eb;
-
+    --logo-bg: #2563eb;          /* Navy blue background in light mode */
+    --logo-accent: #f1f5f9;   
 }
 
 .centered {
