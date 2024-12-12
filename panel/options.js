@@ -1,4 +1,3 @@
-
 /*
 Linkumori(URLs Purifier)
 Copyright (C) 2024 Subham Mahesh
@@ -16,13 +15,45 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-// options.js
+
 document.addEventListener('DOMContentLoaded', function() {
-    const inputUrl = document.getElementById('inputUrl');
-    const outputUrl = document.getElementById('outputUrl');
-    const cleanButton = document.getElementById('cleanButton');
-    const copyButton = document.getElementById('copyButton');
+    // Get elements
+    const inputUrls = document.getElementById('inputUrls');
+    const outputUrls = document.getElementById('outputUrls');
+    const cleanUrls = document.getElementById('cleanUrls');
+    const copyUrls = document.getElementById('copyUrls');
     const copyStatus = document.getElementById('copyStatus');
+
+    // Theme handling
+   // Get the saved theme from chrome.storage
+// Function to get system color scheme
+const getSystemTheme = () => {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+};
+
+// Get the saved theme or use system preference
+chrome.storage.local.get(['theme'], (result) => {
+    const savedTheme = result.theme || getSystemTheme();
+    document.documentElement.setAttribute('data-theme', savedTheme);
+});
+
+// Listen for theme changes from storage
+chrome.storage.onChanged.addListener((changes, namespace) => {
+    if (namespace === 'local' && changes.theme) {
+        document.documentElement.setAttribute('data-theme', changes.theme.newValue);
+    }
+});
+
+// Listen for system theme changes
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    // Only update if there's no saved preference
+    chrome.storage.local.get(['theme'], (result) => {
+        if (!result.theme) {
+            const newTheme = e.matches ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+        }
+    });
+});
 
     // Keep track of processed URLs
     let processedUrls = [];
@@ -31,10 +62,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Listen for cleaned URL from background script
     chrome.runtime.onMessage.addListener((message) => {
         if (message.action === "displayCleanedUrl") {
-            // Add the new cleaned URL to our list
             processedUrls.push(message.cleanedUrl);
-            // Display all processed URLs, each on a new line
-            outputUrl.value = processedUrls.join('\n');
+            outputUrls.value = processedUrls.join('\n');
         }
     });
 
@@ -44,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         isProcessing = true;
         processedUrls = []; // Reset processed URLs
-        outputUrl.value = '';
+        outputUrls.value = '';
 
         for (const url of urls) {
             if (url.trim()) {  // Only process non-empty URLs
@@ -60,64 +89,68 @@ document.addEventListener('DOMContentLoaded', function() {
         isProcessing = false;
     }
 
-    // Clean button click handler
-    cleanButton.addEventListener('click', () => {
-        const urls = inputUrl.value.trim().split('\n')
+    // Clean URLs button click handler
+    cleanUrls.addEventListener('click', () => {
+        const urls = inputUrls.value.trim().split('\n')
             .map(url => url.trim())
-            .filter(url => url.length > 0); // Filter out empty lines
+            .filter(url => url.length > 0);
 
-        if (urls.length === 0) {
-            return;
-        }
-
+        if (urls.length === 0) return;
         processUrls(urls);
     });
 
-    // Copy button click handler
-    copyButton.addEventListener('click', async () => {
-        const cleanedUrls = outputUrl.value;
-        if (!cleanedUrls) {
-            return;
-        }
+    // Copy URLs button click handler
+    copyUrls.addEventListener('click', async () => {
+        const cleanedUrls = outputUrls.value;
+        if (!cleanedUrls) return;
 
         try {
             await navigator.clipboard.writeText(cleanedUrls);
-            copyStatus.textContent = 'Successfully copied cleaned URLs!';
-            copyStatus.style.color = '#28a745';
-            copyStatus.style.display = 'block';
-            
-            const originalText = copyButton.textContent;
-            copyButton.textContent = '✓ Copied!';
-            copyButton.style.backgroundColor = '#28a745';
-
-            setTimeout(() => {
-                copyButton.textContent = originalText;
-                copyButton.style.backgroundColor = '#007bff';
-                copyStatus.style.display = 'none';
-            }, 2000);
-
+            showCopySuccess();
         } catch (err) {
             console.error('Failed to copy URLs:', err);
-            copyStatus.textContent = 'Failed to copy URLs';
-            copyStatus.style.color = '#dc3545';
-            copyStatus.style.display = 'block';
-            
-            setTimeout(() => {
-                copyStatus.style.display = 'none';
-            }, 2000);
+            showCopyError();
         }
     });
 
+    function showCopySuccess() {
+        copyStatus.textContent = 'Successfully copied cleaned URLs!';
+        copyStatus.style.color = 'var(--button-primary)';
+        copyStatus.style.display = 'block';
+        
+        const originalText = copyUrls.innerHTML;
+        copyUrls.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M20 6L9 17l-5-5"/>
+            </svg>
+            Copied!
+        `;
+        copyUrls.style.backgroundColor = 'var(--button-primary)';
+
+        setTimeout(() => {
+            copyUrls.innerHTML = originalText;
+            copyUrls.style.backgroundColor = '';
+            copyStatus.style.display = 'none';
+        }, 2000);
+    }
+
+    function showCopyError() {
+        copyStatus.textContent = 'Failed to copy URLs';
+        copyStatus.style.color = 'var(--button-danger)';
+        copyStatus.style.display = 'block';
+        
+        setTimeout(() => {
+            copyStatus.style.display = 'none';
+        }, 2000);
+    }
+
     // Handle text input - allow Enter for new lines
-    inputUrl.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            if (e.ctrlKey || e.metaKey) {
-                // Ctrl+Enter (or Cmd+Enter on Mac) to process URLs
-                e.preventDefault();
-                cleanButton.click();
-            }
-            // Regular Enter just creates a new line - default behavior
+    inputUrls.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+            e.preventDefault();
+            cleanUrls.click();
         }
     });
 });
+
 

@@ -20,12 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */-->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Cleaner</title>
-    <script src="options.js"></script>
+    <title>Linkumori Advanced Dedicated Cleaner</title>
     <style>
         @font-face {
             font-family: 'Liberation Serif';
@@ -36,458 +34,285 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         :root {
             /* Primary Background Colors */
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-tertiary: #334155;
-            --bg-gradient: linear-gradient(135deg, #1e293b, #0f172a);
-
+            --bg-primary: #0f172a;      /* Darker slate blue for main background */
+            --bg-secondary: #1e293b;    /* Slightly lighter blue for header */
+            --bg-tertiary: #334155;     /* Even lighter blue for active states */
+            --bg-tertiary-license:#334155;
+            --bg-primary-theme:#1e293b; 
             /* Interactive Elements */
-            --button-primary: #2563eb;
-            --button-hover: #3b82f6;
-            --button-gradient: linear-gradient(135deg, #2563eb, #1d4ed8);
-            --button-danger: #dc2626;
+            --button-primary: #2563eb;  /* Bright blue for primary buttons */
+            --button-hover: #3b82f6;    /* Lighter blue for hover states */
+            --button-danger: #dc2626;   /* Red for delete/danger actions */
             --button-danger-hover: #ef4444;
-
+            --logo-bg: #ffffff;          /* White in dark mode */
+            --logo-accent: #2563eb; 
             /* Text Colors */
-            --text-primary: #f8fafc;
-            --text-secondary: #cbd5e1;
-            --text-muted: #94a3b8;
+            --text-primary: #f8fafc; 
+            --text-primary-domain: #f8fafc;    
+            --text-secondary: #cbd5e1;  
+            --text-muted: #94a3b8;      
 
             /* Border and Shadow Colors */
             --border-color: rgba(255, 255, 255, 0.1);
             --shadow-color: rgba(0, 0, 0, 0.25);
-            --glow-color: rgba(37, 99, 235, 0.1);
 
             /* Input and Interactive Element Colors */
-            --input-bg: rgba(255, 255, 255, 0.03);
+            --input-bg: rgba(255, 255, 255, 0.05);
             --input-border: rgba(255, 255, 255, 0.1);
             --input-focus: #3b82f6;
+            --button-primary-toogle:rgba(255, 255, 255, 0.2);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* Light theme */
+        :root[data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f1f5f9;
+            --bg-tertiary: #2563eb;
+            --bg-primary-theme:#f1f5f9;
+            --bg-tertiary-license:#818892;
+            --text-primary: #ffffff;
+            --text-secondary: #334155;
+            --text-primary-domain:#334155;
+            --text-muted: #64748b;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --input-bg: rgba(0, 0, 0, 0.05);
+            --input-border: rgba(0, 0, 0, 0.1);
+            --button-primary: #2563eb;
+            --button-hover: #1e40af;      
+            --button-danger: #dc2626;
+            --button-danger-hover: #ef4444;
+            --input-focus: #1e3a8a;
+            --logo-bg: #2563eb;          
+            --logo-accent: #f1f5f9;
+            --button-primary-toogle: #71a7ff;
         }
 
         body {
-            font-family: "Liberation Serif", serif;
+            margin: 0;
+            font-family: "Liberation Serif";
             background: var(--bg-primary);
-            background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 100%);
-            min-height: 100vh;
-            color: var(--text-primary);
-            padding: 2rem 1rem;
-            line-height: 1.5;
+            transition: background-color 0.2s;
+            color: var(--text-secondary);
         }
 
         .container {
-            max-width: 48rem;
+            width: 100%;
+            max-width: 800px;
             margin: 0 auto;
-            position: relative;
-        }
-
-        .container::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: -20px;
-            right: -20px;
-            bottom: -20px;
-            background: linear-gradient(135deg, var(--button-primary) 0%, transparent 400%);
-            opacity: 0.1;
-            z-index: -1;
-            border-radius: 2rem;
-            filter: blur(40px);
+            padding: 20px;
         }
 
         .header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-            position: relative;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            color: var(--text-primary);
+            background: var(--bg-secondary);
+            padding: 12px;
             display: flex;
+            gap: 10px;
             align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            margin-bottom: 0.75rem;
-            letter-spacing: -0.02em;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
 
-        .header p {
+        .logo {
+            width: 24px;
+            height: 24px;
+        }
+
+        .header-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-text h1 {
+            margin: 0;
+            font-size: 24px;
             color: var(--text-secondary);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-            opacity: 0.9;
+        }
+
+        .header-text span {
+            color: var(--text-secondary);
+            font-size: 14px;
         }
 
         .card {
-            background: var(--bg-gradient);
-            border-radius: 1rem;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            backdrop-filter: blur(20px);
-            position: relative;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(to right, var(--button-primary), var(--button-hover));
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            margin-bottom: 20px;
         }
 
         .card-header {
-            padding: 2rem 2rem 0;
-        }
-
-        .badges {
-            display: flex;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .badge {
-            font-size: 0.875rem;
-            padding: 0.35rem 1rem;
-            border-radius: 999px;
-            background: var(--input-bg);
-            color: var(--button-primary);
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
-            letter-spacing: 0.02em;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-bottom: 8px;
+            display: inline-block;
         }
 
-        .card-description {
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-            font-size: 1.05rem;
-            line-height: 1.6;
+        .card-body {
+            padding: 16px;
         }
 
-        .card-content {
-            padding: 2rem;
-        }
-
-        .input-group {
-            margin-bottom: 2.5rem;
+        .input-container {
+            margin-bottom: 16px;
         }
 
         .input-label {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-size: 1rem;
-            margin-bottom: 0.75rem;
-            color: var(--text-primary);
+            gap: 8px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
         }
 
-        .input-label svg {
-            color: var(--button-primary);
-        }
-
-        textarea {
+        .url-textarea {
             width: 100%;
             min-height: 150px;
-            padding: 1rem;
+            padding: 12px;
             border: 1px solid var(--input-border);
-            border-radius: 0.75rem;
-            font-family: "Liberation Serif", monospace;
-            font-size: 1rem;
-            resize: vertical;
-            transition: all 0.3s ease;
+            border-radius: 4px;
             background: var(--input-bg);
-            color: var(--text-primary);
-            line-height: 1.6;
-        }
-
-        textarea:focus {
-            outline: none;
-            border-color: var(--input-focus);
-            box-shadow: 0 0 0 4px var(--glow-color);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .hint {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            margin-top: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            opacity: 0.8;
-        }
-
-        kbd {
-            padding: 0.3rem 0.6rem;
-            border-radius: 0.5rem;
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: var(--text-primary-domain);
+            font-family: "Liberation Serif";
+            resize: vertical;
+            box-sizing: border-box;
         }
 
         .separator {
-            position: relative;
-            height: 1px;
-            background: var(--border-color);
-            margin: 2.5rem 0;
-        }
-
-        .separator-icon {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--bg-secondary);
-            padding: 0.75rem;
-            border-radius: 50%;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            color: var(--text-secondary);
         }
 
         .card-footer {
-            padding: 2rem;
-            display: flex;
-            justify-content: space-between;
-            gap: 1.5rem;
+            padding: 16px;
             border-top: 1px solid var(--border-color);
-            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            gap: 12px;
         }
 
-        .btn {
-            display: inline-flex;
+        button {
+            display: flex;
             align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1rem;
-            border: none;
-            letter-spacing: 0.01em;
-        }
-
-        .btn svg {
-            transition: transform 0.3s ease;
-        }
-
-        .btn:hover svg {
-            transform: scale(1.1);
-        }
-
-        .btn-primary {
-            background: var(--button-gradient);
-            color: var(--text-primary);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
-        }
-
-        .btn-outline {
-            background: var(--input-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-        }
-
-        .btn-outline:hover {
-            background: var(--bg-tertiary);
-            transform: translateY(-1px);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        #copyStatus {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            padding: 1rem 1.5rem;
-            border-radius: 1rem;
-            display: none;
-            align-items: center;
-            gap: 0.75rem;
-            font-size: 1rem;
-            animation: slideIn 0.3s ease-out;
-            background: var(--bg-gradient);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateY(2rem);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .processing .separator-icon {
-            animation: spin 1s linear infinite;
-        }
-
-        .processing .separator-icon svg {
-            color: var(--button-primary);
-        }
-
-        @keyframes spin {
-            from {
-                transform: translate(-50%, -50%) rotate(0deg);
-            }
-            to {
-                transform: translate(-50%, -50%) rotate(360deg);
-            }
-        }
-
-        @media (max-width: 640px) {
-            .card-footer {
-                flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .header h1 {
-                font-size: 2rem;
-            }
-
-            .card-content {
-                padding: 1.5rem;
-            }
-        }
-
-        /* Scrollbar Styling */
-        textarea::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        textarea::-webkit-scrollbar-track {
-            background: var(--bg-tertiary);
-            border-radius: 4px;
-        }
-
-        textarea::-webkit-scrollbar-thumb {
+            gap: 8px;
+            padding: 8px 16px;
             background: var(--button-primary);
+            color: var(--text-primary);
+            border: none;
             border-radius: 4px;
+            cursor: pointer;
+            font-family: "Liberation Serif";
+            transition: background-color 0.2s;
         }
 
-        textarea::-webkit-scrollbar-thumb:hover {
+        button:hover {
             background: var(--button-hover);
         }
 
-        /* Focus Ring */
-        .btn:focus {
-            outline: none;
-            box-shadow: 0 0 0 4px var(--glow-color);
+        .copy-status {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            min-height: 20px;
         }
 
-        /* Smooth transitions */
-        .card, .btn, textarea, .badge {
-            will-change: transform, opacity;
+        textarea:focus, input:focus {
+            outline: none;
+            border-color: var(--input-focus);
+        }
+
+        /* Add smooth transitions for theme changes */
+        body * {
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
         }
     </style>
-
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <header class="header">
-            <h1>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                </svg>
-              linkurmori multiple URL Cleaning tool
-            </h1>
-            <p>Transform and clean your URLs with ease</p>
+            <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">             
+                <circle cx="50" cy="50" r="45" fill="var(--logo-bg)"/>             
+                <path d="M35 50 Q35 35, 50 35 L65 35 Q80 35, 80 50 Q80 65, 65 65 L60 65" 
+                      fill="none" 
+                      stroke="var(--logo-accent)" 
+                      stroke-width="8" 
+                      stroke-linecap="round"/>             
+                <path d="M65 50 Q65 65, 50 65 L35 65 Q20 65, 20 50 Q20 35, 35 35 L40 35" 
+                      fill="none" 
+                      stroke="var(--logo-accent)" 
+                      stroke-width="8" 
+                      stroke-linecap="round"/>             
+                <polygon points="75,20 78,28 86,31 78,34 75,42 72,34 64,31 72,28" 
+                         fill="var(--logo-accent)"/>         
+            </svg>
+            <div class="header-text">
+                <h1>Linkumori</h1>
+                <span>Multiple URL Cleaning Tool</span>
+            </div>
         </header>
 
-        <div class="card">
-            <div class="card-header">
-                <div class="badges">
-                    <span class="badge badge-outline">v1.0</span>
-                </div>
-                <p class="card-description">Enter your URLs below, one per line. We'll clean and format them automatically.</p>
-            </div>
+        <!-- Main Content -->
+        <div class="card-header">
+            <p>Enter your URLs below, one per line. We'll clean and format them automatically.</p>
+        </div>
 
-            <div class="card-content">
-                <div class="input-group">
-                    <label class="input-label" for="inputUrl">
+            <div class="card-body">
+                <div class="input-container">
+                    <label class="input-label">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M11.4 3.3c.3-.3.7-.3 1 0l8.3 8.3c.3.3.3.7 0 1l-8.3 8.3c-.3.3-.7.3-1 0l-8.3-8.3c-.3-.3-.3-.7 0-1l8.3-8.3z"></path>
+                            <path d="M11.4 3.3c.3-.3.7-.3 1 0l8.3 8.3c.3.3.3.7 0 1l-8.3 8.3c-.3.3-.7.3-1 0l-8.3-8.3c-.3-.3-.3-.7 0-1l8.3-8.3z" />
                         </svg>
                         Input URLs
                     </label>
-                    <textarea 
-                        id="inputUrl" 
-                        placeholder="https://example.com/long-url?param=value..."
-                        spellcheck="false"
-                    ></textarea>
-                    
+                    <textarea id="inputUrls" class="url-textarea"></textarea>
                 </div>
 
                 <div class="separator">
-                    <div class="separator-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                        </svg>
-                    </div>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    </svg>
                 </div>
 
-                <div class="input-group">
-                    <label class="input-label" for="outputUrl">
+                <div class="input-container">
+                    <label class="input-label">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         Cleaned URLs
                     </label>
-                    <textarea 
-                        id="outputUrl" 
-                        placeholder="Your cleaned URLs will appear here..." 
-                        readonly
-                    ></textarea>
+                    <textarea id="outputUrls" class="url-textarea" readonly></textarea>
                 </div>
             </div>
 
             <div class="card-footer">
-                <button id="cleanButton" class="btn btn-primary">
+                <button id="cleanUrls">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                        <path d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                     </svg>
                     Clean URLs
                 </button>
-
-                <button id="copyButton" class="btn btn-outline">
+                <button id="copyUrls">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                        <path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                     </svg>
                     Copy URLs
                 </button>
             </div>
         </div>
-
-        <div id="copyStatus"></div>
+        <div id="copyStatus" class="copy-status"></div>
     </div>
 
+    <script src="options.js"></script>
 </body>
 </html>

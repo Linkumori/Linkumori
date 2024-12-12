@@ -60,7 +60,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     --bg-secondary: #f1f5f9;
     --bg-tertiary: #2563eb;
     --bg-primary-theme:#f1f5f9;
-
     --bg-tertiary-license:#818892;
     --text-primary: #ffffff;
     --text-secondary: #334155;
@@ -71,14 +70,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     --input-bg: rgba(0, 0, 0, 0.05);
     --input-border: rgba(0, 0, 0, 0.1);
     --button-primary: #2563eb;
-    --button-hover: #3b82f6;
+    --button-hover: #1e40af;      /* Slightly lighter navy blue */
     --button-danger: #dc2626;
     --button-danger-hover: #ef4444;
-    --input-focus: #2563eb;
+    --input-focus: #1e3a8a;
     --logo-bg: #2563eb;          /* Navy blue background in light mode */
     --logo-accent: #f1f5f9;
     --button-primary-toogle: #71a7ff;
-   
 }
 
 .centered {
@@ -100,6 +98,7 @@ body {
     gap: 10px;
     align-items: center;
     box-shadow: 0 2px 4px var(--shadow-color);
+    position: relative;
 }
 
 .logo {
@@ -108,15 +107,15 @@ body {
 }
 
 .header h1 {
-    color: var(--text-primary);
+    color: var(--text-secondary);
     font-size: 16px;
     margin: 0;
 }
 
-/* Theme Toggle Styles */
-/* Theme Toggle Styles */
-.theme-toggle-btn {
-    background: var(--bg-primary-theme);  /* Match with header background */
+/* Theme Toggle and Advanced Tools Styles */
+.theme-toggle-btn,
+.advanced-tools-btn {
+    background: var(--bg-primary-theme);
     padding: 6px;
     cursor: pointer;
     display: flex;
@@ -124,17 +123,24 @@ body {
     justify-content: center;
     color: var(--text-secondary);
     transition: all 0.2s;
+}
+
+.advanced-tools-btn {
     margin-left: auto;
+    margin-right: 8px;
 }
 
-.theme-toggle-btn:hover {
-    background: var(--bg-primary-theme);  /* Subtle hover effect */
+.theme-toggle-btn:hover,
+.advanced-tools-btn:hover {
+    background: var(--bg-primary-theme);
 }
 
-.theme-toggle-btn:focus {
+.theme-toggle-btn:focus,
+.advanced-tools-btn:focus {
     outline: none;
     box-shadow: 0 0 0 2px var(--bg-primary-theme);
 }
+
 .sun-icon,
 .moon-icon {
     display: none;
@@ -154,6 +160,20 @@ body {
 
 :root:not([data-theme="light"]) .moon-icon {
     display: block;
+}
+
+/* Advanced Tools Button Icons */
+.advanced-tools-btn .light-icon,
+.advanced-tools-btn .dark-icon {
+  display: none;
+}
+
+:root[data-theme="light"] .advanced-tools-btn .light-icon {
+  display: block;
+}
+
+:root:not([data-theme="light"]) .advanced-tools-btn .dark-icon {
+  display: block;
 }
 
 .tab-container {
@@ -202,7 +222,7 @@ body {
 .toggle-switch {
     width: 44px;
     height: 24px;
-    background: var(--button-primary-toogle); 
+    background: var(--button-primary-toogle);
     border-radius: 12px;
     position: relative;
     cursor: pointer;

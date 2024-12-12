@@ -591,20 +591,56 @@ document.getElementById('adguardSourceButton')?.addEventListener('click', () => 
     window.open('https://github.com/AdguardTeam/AdguardFilters/blob/master/TrackParamFilter/sections/specific.txt', '_blank');
 });
 
+document.getElementById('fontAwesomeIconButton')?.addEventListener('click', () => {
+    window.open('https://fontawesome.com/icons/screwdriver-wrench?f=classic&s=solid&pc=%23ffffff&sc=%23FFD43B%2F', '_blank');
+});
+document.getElementById('fontAwesomeIconButton1')?.addEventListener('click', () => {
+    window.open('https://fontawesome.com/icons/screwdriver-wrench?f=classic&s=solid&pc=%23334155&sc=%23FFD43B%2F', '_blank');
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('themeToggle');
     
-    // Check for saved theme preference or default to dark
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    // Function to get system color scheme
+    const getSystemTheme = () => {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+
+    // Check for saved theme preference or default to system preference
+    chrome.storage.local.get(['theme'], (result) => {
+        const savedTheme = result.theme || getSystemTheme();
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    });
     
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        // Only update if there's no saved preference
+        chrome.storage.local.get(['theme'], (result) => {
+            if (!result.theme) {
+                const newTheme = e.matches ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', newTheme);
+            }
+        });
+    });
+
     themeToggle.addEventListener('click', () => {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'light' ? 'dark' : 'light';
         
         document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+        chrome.storage.local.set({ theme: newTheme });
     });
 });
+
+const advancedToolsBtn = document.getElementById('advancedTools');
+if (advancedToolsBtn) {
+    advancedToolsBtn.addEventListener('click', () => {
+        // Open options.html in a new tab
+        chrome.tabs.create({
+            url: 'panel/option.html'
+        });
+    });
+}
+
 // Initialize the controller
 const controller = new PanelMenuController();

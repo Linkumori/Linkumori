@@ -739,24 +739,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.contextMenus.create({
-    id: "openHTML",
-    title: "Dedicated Url Cleaning Tool Page",
-    contexts: ["page", "selection","page_action","action"]
-  });
-});
-
-chrome.contextMenus.onClicked.addListener((info, tab) => {
-  if (info.menuItemId === "openHTML") {
-    chrome.tabs.update(tab.id, {
-      url: 'panel/option.html'
-
-    });
-  }
-});
 
 
 
 
-// New batch processing function with progress tracking
+
+
