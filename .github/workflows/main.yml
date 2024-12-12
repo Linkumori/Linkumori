@@ -216,7 +216,6 @@ jobs:
         with:
           files: |
             Linkumori.crx
-            Linkumori-webstore.zip
             updates.xml
             config.zip
           body: |
