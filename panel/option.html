@@ -23,223 +23,219 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Linkumori Advanced Dedicated Cleaner</title>
+    <title>Linkumori</title>
     <style>
         @font-face {
             font-family: 'Liberation Serif';
             src: url('../liberation-fonts/LiberationSerif-Regular.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
         }
 
         :root {
-            /* Primary Background Colors */
-            --bg-primary: #0f172a;      /* Darker slate blue for main background */
-            --bg-secondary: #1e293b;    /* Slightly lighter blue for header */
-            --bg-tertiary: #334155;     /* Even lighter blue for active states */
-            --bg-tertiary-license:#334155;
-            --bg-primary-theme:#1e293b; 
-            /* Interactive Elements */
-            --button-primary: #2563eb;  /* Bright blue for primary buttons */
-            --button-hover: #3b82f6;    /* Lighter blue for hover states */
-            --button-danger: #dc2626;   /* Red for delete/danger actions */
+            /* Navy theme with original class structure */
+            --bg-primary: #0f1729;
+            --bg-secondary: #1a2238;
+            --bg-tertiary: #233049;
+            --bg-tertiary-license: #2d3b5e;
+            --bg-primary-theme: #1a2238;
+            --button-primary: #3b82f6;
+            --button-hover: #2563eb;
+            --button-danger: #dc2626;
             --button-danger-hover: #ef4444;
-            --logo-bg: #ffffff;          /* White in dark mode */
-            --logo-accent: #2563eb; 
-            /* Text Colors */
-            --text-primary: #f8fafc; 
-            --text-primary-domain: #f8fafc;    
-            --text-secondary: #cbd5e1;  
-            --text-muted: #94a3b8;      
-
-            /* Border and Shadow Colors */
-            --border-color: rgba(255, 255, 255, 0.1);
+            --logo-bg: #ffffff;
+            --logo-accent: #3b82f6; 
+            --text-primary: #f8fafc;
+            --text-primary-domain: #f8fafc;
+            --text-secondary: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-color: rgba(148, 163, 184, 0.1);
             --shadow-color: rgba(0, 0, 0, 0.25);
-
-            /* Input and Interactive Element Colors */
             --input-bg: rgba(255, 255, 255, 0.05);
-            --input-border: rgba(255, 255, 255, 0.1);
+            --input-border: rgba(148, 163, 184, 0.2);
             --input-focus: #3b82f6;
-            --button-primary-toogle:rgba(255, 255, 255, 0.2);
+            --button-primary-toogle: rgba(59, 130, 246, 0.2);
         }
 
-        /* Light theme */
         :root[data-theme="light"] {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f1f5f9;
-            --bg-tertiary: #2563eb;
-            --bg-primary-theme:#f1f5f9;
-            --bg-tertiary-license:#818892;
-            --text-primary: #ffffff;
-            --text-secondary: #334155;
-            --text-primary-domain:#334155;
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: ##ffffff;
+            --bg-primary-theme: #ffffff;
+            --bg-tertiary-license: #6b7280;
+            --text-primary: #0f172a;
+            --text-secondary: #1e293b;
+            --text-primary-domain: #1e293b;
             --text-muted: #64748b;
             --border-color: rgba(0, 0, 0, 0.1);
             --shadow-color: rgba(0, 0, 0, 0.1);
             --input-bg: rgba(0, 0, 0, 0.05);
             --input-border: rgba(0, 0, 0, 0.1);
-            --button-primary: #2563eb;
-            --button-hover: #1e40af;      
-            --button-danger: #dc2626;
-            --button-danger-hover: #ef4444;
-            --input-focus: #1e3a8a;
-            --logo-bg: #2563eb;          
-            --logo-accent: #f1f5f9;
-            --button-primary-toogle: #71a7ff;
+            --input-focus: #3b82f6;
+            --logo-bg: #3b82f6;
+            --logo-accent: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            margin: 0;
             font-family: "Liberation Serif";
-            background: var(--bg-primary);
-            transition: background-color 0.2s;
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
             color: var(--text-secondary);
+            line-height: 1.5;
+            min-height: 100vh;
+            padding: 2rem;
         }
 
         .container {
-            width: 100%;
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
         }
 
         .header {
             background: var(--bg-secondary);
-            padding: 12px;
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
             display: flex;
-            gap: 10px;
             align-items: center;
-            box-shadow: 0 2px 4px var(--shadow-color);
-            border-radius: 8px;
-            margin-bottom: 20px;
+            gap: 1rem;
+            box-shadow: 0 4px 6px var(--shadow-color);
         }
 
         .logo {
-            width: 24px;
-            height: 24px;
-        }
-
-        .header-text {
-            display: flex;
-            flex-direction: column;
+            width: 40px;
+            height: 40px;
         }
 
         .header-text h1 {
-            margin: 0;
-            font-size: 24px;
+            font-size: 1.75rem;
             color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .header-text span {
-            color: var(--text-secondary);
-            font-size: 14px;
+            color: var(--text-muted);
+            font-size: 1rem;
         }
 
-        .card {
+        .main-card {
             background: var(--bg-secondary);
-            border-radius: 8px;
-            box-shadow: 0 2px 4px var(--shadow-color);
-            margin-bottom: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px var(--shadow-color);
         }
 
         .card-header {
-            padding: 16px;
+            padding: 1.25rem;
             border-bottom: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
         }
 
-        .badge {
-            background: var(--bg-tertiary);
+        .card-header p {
             color: var(--text-primary);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            margin-bottom: 8px;
-            display: inline-block;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .card-body {
-            padding: 16px;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
         }
 
-        .input-container {
-            margin-bottom: 16px;
+        .input-group {
+            margin-bottom: 1.5rem;
         }
 
         .input-label {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
             color: var(--text-secondary);
-            margin-bottom: 8px;
+            font-size: 1.1rem;
         }
 
         .url-textarea {
             width: 100%;
             min-height: 150px;
-            padding: 12px;
+            padding: 1rem;
             border: 1px solid var(--input-border);
-            border-radius: 4px;
+            border-radius: 8px;
             background: var(--input-bg);
             color: var(--text-primary-domain);
-            font-family: "Liberation Serif";
+            font-family: inherit;
+            font-size: 1rem;
             resize: vertical;
-            box-sizing: border-box;
+            transition: all 0.2s ease;
         }
 
-        .separator {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 20px 0;
-            color: var(--text-secondary);
+        .url-textarea:focus {
+            outline: none;
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 3px var(--button-primary-toogle);
         }
 
         .card-footer {
-            padding: 16px;
+            padding: 1.25rem;
             border-top: 1px solid var(--border-color);
             display: flex;
-            gap: 12px;
+            gap: 1rem;
+            background: var(--bg-tertiary);
         }
 
         button {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: var(--button-primary);
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(to right, var(--button-primary), var(--button-hover));
             color: var(--text-primary);
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            font-family: "Liberation Serif";
-            transition: background-color 0.2s;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         button:hover {
             background: var(--button-hover);
+            transform: translateY(-1px);
+        }
+
+        button:active {
+            transform: translateY(0);
         }
 
         .copy-status {
+            margin-top: 1rem;
             text-align: center;
-            color: var(--text-secondary);
-            margin-top: 8px;
-            min-height: 20px;
+            color: var(--button-primary);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
-        textarea:focus, input:focus {
-            outline: none;
-            border-color: var(--input-focus);
-        }
-
-        /* Add smooth transitions for theme changes */
-        body * {
-            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+        [data-lucide] {
+            color: currentColor;
+            stroke-width: 1.5;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <header class="header">
             <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">             
                 <circle cx="50" cy="50" r="45" fill="var(--logo-bg)"/>             
@@ -257,61 +253,54 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                          fill="var(--logo-accent)"/>         
             </svg>
             <div class="header-text">
-                <h1>Linkumori</h1>
+                <h1>
+                    <i data-lucide="link-2"></i>
+                    Linkumori
+                </h1>
                 <span>Multiple URL Cleaning Tool</span>
             </div>
         </header>
 
-        <!-- Main Content -->
-        <div class="card-header">
-            <p>Enter your URLs below, one per line. We'll clean and format them automatically.</p>
-        </div>
+        <main class="main-card">
+            <div class="card-header">
+                <p>
+                    <i data-lucide="alert-circle"></i>
+                    Enter your URLs below, one per line. We'll clean and format them automatically.
+                </p>
+            </div>
 
             <div class="card-body">
-                <div class="input-container">
+                <div class="input-group">
                     <label class="input-label">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M11.4 3.3c.3-.3.7-.3 1 0l8.3 8.3c.3.3.3.7 0 1l-8.3 8.3c-.3.3-.7.3-1 0l-8.3-8.3c-.3-.3-.3-.7 0-1l8.3-8.3z" />
-                        </svg>
+                        <i data-lucide="file-input"></i>
                         Input URLs
                     </label>
-                    <textarea id="inputUrls" class="url-textarea"></textarea>
+                    <textarea id="inputUrls" class="url-textarea" placeholder="Paste your URLs here, one per line"></textarea>
                 </div>
 
-                <div class="separator">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                    </svg>
-                </div>
-
-                <div class="input-container">
+                <div class="input-group">
                     <label class="input-label">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+                        <i data-lucide="file-output"></i>
                         Cleaned URLs
                     </label>
-                    <textarea id="outputUrls" class="url-textarea" readonly></textarea>
+                    <textarea id="outputUrls" class="url-textarea" placeholder="Cleaned URLs will appear here" readonly></textarea>
                 </div>
             </div>
 
             <div class="card-footer">
                 <button id="cleanUrls">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                    </svg>
+                    <i data-lucide="spray-can"></i>
                     Clean URLs
                 </button>
                 <button id="copyUrls">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                    </svg>
-                    Copy URLs
+                    Copy Results
                 </button>
             </div>
-        </div>
-        <div id="copyStatus" class="copy-status"></div>
+        </main>
+        
     </div>
+    <div id="copyStatus" class="copy-status"></div>
+</div>
 
     <script src="options.js"></script>
 </body>
