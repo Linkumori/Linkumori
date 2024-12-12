@@ -184,9 +184,9 @@ Copyright (c) 2024 Subham Mahesh
 
 This project uses the Screwdriver Wrench icon from Font Awesome Free, which is licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).
 - Icon: Screwdriver Wrench
--  orginal Source URLs: 
-  - advanced-tools-dark.svg: https://fontawesome.com/icons/screwdriver-wrench?f=classic&s=solid&pc=%23ffffff&sc=%23FFD43B%2F
-  - advanced-tools-light.svg: https://fontawesome.com/icons/screwdriver-wrench?f=classic&s=solid&pc=%23334155&sc=%23FFD43B%2F
+- View Original Source of advanced-tools-dark.svg: https://fontawesome.com/icons/screwdriver-wrench?f=classic&s=solid&pc=%23ffffff&sc=%23FFD43B%2F
+
+- View Original Source of Sourceadvanced-tools-light.svg: https://fontawesome.com/icons/screwdriver-wrench?f=classic&s=solid&pc=%23334155&sc=%23FFD43B%2F
 -  icon locations in linkumori source code:
   - `/panel/advanced-tools-dark.svg`
   - `/panel/advanced-tools-light.svg`
