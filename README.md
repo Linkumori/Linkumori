@@ -182,7 +182,7 @@ Copyright (c) 2024 Subham Mahesh
 
 ### Font Awesome License
 
-This project uses modified versions of the Screwdriver Wrench icon from Font Awesome Free, which is licensed under the Font Awesome Free License:
+This project uses the two Screwdriver Wrench icon from Font Awesome Free, which is licensed under the Font Awesome Free License.:
 - Icon: Screwdriver Wrench
 -  orginal Source URLs: 
   - Light version: https://fontawesome.com/icons/screwdriver-wrench?f=classic&s=solid&pc=%23ffffff&sc=%23FFD43B%2F
