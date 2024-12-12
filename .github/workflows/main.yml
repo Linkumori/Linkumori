@@ -200,7 +200,7 @@ jobs:
             -H "Authorization: Bearer ${{ steps.get-token.outputs.access_token }}" \
             -H "x-goog-api-version: 2" \
             -H "Content-Length: 0" \
-            "https://www.googleapis.com/chromewebstore/v1.1/items/${{ secrets.EXTENSION_ID }}/publish")
+            "https://www.googleapis.com/chromewebstore/v1.1/items/${{ secrets.EXTENSION_ID }}/publish?publishTarget=default")
           
           PUBLISH_STATUS=$(echo $PUBLISH_RESPONSE | jq -r '.status[0]')
           
