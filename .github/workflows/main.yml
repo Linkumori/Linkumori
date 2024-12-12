@@ -126,17 +126,17 @@ jobs:
           mv selfhosted_ext.crx "Linkumori.crx"
           
           # Create updates.xml
-          cat > updates.xml << EOL
+           cat > updates.xml << EOL
           <?xml version='1.0' encoding='UTF-8'?>
           <gupdate xmlns='http://www.google.com/update2/response' protocol='2.0'>
             <app appid="kcpfnbjlimolkcjllfooaipdpdjmjigg">
               <updatecheck 
-                codebase='https://github.com/Linkumori/Linkumori-Extension/releases/latest/download/Linkumori.crx' 
-                version='${{ steps.manifest.outputs.version }}' 
-                prodversionmin='121.0'/>
+                codebase='https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/Linkumori.crx' 
+                version='${{ steps.manifest.outputs.version }}' />
             </app>
           </gupdate>
           EOL
+          
           
           # Clean up
           rm -rf selfhosted_ext
