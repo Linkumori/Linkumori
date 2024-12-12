@@ -228,7 +228,8 @@ jobs:
             ## 📦 Download Options
             
             ### 1️⃣ Chrome Web Store (Recommended)
-            [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/${{ env.EXTENSION_ID }}?label=Chrome%20Web%20Store&style=for-the-badge)](https://chrome.google.com/webstore/detail/linkumori/${{ env.EXTENSION_ID }})
+            [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/kcpfnbjlimolkcjllfooaipdpdjmjigg?label=Chrome%20Web%20Store&logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/detail/linkumori-clean-urls/kcpfnbjlimolkcjllfooaipdpdjmjigg)
+
             - ✨ Official release channel
             - 🔄 Automatic updates
             - ✅ Verified by Google
