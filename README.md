@@ -184,7 +184,7 @@ The following files are licensed under the Creative Commons Attribution 4.0 Inte
 
 Copyright (c) 2024 Subham Mahesh
 
-### Font Awesome License
+### Font Awesome Icons
 
 This project uses the Screwdriver Wrench icon from Font Awesome Free, which is licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).
 - Icon: Screwdriver Wrench
