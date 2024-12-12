@@ -6,7 +6,6 @@
 
 ![Linkumori](https://github.com/subham8907/Linkumori/blob/main/icons/icon128.png)
 
-[![Linkumori License](https://img.shields.io/badge/Linkumori_Components_Licensed_Either_In-MIT%2FGPL--3.0%2FMPL--2.0%2FCC_BY_4.0-1D8AC8.svg)](LICENSE)
 
  <a href="https://chromewebstore.google.com/detail/linkumori-clean-urls/kcpfnbjlimolkcjllfooaipdpdjmjigg
 "><img height="58" src="https://i.imgur.com/K9Yh8G9.png" alt="Chrome Web Store"></a>
