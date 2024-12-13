@@ -1529,7 +1529,7 @@ rules/adguard-modifed/rules5.json
 rules/adguard-modifed/rules6.json
 rules/adguard-modifed/rules7.json
 rules/adguard-modifed/rules4.json
-
+rules/adguard-modifed/rules12.json
 Original work: https://github.com/AdguardTeam/AdguardFilters/blob/master/TrackParamFilter/sections/specific.txt
 
 original work: license under General Public License v3

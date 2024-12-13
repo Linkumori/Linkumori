@@ -120,7 +120,7 @@ Linkumori includes a domain whitelisting system that allows you to exempt specif
 
 Linkumori uses configuration files to determine which parameters to remove from URLs:
 
-- `rules/et_1` to `rules/et_10`: Static DNR rules
+- `rules/et_1` to `rules/et_12`: Static DNR rules
 - `Artifact.json`: Additional URL cleaning patterns for the History API method
 
 Advanced users can modify these files to customize the extension's behavior.
@@ -162,7 +162,8 @@ MIT portions: Copyright (c) 2022 Nick
 
 ### Derivative Work
 
-Files `rules/adguard-modifed/rules5.json`, `rules/adguard-modifed/rules6.json`, and `rules/adguard-modifed/rules7.json`, `rules/adguard-modifed/rules4.json` are modified works:
+Files `rules/adguard-modifed/rules5.json`, `rules/adguard-modifed/rules6.json`,`rules/adguard-modifed/rules12.json`
+ and `rules/adguard-modifed/rules7.json`, `rules/adguard-modifed/rules4.json` are modified works:
 
 - Original work: https://github.com/AdguardTeam/AdguardFilters/blob/master/TrackParamFilter/sections/specific.txt
 - Original work license: GNU General Public License v3

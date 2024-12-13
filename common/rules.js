@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 export const parameterRules = [
     {
+        // Generic parameters
         removeParams: [
             "Echobox", "__hsfp", "__hssc", "__hstc",
             "__s", "__twitter_impression", "_ga", "_gl",
@@ -65,9 +66,21 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "abcnyheter.no",
+        removeParams: [
+            "nr"
+        ]
+    },
+    {
         domain: "academic.oup",
         removeParams: [
             "redirectedFrom"
+        ]
+    },
+    {
+        domain: "account.microsoft.com",
+        removeParams: [
+            "refd"
         ]
     },
     {
@@ -103,9 +116,15 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "adobe.com",
+        removeParams: [
+            "mv2", "ref"
+        ]
+    },
+    {
         domain: "adorama.com",
         removeParams: [
-            "bc_pid", "obem"
+            "bc_pid", "obem", "sterm"
         ]
     },
     {
@@ -124,6 +143,13 @@ export const parameterRules = [
         domain: "adweek.com",
         removeParams: [
             "traffic_source"
+        ]
+    },
+    {
+        domain: "affiliate.insider.com",
+        removeParams: [
+            "amazonTrackingID", "h", "platform", "postID",
+            "postSlug"
         ]
     },
     {
@@ -151,15 +177,23 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "alibaba.com",
+        removeParams: [
+            "categoryIds"
+        ]
+    },
+    {
         domain: "aliexpress.com",
         removeParams: [
-            "af", "aff_fcid", "aff_fsk", "aff_platform",
-            "aff_request_id", "aff_short_key", "aff_trace_key", "algo_expid",
-            "algo_pvid", "btsid", "curPageLogUid", "cv",
-            "dp", "gps-id", "mall_affr", "pdp_npi",
-            "pvid", "scm", "scm-url", "scm[_a-z-]*",
-            "scm_id", "sk", "spm", "terminal_id",
-            "utparam", "ws_ab_test"
+            "__tppBottom", "_t", "af", "aff_fcid",
+            "aff_fsk", "aff_platform", "aff_request_id", "aff_short_key",
+            "aff_trace_key", "algo_expid", "algo_pvid", "btsid",
+            "curPageLogUid", "cv", "dp", "gatewayAdapt",
+            "gps-id", "initiative_id", "mall_affr", "pdp_ext_f",
+            "pdp_npi", "pdp_pi", "pvid", "scm",
+            "scm-url", "scm[_a-z-]*", "scm_id", "sk",
+            "spm", "terminal_id", "tt", "utparam",
+            "ws_ab_test"
         ]
     },
     {
@@ -172,6 +206,12 @@ export const parameterRules = [
         domain: "allabout.co.jp",
         removeParams: [
             "FM"
+        ]
+    },
+    {
+        domain: "allbeauty.com",
+        removeParams: [
+            "abref"
         ]
     },
     {
@@ -205,15 +245,39 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "ambcrypto.com",
+        removeParams: [
+            "wp_source"
+        ]
+    },
+    {
+        domain: "amc.com",
+        removeParams: [
+            "bclid", "bcpid", "bctid"
+        ]
+    },
+    {
         domain: "ameblo.jp",
         removeParams: [
             "adxarea", "frm_id"
         ]
     },
     {
+        domain: "analytics.bluekai.com",
+        removeParams: [
+            "phint"
+        ]
+    },
+    {
         domain: "announcements.bybit.com",
         removeParams: [
             "pid", "sa_utm_channel", "sa_utm_ci", "sa_utm_tcn"
+        ]
+    },
+    {
+        domain: "apnews.com",
+        removeParams: [
+            "user_email"
         ]
     },
     {
@@ -236,10 +300,24 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "app.slack.com",
+        removeParams: [
+            "entry_point"
+        ]
+    },
+    {
+        domain: "app.snyk.io",
+        removeParams: [
+            "pagedoc"
+        ]
+    },
+    {
         domain: "apple.com",
         removeParams: [
-            "afid", "app", "cid", "ct",
-            "ign-itsc[a-z]+", "pt"
+            "/ign-.*", "afid", "app", "cid",
+            "ct", "fnode", "ign-itsc[a-z]+", "mttn3pid",
+            "mttnagencyid", "mttncc", "mttnpid", "mttnsiteid",
+            "mttnsubad", "mttnsubkw", "mttnsubplmnt", "pt"
         ]
     },
     {
@@ -258,6 +336,12 @@ export const parameterRules = [
         domain: "arcelik.com.tr",
         removeParams: [
             "ref"
+        ]
+    },
+    {
+        domain: "archive.org",
+        removeParams: [
+            "iax"
         ]
     },
     {
@@ -280,9 +364,28 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "artstation.com",
+        removeParams: [
+            "/\d.*"
+        ]
+    },
+    {
+        domain: "as.com",
+        removeParams: [
+            "id_externo_noti", "m1", "m2", "m3",
+            "m4", "m5", "omnil", "ssmdoc"
+        ]
+    },
+    {
         domain: "asahi.com",
         removeParams: [
             "cid", "iref", "ref"
+        ]
+    },
+    {
+        domain: "asos.com",
+        removeParams: [
+            "ctaref"
         ]
     },
     {
@@ -294,7 +397,8 @@ export const parameterRules = [
     {
         domain: "audible.com",
         removeParams: [
-            "ref"
+            "/ref/", "creativeId", "ipRedirectFrom", "ipRedirectOriginalURL",
+            "pageLoadId", "ref", "source_code"
         ]
     },
     {
@@ -308,6 +412,12 @@ export const parameterRules = [
         removeParams: [
             "dr_tracker", "hash", "idprob", "sending_id",
             "site_id"
+        ]
+    },
+    {
+        domain: "avast.com",
+        removeParams: [
+            "__cf_chl_rt_tk"
         ]
     },
     {
@@ -336,6 +446,26 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "b23.tv",
+        removeParams: [
+            "/share_.*", "bbid", "ts"
+        ]
+    },
+    {
+        domain: "babbel.com",
+        removeParams: [
+            "bsc", "btp"
+        ]
+    },
+    {
+        domain: "babybunting.com.au",
+        removeParams: [
+            "cq_cmp", "cq_con", "cq_med", "cq_net",
+            "cq_plac", "cq_plt", "cq_pos", "cq_src",
+            "cq_term"
+        ]
+    },
+    {
         domain: "backcountry.com",
         removeParams: [
             "CMP_ID", "CMP_SKU", "INT_ID", "MER",
@@ -352,19 +482,55 @@ export const parameterRules = [
     {
         domain: "baidu.com",
         removeParams: [
-            "eqid", "rsv_pq", "rsv_t"
+            "/from.*", "/rsv.*", "/rsv_.*", "asctag",
+            "bsst", "category", "cf", "cl",
+            "ct", "dyTabStr", "eqid", "euri",
+            "f", "fenlei", "fid", "for",
+            "frs", "gsid", "hisfilter", "hl_tag",
+            "idctag", "iid", "inputT", "issp",
+            "ivk_sa", "jid", "lattr", "lm",
+            "logid", "miniId", "n_type", "nc",
+            "od", "oq", "p_from", "p_tk",
+            "pageFrom", "params_ssrt", "pi", "platform",
+            "prefixsug", "prod_type", "ps", "query",
+            "rn", "rq", "rqid", "rs_src",
+            "rsf", "rsp", "rsv_pq", "rsv_t",
+            "sa", "sfrom", "sids", "sourceFrom",
+            "srcp", "t_kt", "tn", "tpl_from",
+            "usm", "vit", "vslid", "wd",
+            "xzhid"
+        ]
+    },
+    {
+        domain: "baike.baidu.com",
+        removeParams: [
+            "fromLemmaModule", "fromModule", "lemmaFrom", "lemmaId",
+            "lemmaTitle"
+        ]
+    },
+    {
+        domain: "baike.com",
+        removeParams: [
+            "prd", "search_id", "view_id"
+        ]
+    },
+    {
+        domain: "baike.sogou.com",
+        removeParams: [
+            "ch"
         ]
     },
     {
         domain: "bandcamp.com",
         removeParams: [
-            "from"
+            "from", "search_item_id", "search_item_type", "search_match_part",
+            "search_page_no", "search_rank"
         ]
     },
     {
         domain: "banggood.com",
         removeParams: [
-            "utmid"
+            "custlinkid", "utmid"
         ]
     },
     {
@@ -376,13 +542,30 @@ export const parameterRules = [
     {
         domain: "bbc.com",
         removeParams: [
-            "at_[a-z_]+", "at_bbc_team", "facebook_page", "xtor"
+            "at_[a-z_]+", "at_bbc_team", "at_campaign", "at_campaign_type",
+            "at_creation", "at_custom1", "at_custom2", "at_custom3",
+            "at_custom4", "at_format", "at_identifier", "at_link_id",
+            "at_link_origin", "at_link_type", "at_ptr_name", "at_type",
+            "at_variant", "facebook_page", "pinned_post_asset_id", "pinned_post_locator",
+            "pinned_post_type", "src_origin", "xtor"
         ]
     },
     {
         domain: "beacon-recommend.tower.jp",
         removeParams: [
             "tracking_id"
+        ]
+    },
+    {
+        domain: "bedbathandbeyond.com",
+        removeParams: [
+            "lyceumGuid", "osp", "refccid", "searchidx"
+        ]
+    },
+    {
+        domain: "belk.com",
+        removeParams: [
+            "start"
         ]
     },
     {
@@ -396,6 +579,12 @@ export const parameterRules = [
         removeParams: [
             "acampID", "intl", "irclickid", "irgwc",
             "loc", "mpid"
+        ]
+    },
+    {
+        domain: "bet.com",
+        removeParams: [
+            "xrs"
         ]
     },
     {
@@ -413,11 +602,16 @@ export const parameterRules = [
     {
         domain: "bilibili.com",
         removeParams: [
-            "buvid", "callback", "from", "from_source",
-            "from_spm_id", "is_story_h5", "mid", "msource",
-            "plat_id", "refer_from", "seid", "share_from",
-            "share_medium", "share_plat", "share_session_id", "share_source",
-            "share_tag", "spm_id_from", "timestamp", "unique_k",
+            "-Arouter", "/current.*", "/from.*", "/network.*",
+            "/playurl.*", "/share_.*", "accept_quality", "bbid",
+            "broadcast_type", "bsource", "buvid", "callback",
+            "from", "from_source", "from_spm_id", "hotRank",
+            "is_story_h5", "mid", "msource", "p2p_type",
+            "plat_id", "platform_network_status", "quality_description", "refer_from",
+            "referfrom", "seid", "share_from", "share_medium",
+            "share_plat", "share_session_id", "share_source", "share_tag",
+            "spm_id_from", "spmid", "tdsourcetag", "theme",
+            "timestamp", "ts", "type", "unique_k",
             "up_id", "vd_source"
         ]
     },
@@ -428,17 +622,41 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "bindright.com",
+        removeParams: [
+            "camp_id"
+        ]
+    },
+    {
         domain: "bing.com",
         removeParams: [
-            "PC", "adppc", "cvid", "form",
-            "gs_lcrp", "qp", "qs", "sc",
-            "sk", "sp"
+            "/sh[b-np-z0-9]/", "CREA", "FPIG", "PC",
+            "PTAG", "PUBL", "adppc", "aqs",
+            "cc", "crslsl", "cvid", "ecount",
+            "efirst", "form", "go", "gs_lcrp",
+            "mkt", "nclid", "pc", "pglt",
+            "pq", "qp", "qpvt", "qs",
+            "redig", "refig", "rnoreward", "rqpiodemo",
+            "sc", "sk", "skipopalnative", "sp",
+            "toWww", "ts", "wlexpsignin", "wsso"
         ]
     },
     {
         domain: "bizhint.jp",
         removeParams: [
             "trcd"
+        ]
+    },
+    {
+        domain: "bk8win8.com",
+        removeParams: [
+            "aftcamp"
+        ]
+    },
+    {
+        domain: "bleepingcomputer.com",
+        removeParams: [
+            "cx"
         ]
     },
     {
@@ -451,6 +669,18 @@ export const parameterRules = [
         domain: "blog.twitch.tv",
         removeParams: [
             "web_only"
+        ]
+    },
+    {
+        domain: "blogger.com",
+        removeParams: [
+            "bpli"
+        ]
+    },
+    {
+        domain: "bloglovin.com",
+        removeParams: [
+            "widget-ref"
         ]
     },
     {
@@ -468,7 +698,21 @@ export const parameterRules = [
     {
         domain: "bloomberg.com",
         removeParams: [
-            "in_source", "leadSource", "sref", "srnd"
+            "fromMostRead", "in_source", "leadSource", "re_source",
+            "sref", "srnd"
+        ]
+    },
+    {
+        domain: "bloomingdales.com",
+        removeParams: [
+            "ranLinkID", "ranLinkTypeID", "ranPublisherID", "ransiteID"
+        ]
+    },
+    {
+        domain: "blue-tomato.com",
+        removeParams: [
+            "varid",
+            "zanox"
         ]
     },
     {
@@ -481,6 +725,18 @@ export const parameterRules = [
         domain: "boncharge.com",
         removeParams: [
             "shpxid"
+        ]
+    },
+    {
+        domain: "bookdepository.com",
+        removeParams: [
+            "qid", "sr"
+        ]
+    },
+    {
+        domain: "booking.com",
+        removeParams: [
+            "aid", "redirected", "sid", "srpvid"
         ]
     },
     {
@@ -502,9 +758,33 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "boulanger.com",
+        removeParams: [
+            "lgw_code", "xtor"
+        ]
+    },
+    {
+        domain: "bp.blogspot.com",
+        removeParams: [
+            "time"
+        ]
+    },
+    {
         domain: "brazzers.com",
         removeParams: [
             "ats"
+        ]
+    },
+    {
+        domain: "bstn.com",
+        removeParams: [
+            "indexName", "objectID", "queryID"
+        ]
+    },
+    {
+        domain: "bugs.co.kr",
+        removeParams: [
+            "wl_ref"
         ]
     },
     {
@@ -514,9 +794,33 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "buschgardens.com",
+        removeParams: [
+            "AFS"
+        ]
+    },
+    {
+        domain: "businessinsider.com",
+        removeParams: [
+            "amp", "inline-endstory-related-recommendations", "opdoc", "r"
+        ]
+    },
+    {
+        domain: "but.fr",
+        removeParams: [
+            "SRC"
+        ]
+    },
+    {
         domain: "buzzfeednews.com",
         removeParams: [
-            "ref"
+            "bfsource", "ref"
+        ]
+    },
+    {
+        domain: "bybit.com",
+        removeParams: [
+            "/sa_utm_.*"
         ]
     },
     {
@@ -550,6 +854,20 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "cardif.fr",
+        removeParams: [
+            "at_custom_var10", "at_custom_var9"
+        ]
+    },
+    {
+        domain: "carousell.com",
+        removeParams: [
+            "t-id", "t-referrer_browse_type", "t-referrer_category_id", "t-referrer_page_type",
+            "t-referrer_request_id", "t-referrer_search_query", "t-referrer_search_query_source", "t-referrer_sort_by",
+            "t-referrer_source", "t-source", "t-tap_index"
+        ]
+    },
+    {
         domain: "carousell.sg",
         removeParams: [
             "t-id", "t-referrer_browse_type", "t-referrer_category_id", "t-referrer_page_type",
@@ -561,6 +879,24 @@ export const parameterRules = [
         domain: "carseven.co.jp",
         removeParams: [
             "from"
+        ]
+    },
+    {
+        domain: "cartoonbrew.com",
+        removeParams: [
+            "cbtr"
+        ]
+    },
+    {
+        domain: "casper.com",
+        removeParams: [
+            "gwlurl"
+        ]
+    },
+    {
+        domain: "cbs42.com",
+        removeParams: [
+            "ipid"
         ]
     },
     {
@@ -578,9 +914,33 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "cdc.gov",
+        removeParams: [
+            "ACSTrackingID", "ACSTrackingLabel", "deliveryName"
+        ]
+    },
+    {
+        domain: "cdninstagram.com",
+        removeParams: [
+            "_nc_sid", "ccb", "efg"
+        ]
+    },
+    {
+        domain: "cdon.com",
+        removeParams: [
+            "g"
+        ]
+    },
+    {
         domain: "cell.com",
         removeParams: [
             "_returnURL"
+        ]
+    },
+    {
+        domain: "cellularcountry.com",
+        removeParams: [
+            "zenid"
         ]
     },
     {
@@ -596,9 +956,21 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "chase.com",
+        removeParams: [
+            "jp_cmp"
+        ]
+    },
+    {
         domain: "chemistwarehouse.com.au",
         removeParams: [
             "ranEAID", "ranMID", "ranSiteID"
+        ]
+    },
+    {
+        domain: "chinadaily.com.cn",
+        removeParams: [
+            "cvid"
         ]
     },
     {
@@ -620,9 +992,23 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "cimri.com",
+        removeParams: [
+            "commentCount", "hasFavorite", "offerCount", "offerFiltered",
+            "offerSponsored", "photoCount", "platformName"
+        ]
+    },
+    {
         domain: "cinematoday.jp",
         removeParams: [
             "g_clk"
+        ]
+    },
+    {
+        domain: "citi.com",
+        removeParams: [
+            "BT_TX", "BT_VanityDomain", "Promo_ID", "ProspectID",
+            "aoOfferParams", "intc", "selectedCCIndex", "src"
         ]
     },
     {
@@ -645,9 +1031,21 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "clicklogger.rm.uol.com.br",
+        removeParams: [
+            "grp", "msr", "oper"
+        ]
+    },
+    {
         domain: "clickserve.dartsearch.net",
         removeParams: [
             "ds_s_kwgid", "lid"
+        ]
+    },
+    {
+        domain: "clips.twitch.tv",
+        removeParams: [
+            "tt_content", "tt_medium"
         ]
     },
     {
@@ -657,9 +1055,15 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "cmp.inmobi.com",
+        removeParams: [
+            "referer"
+        ]
+    },
+    {
         domain: "cmswire.com",
         removeParams: [
-            "source"
+            "is_rec", "source", "topic_id"
         ]
     },
     {
@@ -693,9 +1097,21 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "columbiasportswear.com",
+        removeParams: [
+            "oid"
+        ]
+    },
+    {
         domain: "column.sp.baseball.findfriends.jp",
         removeParams: [
             "from"
+        ]
+    },
+    {
+        domain: "community.spiceworks.com",
+        removeParams: [
+            "carPos"
         ]
     },
     {
@@ -766,6 +1182,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "cyberghostvpn.com",
+        removeParams: [
+            "brand", "media_source"
+        ]
+    },
+    {
         domain: "cyberlink.com",
         removeParams: [
             "affid"
@@ -792,7 +1214,7 @@ export const parameterRules = [
     {
         domain: "dailymail.co.uk",
         removeParams: [
-            "ito"
+            "ico", "ito"
         ]
     },
     {
@@ -814,15 +1236,33 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "darty.com",
+        removeParams: [
+            "dartycid"
+        ]
+    },
+    {
         domain: "dashboard.wedare.pl",
         removeParams: [
             "smc1", "smc2"
         ]
     },
     {
+        domain: "datareportal.com",
+        removeParams: [
+            "rq"
+        ]
+    },
+    {
+        domain: "deepdiscount.com",
+        removeParams: [
+            "bid"
+        ]
+    },
+    {
         domain: "deepl.com",
         removeParams: [
-            "cta"
+            "cta", "pdf"
         ]
     },
     {
@@ -846,13 +1286,25 @@ export const parameterRules = [
     {
         domain: "dell.com",
         removeParams: [
-            "gacd"
+            "VEN1", "dgc", "gacd", "nclid"
         ]
     },
     {
         domain: "dengekionline.com",
         removeParams: [
             "osusume_banner"
+        ]
+    },
+    {
+        domain: "despegar.com",
+        removeParams: [
+            "/clt_.*", "mktdata"
+        ]
+    },
+    {
+        domain: "dhgate.com",
+        removeParams: [
+            "f"
         ]
     },
     {
@@ -880,9 +1332,33 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "digitalimpuls.no",
+        removeParams: [
+            "WebSiteMapNodeID"
+        ]
+    },
+    {
+        domain: "discoveryplus.com",
+        removeParams: [
+            "_referrer", "idp", "responseCode"
+        ]
+    },
+    {
+        domain: "disneyplus.com",
+        removeParams: [
+            "distributionPartner"
+        ]
+    },
+    {
         domain: "disq.us",
         removeParams: [
             "cuid"
+        ]
+    },
+    {
+        domain: "dl-protect.com",
+        removeParams: [
+            "fn", "rl"
         ]
     },
     {
@@ -895,6 +1371,12 @@ export const parameterRules = [
         domain: "dmm.co.jp",
         removeParams: [
             "dmmref", "i3_ord", "i3_ref"
+        ]
+    },
+    {
+        domain: "docs.kernel.org",
+        removeParams: [
+            "ref"
         ]
     },
     {
@@ -914,6 +1396,18 @@ export const parameterRules = [
         removeParams: [
             "fm", "from", "recommendID", "usrclk",
             "usrclk_searchListCassette"
+        ]
+    },
+    {
+        domain: "dollar.com",
+        removeParams: [
+            "SourceSystem", "iata", "sourcecode"
+        ]
+    },
+    {
+        domain: "domains.ch",
+        removeParams: [
+            "REF"
         ]
     },
     {
@@ -955,8 +1449,8 @@ export const parameterRules = [
     {
         domain: "duckduckgo.com",
         removeParams: [
-            "ad_domain", "ad_provider", "ad_type", "parent_perf_id",
-            "perf_id", "t", "vis"
+            "ad_domain", "ad_provider", "ad_type", "natb",
+            "parent_perf_id", "perf_id", "t", "vis"
         ]
     },
     {
@@ -970,9 +1464,27 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "dw.com",
+        removeParams: [
+            "maca"
+        ]
+    },
+    {
         domain: "dzen.ru",
         removeParams: [
             "clid", "persistent_id", "stid", "yredirect"
+        ]
+    },
+    {
+        domain: "dzone.com",
+        removeParams: [
+            "fromrel"
+        ]
+    },
+    {
+        domain: "eastday.com",
+        removeParams: [
+            "cvid", "qid"
         ]
     },
     {
@@ -992,7 +1504,19 @@ export const parameterRules = [
     {
         domain: "ebay.com",
         removeParams: [
-            "_from", "_trkparms", "_trksid", "hash"
+            "LH_BIN", "_from", "_trkparms", "_trksid",
+            "abcId", "bu", "campid", "ch",
+            "chn", "crd", "customid", "emsid",
+            "euid", "hash", "mkcid", "mkevt",
+            "mkgroupid", "mkpid", "mkrid", "mktype",
+            "osub", "poi", "segname", "sojTags",
+            "toolid", "ut"
+        ]
+    },
+    {
+        domain: "ecosia.org",
+        removeParams: [
+            "addon"
         ]
     },
     {
@@ -1014,6 +1538,18 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "ekstrabladet.dk",
+        removeParams: [
+            "account", "ilc"
+        ]
+    },
+    {
+        domain: "electrodepot.fr",
+        removeParams: [
+            "LGWCODE"
+        ]
+    },
+    {
         domain: "electronic4you.de",
         removeParams: [
             "idealoid"
@@ -1024,6 +1560,12 @@ export const parameterRules = [
         removeParams: [
             "attribution_window", "contact_id", "link_id", "platform",
             "token"
+        ]
+    },
+    {
+        domain: "elgiganten.dk",
+        removeParams: [
+            "scid"
         ]
     },
     {
@@ -1039,6 +1581,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "entradas.com",
+        removeParams: [
+            "referer_info"
+        ]
+    },
+    {
         domain: "eonline.com",
         removeParams: [
             "content", "medium", "source"
@@ -1051,21 +1599,47 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "epidemicsound.com",
+        removeParams: [
+            "_us", "_usx"
+        ]
+    },
+    {
         domain: "eplus.by",
         removeParams: [
             "de_utm_source"
         ]
     },
     {
+        domain: "eporner.com",
+        removeParams: [
+            "trx"
+        ]
+    },
+    {
         domain: "espn.com",
         removeParams: [
-            "appsrc"
+            "RuleNumberdoc", "appsrc", "appsrcdoc", "ex_cid",
+            "platform"
         ]
     },
     {
         domain: "etsy.com",
         removeParams: [
-            "click_key", "click_sum", "organic_search_click", "ref"
+            "click_key", "click_sum", "gao", "gpla",
+            "organic_search_click", "ref"
+        ]
+    },
+    {
+        domain: "euromaidanpress.com",
+        removeParams: [
+            "swcfpcdoc"
+        ]
+    },
+    {
+        domain: "euronews.com",
+        removeParams: [
+            "_ope"
         ]
     },
     {
@@ -1078,6 +1652,18 @@ export const parameterRules = [
         domain: "event.hoken-mammoth.jp",
         removeParams: [
             "s_mf"
+        ]
+    },
+    {
+        domain: "everesttech.net",
+        removeParams: [
+            "/ev_.*"
+        ]
+    },
+    {
+        domain: "expedia.com",
+        removeParams: [
+            "my_ad"
         ]
     },
     {
@@ -1106,6 +1692,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "fandom.com",
+        removeParams: [
+            "so"
+        ]
+    },
+    {
         domain: "faphouse.com",
         removeParams: [
             "UserId", "login", "signature", "statsUID",
@@ -1116,6 +1708,24 @@ export const parameterRules = [
         domain: "fashion-press.net",
         removeParams: [
             "media"
+        ]
+    },
+    {
+        domain: "feedspot.com",
+        removeParams: [
+            "_src"
+        ]
+    },
+    {
+        domain: "festo-didactic.com",
+        removeParams: [
+            "fbid"
+        ]
+    },
+    {
+        domain: "fifa.com",
+        removeParams: [
+            "entryPoint"
         ]
     },
     {
@@ -1139,7 +1749,9 @@ export const parameterRules = [
     {
         domain: "fiverr.com",
         removeParams: [
-            "context_referrer", "funnel", "ref_ctx_id", "source"
+            "afp", "bta", "context_alg", "context_referrer",
+            "context_type", "cxd_token", "funnel", "is_pro",
+            "pckg_id", "ref_ctx_id", "source"
         ]
     },
     {
@@ -1162,6 +1774,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "fnac.com",
+        removeParams: [
+            "Origin", "ectrans"
+        ]
+    },
+    {
         domain: "fon.bet",
         removeParams: [
             "affijet-click", "partner_id", "sub_1"
@@ -1180,9 +1798,27 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "fortnite.com",
+        removeParams: [
+            "icmp"
+        ]
+    },
+    {
+        domain: "fr.shopping.rakuten.com",
+        removeParams: [
+            "bbaid"
+        ]
+    },
+    {
         domain: "freebies.indiegala.com",
         removeParams: [
             "ref"
+        ]
+    },
+    {
+        domain: "fubo.tv",
+        removeParams: [
+            "irad", "irmp"
         ]
     },
     {
@@ -1201,6 +1837,12 @@ export const parameterRules = [
         domain: "game.hiroba.dpoint.docomo.ne.jp",
         removeParams: [
             "mks_referer_event"
+        ]
+    },
+    {
+        domain: "gamedeveloper.com",
+        removeParams: [
+            "iiris-ref"
         ]
     },
     {
@@ -1223,9 +1865,33 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "gamestop.com",
+        removeParams: [
+            "maltcode"
+        ]
+    },
+    {
+        domain: "gamivo.com",
+        removeParams: [
+            "glv"
+        ]
+    },
+    {
+        domain: "gearbest.com",
+        removeParams: [
+            "lkid"
+        ]
+    },
+    {
         domain: "gelocal.it",
         removeParams: [
             "cnt", "ref"
+        ]
+    },
+    {
+        domain: "geoguessr.com",
+        removeParams: [
+            "s"
         ]
     },
     {
@@ -1262,19 +1928,27 @@ export const parameterRules = [
     {
         domain: "github.com",
         removeParams: [
-            "email_source", "email_token", "reference_location", "source"
+            "email_source", "email_token", "ref_cta", "ref_loc",
+            "ref_page", "reference_location", "source"
         ]
     },
     {
         domain: "gitlab.com",
         removeParams: [
-            "glm_content", "glm_source", "referrer_action"
+            "glm_content", "glm_source", "ref_type", "referrer_action",
+            "referrer_actiondoc"
         ]
     },
     {
         domain: "glami.cz",
         removeParams: [
             "/ga_id/"
+        ]
+    },
+    {
+        domain: "glispa.com",
+        removeParams: [
+            "wp_source"
         ]
     },
     {
@@ -1314,6 +1988,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "go2games.com",
+        removeParams: [
+            "ranEAID", "ranMID", "ranSiteID"
+        ]
+    },
+    {
         domain: "gog.com",
         removeParams: [
             "link_id", "pp", "track_click"
@@ -1332,14 +2012,14 @@ export const parameterRules = [
             "_u", "aqs", "atyp", "bih",
             "biw", "cad", "cd", "client",
             "cshid", "dcr", "dpr", "ei",
-            "esrc", "fbs", "gs_lcp", "gs_lcrp",
-            "gs_lp", "gs_ssp", "hl", "i-would-rather-use-firefox",
-            "ictx", "ie", "iflsig", "je",
-            "ls_rcp", "oq", "pcampaignid", "rlz",
-            "sa", "sca_esv", "sca_upv", "sclient",
-            "sei", "site", "source", "sourceid",
-            "sxsrf", "uact", "usg", "ved",
-            "vet"
+            "esrc", "fbs", "fg", "gs_lcp",
+            "gs_lcrp", "gs_lp", "gs_ssp", "hl",
+            "i-would-rather-use-firefox", "ictx", "ie", "iflsig",
+            "je", "ls_rcp", "oq", "pcampaignid",
+            "rlz", "sa", "sca_esv", "sca_upv",
+            "sclient", "sei", "site", "source",
+            "sourceid", "sxsrf", "uact", "usg",
+            "ved", "vet"
         ]
     },
     {
@@ -1352,6 +2032,42 @@ export const parameterRules = [
         domain: "gotanynudes.com",
         removeParams: [
             "ref"
+        ]
+    },
+    {
+        domain: "grafana.com",
+        removeParams: [
+            "plcmt"
+        ]
+    },
+    {
+        domain: "greenmangaming.com",
+        removeParams: [
+            "/tap_.*"
+        ]
+    },
+    {
+        domain: "gumroad.com",
+        removeParams: [
+            "recommended_by"
+        ]
+    },
+    {
+        domain: "hao123.com",
+        removeParams: [
+            "tn"
+        ]
+    },
+    {
+        domain: "haokan.baidu.com",
+        removeParams: [
+            "pd"
+        ]
+    },
+    {
+        domain: "haokan.hao123.com",
+        removeParams: [
+            "context", "pd"
         ]
     },
     {
@@ -1397,6 +2113,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "help.iqiyi.com",
+        removeParams: [
+            "entry"
+        ]
+    },
+    {
         domain: "hepsiburada.com",
         removeParams: [
             "shortlink", "url_src", "wt_af", "wt_ds",
@@ -1417,6 +2139,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "hinta.fi",
+        removeParams: [
+            "v"
+        ]
+    },
+    {
         domain: "hit.gemius.pl",
         removeParams: [
             "extra", "id"
@@ -1427,6 +2155,12 @@ export const parameterRules = [
         removeParams: [
             "etcc_cmp", "etcc_med", "etcc_produkt", "idealoid",
             "sPartner"
+        ]
+    },
+    {
+        domain: "hobbyhall.fi",
+        removeParams: [
+            "feat", "navigation_source"
         ]
     },
     {
@@ -1445,6 +2179,36 @@ export const parameterRules = [
         domain: "homedepot.com",
         removeParams: [
             "fromReminder"
+        ]
+    },
+    {
+        domain: "homo.xxx",
+        removeParams: [
+            "ad_sub"
+        ]
+    },
+    {
+        domain: "hostinger.com",
+        removeParams: [
+            "session"
+        ]
+    },
+    {
+        domain: "hoteles.com",
+        removeParams: [
+            "/sub_.*", "PSRC", "tmid"
+        ]
+    },
+    {
+        domain: "hp.com",
+        removeParams: [
+            "jumpid"
+        ]
+    },
+    {
+        domain: "hpi.de",
+        removeParams: [
+            "tracking_id"
         ]
     },
     {
@@ -1487,6 +2251,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "ifixit.com",
+        removeParams: [
+            "sponsor"
+        ]
+    },
+    {
         domain: "igromania.ru",
         removeParams: [
             "from"
@@ -1496,6 +2266,12 @@ export const parameterRules = [
         domain: "iguru.gr",
         removeParams: [
             "_unique_id", "feed_id"
+        ]
+    },
+    {
+        domain: "ilo.org",
+        removeParams: [
+            "ssSourceSiteId"
         ]
     },
     {
@@ -1519,6 +2295,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "imobiliare.ro",
+        removeParams: [
+            "exprec", "rec_ref"
+        ]
+    },
+    {
         domain: "incogni.com",
         removeParams: [
             "aff_sub", "affiliate_id", "offer_id", "source",
@@ -1528,13 +2310,35 @@ export const parameterRules = [
     {
         domain: "indeed.com",
         removeParams: [
-            "[a-z]*tk", "alid", "from"
+            "[a-z]*tk", "advn", "alid", "bb",
+            "from", "fvj", "jsa", "oc",
+            "pub", "sal", "sjdu", "tk",
+            "vjk", "vjs", "xkcb", "xpse"
+        ]
+    },
+    {
+        domain: "inews.co.uk",
+        removeParams: [
+            "ico"
+        ]
+    },
+    {
+        domain: "inmac-wstore.com",
+        removeParams: [
+            "coagent", "cotracking"
         ]
     },
     {
         domain: "instagram.com",
         removeParams: [
-            "ig_rid", "igsh", "igshid"
+            "helpref", "ig_rid", "igsh", "igshid",
+            "short_redirect"
+        ]
+    },
+    {
+        domain: "intersport.com",
+        removeParams: [
+            "cgid"
         ]
     },
     {
@@ -1547,6 +2351,12 @@ export const parameterRules = [
         domain: "iotransfer.itopvpn.com",
         removeParams: [
             "ref"
+        ]
+    },
+    {
+        domain: "iplt20.com",
+        removeParams: [
+            "tagNames"
         ]
     },
     {
@@ -1565,7 +2375,23 @@ export const parameterRules = [
     {
         domain: "iqiyi.com",
         removeParams: [
-            "vfrm", "vfrmblk", "vfrmrst"
+            "bkt", "e", "flashvars", "pccenter_fr",
+            "pltfm", "pos", "r_area", "r_source",
+            "s_source", "source", "sr", "ssra",
+            "ssrt", "stype", "vfrm", "vfrmblk",
+            "vfrmrst"
+        ]
+    },
+    {
+        domain: "ixigua.com",
+        removeParams: [
+            "logTag"
+        ]
+    },
+    {
+        domain: "jackjones.com",
+        removeParams: [
+            "rm"
         ]
     },
     {
@@ -1577,7 +2403,20 @@ export const parameterRules = [
     {
         domain: "jasonsavard.com",
         removeParams: [
-            "/cUrl|ref/"
+            "/cUrl|ref/", "cUrl"
+        ]
+    },
+    {
+        domain: "jcpenney.com",
+        removeParams: [
+            "Dr", "badge", "catId", "deptId",
+            "productGridView", "selectedSKUId", "urlState"
+        ]
+    },
+    {
+        domain: "jdwilliams.co.uk",
+        removeParams: [
+            "pdpClick"
         ]
     },
     {
@@ -1590,6 +2429,12 @@ export const parameterRules = [
         domain: "jiji.com",
         removeParams: [
             "m"
+        ]
+    },
+    {
+        domain: "jjxx.com",
+        removeParams: [
+            "rm"
         ]
     },
     {
@@ -1617,7 +2462,19 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "jula.no",
+        removeParams: [
+            "gclsrc"
+        ]
+    },
+    {
         domain: "kahoot.com",
+        removeParams: [
+            "refer_method"
+        ]
+    },
+    {
+        domain: "kahoot.it",
         removeParams: [
             "refer_method"
         ]
@@ -1638,6 +2495,12 @@ export const parameterRules = [
         domain: "kaspersky.com",
         removeParams: [
             "icid"
+        ]
+    },
+    {
+        domain: "kelkoogroup.net",
+        removeParams: [
+            "custom1"
         ]
     },
     {
@@ -1665,9 +2528,28 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "kochava.com",
+        removeParams: [
+            "/app_.*", "device_id", "network_id"
+        ]
+    },
+    {
         domain: "kohls.com",
         removeParams: [
-            "CID"
+            "CID", "bdrecsId", "kls_sbp", "pfm",
+            "prdPV"
+        ]
+    },
+    {
+        domain: "kongregate.com",
+        removeParams: [
+            "acomplete"
+        ]
+    },
+    {
+        domain: "koreaherald.com",
+        removeParams: [
+            "ACE_SEARCH"
         ]
     },
     {
@@ -1689,6 +2571,18 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "landevei.no",
+        removeParams: [
+            "email"
+        ]
+    },
+    {
+        domain: "lazada.com",
+        removeParams: [
+            "dsource", "exlaz", "laz_share_info", "laz_token"
+        ]
+    },
+    {
         domain: "lcs.naver.com",
         removeParams: [
             "bh", "bw", "domComplete", "domContentLoadedEventEnd",
@@ -1699,15 +2593,51 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "lego.com",
+        removeParams: [
+            "icmp"
+        ]
+    },
+    {
+        domain: "lendgo.com",
+        removeParams: [
+            "apr", "lt", "rate"
+        ]
+    },
+    {
+        domain: "lenovo.com",
+        removeParams: [
+            "cid", "orgRef"
+        ]
+    },
+    {
         domain: "lenta.ru",
         removeParams: [
             "es"
         ]
     },
     {
+        domain: "lidea.today",
+        removeParams: [
+            "from"
+        ]
+    },
+    {
         domain: "lidl.de",
         removeParams: [
             "msktc"
+        ]
+    },
+    {
+        domain: "lightinthebox.com",
+        removeParams: [
+            "url"
+        ]
+    },
+    {
+        domain: "lindex.com",
+        removeParams: [
+            "affiliate_source"
         ]
     },
     {
@@ -1721,7 +2651,7 @@ export const parameterRules = [
         removeParams: [
             "li[a-z]{2}", "origin", "originalReferer", "original_referer",
             "refId", "trackingId", "trk", "trkInfo",
-            "u"
+            "u", "updateEntityUrn"
         ]
     },
     {
@@ -1751,9 +2681,27 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "localmonero.co",
+        removeParams: [
+            "rc"
+        ]
+    },
+    {
         domain: "login.afreecatv.com",
         removeParams: [
             "szFrom"
+        ]
+    },
+    {
+        domain: "login.yahoo.com",
+        removeParams: [
+            ".src", "activity", "pspid"
+        ]
+    },
+    {
+        domain: "lookmovie211.xyz",
+        removeParams: [
+            "sec", "sid"
         ]
     },
     {
@@ -1775,6 +2723,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "m.baidu.com",
+        removeParams: [
+            "from"
+        ]
+    },
+    {
         domain: "m.bilibili.com",
         removeParams: [
             "bbid", "ts"
@@ -1793,6 +2747,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "macys.com",
+        removeParams: [
+            "trackingid"
+        ]
+    },
+    {
         domain: "mag2.com",
         removeParams: [
             "trflg"
@@ -1805,9 +2765,21 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "mail.qq.com",
+        removeParams: [
+            "r"
+        ]
+    },
+    {
         domain: "mailtrack.io",
         removeParams: [
             "userId"
+        ]
+    },
+    {
+        domain: "make.com",
+        removeParams: [
+            "fromImt"
         ]
     },
     {
@@ -1817,9 +2789,35 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "malwarebytes.com",
+        removeParams: [
+            "ADDITIONAL_AFFID", "ADDITIONAL_x-source", "guard", "x-affid",
+            "x-source"
+        ]
+    },
+    {
+        domain: "mamalicious.com",
+        removeParams: [
+            "rm"
+        ]
+    },
+    {
+        domain: "manchestereveningnews.co.uk",
+        removeParams: [
+            "kopdoc"
+        ]
+    },
+    {
         domain: "manga.nicovideo.jp",
         removeParams: [
             "track"
+        ]
+    },
+    {
+        domain: "map.baidu.com",
+        removeParams: [
+            "compat", "da_src", "device_ratio", "newfrom",
+            "pcevaname", "ugc_type", "ugc_ver"
         ]
     },
     {
@@ -1833,6 +2831,12 @@ export const parameterRules = [
         removeParams: [
             "clid", "do-waremd5", "mclid", "offerid",
             "show-uid", "uniqueId", "vid"
+        ]
+    },
+    {
+        domain: "market.yandex.ru",
+        removeParams: [
+            "cpc"
         ]
     },
     {
@@ -1857,9 +2861,35 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "marksandspencer.com",
+        removeParams: [
+            "bvstate"
+        ]
+    },
+    {
         domain: "marktjagd.de",
         removeParams: [
             "client"
+        ]
+    },
+    {
+        domain: "mcafee.com",
+        removeParams: [
+            "ccstype", "cctype", "csrc"
+        ]
+    },
+    {
+        domain: "mechanicalkeyboards.com",
+        removeParams: [
+            "creator"
+        ]
+    },
+    {
+        domain: "media-cdn.costco",
+        removeParams: [
+            "adSize", "channelID", "hc", "location",
+            "matches", "mt", "spr", "tc",
+            "textadID"
         ]
     },
     {
@@ -1872,6 +2902,12 @@ export const parameterRules = [
         domain: "media01.eu",
         removeParams: [
             "trackid"
+        ]
+    },
+    {
+        domain: "mediamarket.com",
+        removeParams: [
+            "rbtc"
         ]
     },
     {
@@ -1907,6 +2943,18 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "mercadolibre.com.ar",
+        removeParams: [
+            "pdp_filters"
+        ]
+    },
+    {
+        domain: "metro.co.uk",
+        removeParams: [
+            "ico"
+        ]
+    },
+    {
         domain: "michaelkors.global",
         removeParams: [
             "ecid"
@@ -1915,13 +2963,20 @@ export const parameterRules = [
     {
         domain: "microsoft.com",
         removeParams: [
-            "ocid", "ranEAID", "ranSiteID"
+            "/AAAA.*", "destrt", "headerid", "ocid",
+            "ranEAID", "ranSiteID"
         ]
     },
     {
         domain: "microsoft.msafflnk.net",
         removeParams: [
             "sharedid"
+        ]
+    },
+    {
+        domain: "milanoo.com",
+        removeParams: [
+            "Promotion", "deduplication_channel"
         ]
     },
     {
@@ -1967,6 +3022,24 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "money.smt.docomo.ne.jp",
+        removeParams: [
+            "ref"
+        ]
+    },
+    {
+        domain: "mongodb.com",
+        removeParams: [
+            "tck"
+        ]
+    },
+    {
+        domain: "monsterhunternow.com",
+        removeParams: [
+            "source_caller"
+        ]
+    },
+    {
         domain: "moosejaw.com",
         removeParams: [
             "cm_lm", "cm_mmc", "spJobID", "spMailingID",
@@ -2000,16 +3073,20 @@ export const parameterRules = [
     {
         domain: "mp.weixin.qq.com",
         removeParams: [
-            "WBAPIAnalysisOriUICodes", "aid", "chksm", "devicetype",
-            "exportkey", "from", "key", "launchid",
-            "mpshare", "nettype", "scene", "srcid",
-            "uin", "v_p"
+            "WBAPIAnalysisOriUICodes", "abtest_cookie", "aid", "ascene",
+            "chksm", "ckhsm", "count", "devicetype",
+            "enterid", "exportkey", "from", "from_itemidx",
+            "from_msgid", "key", "launchid", "mpshare",
+            "nettype", "pass_ticket", "scene", "sessionid",
+            "srcid", "subscene", "uin", "v_p",
+            "version", "xtrack"
         ]
     },
     {
         domain: "msn.com",
         removeParams: [
-            "cvid", "ei", "ocid", "pc"
+            "cvid", "ei", "ignorejs", "ocid",
+            "pc"
         ]
     },
     {
@@ -2043,9 +3120,27 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "n11.com",
+        removeParams: [
+            "adj_adnomia_click_id", "adj_t", "pfx"
+        ]
+    },
+    {
         domain: "nationalgeographic.com",
         removeParams: [
             "utm_rd"
+        ]
+    },
+    {
+        domain: "neeva.com",
+        removeParams: [
+            "nva"
+        ]
+    },
+    {
+        domain: "nerdrooted.com",
+        removeParams: [
+            "sfw"
         ]
     },
     {
@@ -2064,8 +3159,9 @@ export const parameterRules = [
     {
         domain: "netflix.com",
         removeParams: [
-            "LanguageFilter", "al", "isLanguageFilter", "tctx",
-            "trackId"
+            "LanguageFilter", "al", "dpRightClick", "isLanguageFilter",
+            "tctx", "trackId", "trackIdEpisode", "trackIdJaw",
+            "trackIdTrailer"
         ]
     },
     {
@@ -2078,6 +3174,24 @@ export const parameterRules = [
         domain: "netkeiba.com",
         removeParams: [
             "rf"
+        ]
+    },
+    {
+        domain: "netonnet.no",
+        removeParams: [
+            "dclid"
+        ]
+    },
+    {
+        domain: "newark.com",
+        removeParams: [
+            "COM"
+        ]
+    },
+    {
+        domain: "newegg.com",
+        removeParams: [
+            "nm_mc", "quicklink"
         ]
     },
     {
@@ -2107,6 +3221,13 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "nextdoor.com",
+        removeParams: [
+            "auto_token", "ct", "ec", "is",
+            "link_source_user_id", "mar", "mobile_deeplink_data"
+        ]
+    },
+    {
         domain: "nextgov.com",
         removeParams: [
             "oref"
@@ -2128,8 +3249,8 @@ export const parameterRules = [
         domain: "nicovideo.jp",
         removeParams: [
             "cmnhd_ref", "news_ref", "ra", "rd",
-            "ref", "rf", "rp", "transit_from",
-            "transition_id", "transition_type"
+            "ref", "rf", "rp", "track",
+            "transit_from", "transition_id", "transition_type"
         ]
     },
     {
@@ -2188,6 +3309,20 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "nortonsafe.search.ask.com",
+        removeParams: [
+            "chn", "cmpgn", "doi", "installsource",
+            "olpchannel", "os", "p2", "templatecat",
+            "tpr", "vendorsrc"
+        ]
+    },
+    {
+        domain: "notion.so",
+        removeParams: [
+            "gspk", "gsxid", "pscd"
+        ]
+    },
+    {
         domain: "novinky.cz",
         removeParams: [
             "dop_ab_variant", "dop_id", "dop_req_id", "dop_source_zone_name",
@@ -2215,7 +3350,28 @@ export const parameterRules = [
     {
         domain: "nytimes.com",
         removeParams: [
-            "impression_id", "referringSource", "sgrp", "smid"
+            "algodoc", "checkout_entry_point", "fellback|", "impression_id",
+            "login_source", "module|", "pool|", "ref_page",
+            "referringSource", "region|", "req_id|", "sgrp",
+            "smid", "variant|"
+        ]
+    },
+    {
+        domain: "nytimes.com|scmp.com",
+        removeParams: [
+            "pgtype|", "section|"
+        ]
+    },
+    {
+        domain: "nytimes.com||microcenter.com",
+        removeParams: [
+            "rf"
+        ]
+    },
+    {
+        domain: "oerproject.com",
+        removeParams: [
+            "RegistrationSource"
         ]
     },
     {
@@ -2225,9 +3381,21 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "officemonster.co.uk",
+        removeParams: [
+            "/fo_.*"
+        ]
+    },
+    {
         domain: "oh-my-teeth.com",
         removeParams: [
             "clid"
+        ]
+    },
+    {
+        domain: "oikotie.fi",
+        removeParams: [
+            "sRef"
         ]
     },
     {
@@ -2249,15 +3417,52 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "omaha.com",
+        removeParams: [
+            "mode"
+        ]
+    },
+    {
+        domain: "onbuy.com",
+        removeParams: [
+            "exta", "stat"
+        ]
+    },
+    {
+        domain: "onenote.com",
+        removeParams: [
+            "fromAR", "nf"
+        ]
+    },
+    {
         domain: "onet.pl",
         removeParams: [
             "srcc", "utm_medium", "utm_source", "utm_v"
         ]
     },
     {
+        domain: "only.com",
+        removeParams: [
+            "rm"
+        ]
+    },
+    {
+        domain: "onlyandsons.com",
+        removeParams: [
+            "rm"
+        ]
+    },
+    {
         domain: "open.spotify.com",
         removeParams: [
-            "referral"
+            "%243p", "/.*advertising_partner_name=.*", "referral", "si",
+            "uid"
+        ]
+    },
+    {
+        domain: "open.substack.com",
+        removeParams: [
+            "rdoc"
         ]
     },
     {
@@ -2281,6 +3486,31 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "p3.no",
+        removeParams: [
+            "draftsforfriends"
+        ]
+    },
+    {
+        domain: "paypal.com",
+        removeParams: [
+            "calc", "mchn", "pgrp", "ppid",
+            "unp_tpcid", "unptid"
+        ]
+    },
+    {
+        domain: "pb.sogou.com",
+        removeParams: [
+            "scrnhi", "scrnwi", "uigs_cookie", "uigs_t"
+        ]
+    },
+    {
+        domain: "pbtech.com",
+        removeParams: [
+            "qr"
+        ]
+    },
+    {
         domain: "pcmag.com",
         removeParams: [
             "taid"
@@ -2289,13 +3519,37 @@ export const parameterRules = [
     {
         domain: "peacocktv.com",
         removeParams: [
-            "method", "orig_ref"
+            "method", "orig_re", "orig_ref"
         ]
     },
     {
         domain: "perfo.salestube.pl",
         removeParams: [
             "aff_click_id"
+        ]
+    },
+    {
+        domain: "philips.com",
+        removeParams: [
+            "linkname", "uuid"
+        ]
+    },
+    {
+        domain: "photojobz.com",
+        removeParams: [
+            "hop"
+        ]
+    },
+    {
+        domain: "pinterest.com",
+        removeParams: [
+            "mt"
+        ]
+    },
+    {
+        domain: "pinterest.commt=signup",
+        removeParams: [
+            "d", "mt"
         ]
     },
     {
@@ -2372,6 +3626,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "postnord.com",
+        removeParams: [
+            "mobile", "signed"
+        ]
+    },
+    {
         domain: "pravda.com.ua",
         removeParams: [
             "pageviewCount"
@@ -2384,6 +3644,24 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "privatbank.ua",
+        removeParams: [
+            "visit_id"
+        ]
+    },
+    {
+        domain: "privatehomeclips.com",
+        removeParams: [
+            "plimit", "skip"
+        ]
+    },
+    {
+        domain: "privateinternetaccess.com",
+        removeParams: [
+            "brand"
+        ]
+    },
+    {
         domain: "productcatalog.channeladvisor.com",
         removeParams: [
             "DeviceTypeId", "InteractionSessionId", "PCAT_vNextTracking_LocalWidget", "PCAT_vNextTracking_OnlineItrack",
@@ -2391,9 +3669,27 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "productkeys.dk",
+        removeParams: [
+            "dTribesID"
+        ]
+    },
+    {
+        domain: "promofarma.com",
+        removeParams: [
+            "etf-name", "etf-prdref", "etf-publisher"
+        ]
+    },
+    {
         domain: "promote.betcity.ru",
         removeParams: [
             "icm", "refcode", "widget_id"
+        ]
+    },
+    {
+        domain: "proshop.dk",
+        removeParams: [
+            "cid"
         ]
     },
     {
@@ -2415,6 +3711,18 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "pulseway.com",
+        removeParams: [
+            "rfid"
+        ]
+    },
+    {
+        domain: "puma.com",
+        removeParams: [
+            "amp"
+        ]
+    },
+    {
         domain: "qcplay.co.jp",
         removeParams: [
             "c", "pid", "shortlink"
@@ -2433,6 +3741,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "qq.com",
+        removeParams: [
+            "ptag"
+        ]
+    },
+    {
         domain: "querie.me",
         removeParams: [
             "timestamp"
@@ -2447,7 +3761,7 @@ export const parameterRules = [
     {
         domain: "quizlet.com",
         removeParams: [
-            "funnelUUID"
+            "funnelUUID", "signupOrigin"
         ]
     },
     {
@@ -2457,9 +3771,24 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "qvc.com",
+        removeParams: [
+            "qq", "sc"
+        ]
+    },
+    {
+        domain: "qwant.com",
+        removeParams: [
+            "client"
+        ]
+    },
+    {
         domain: "qzone.qq.com",
         removeParams: [
-            "loginfrom"
+            "blog_photo", "bp1", "bp2", "bp7",
+            "cellid", "ciphertext", "g", "g_f",
+            "jumptoqzone", "loginfrom", "res_uin", "subid",
+            "subtype"
         ]
     },
     {
@@ -2532,8 +3861,11 @@ export const parameterRules = [
     {
         domain: "reddit.app.link",
         removeParams: [
-            "adblock", "compact_view", "dnt", "geoip_country",
-            "referrer_domain", "referrer_url"
+            "adblock", "compact_view", "dnt", "domain",
+            "feature", "geoip_country", "language", "loid",
+            "loid_created", "mweb_loid", "mweb_loid_create", "mweb_user_name",
+            "reddaid", "referrer_domain", "referrer_url", "session_id",
+            "sr_id", "sr_name", "tags", "user_agent"
         ]
     },
     {
@@ -2542,8 +3874,8 @@ export const parameterRules = [
             "$deep_link", "$original_url", "%243p", "%24deep_link",
             "%24original_url", "?$deep_link", "_branch_match_id", "cId",
             "chainedPosts", "correlation_id", "iId", "post_fullname",
-            "rdt", "ref", "ref_campaign", "ref_source",
-            "share_id", "type"
+            "post_index", "rdt", "ref", "ref_campaign",
+            "ref_source", "share_id", "st", "type"
         ]
     },
     {
@@ -2559,9 +3891,21 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "redirect.appmetrica.yandex.com",
+        removeParams: [
+            "c"
+        ]
+    },
+    {
         domain: "redtube.com",
         removeParams: [
             "from"
+        ]
+    },
+    {
+        domain: "rei.com",
+        removeParams: [
+            "target_id"
         ]
     },
     {
@@ -2580,7 +3924,7 @@ export const parameterRules = [
     {
         domain: "reuters.com",
         removeParams: [
-            "taid"
+            "edition-redirect", "taid"
         ]
     },
     {
@@ -2591,9 +3935,23 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "rightmove.co.uk",
+        removeParams: [
+            "csg"
+        ]
+    },
+    {
+        domain: "riverisland.com",
+        removeParams: [
+            "sem"
+        ]
+    },
+    {
         domain: "roblox.com",
         removeParams: [
-            "refPageId"
+            "RelatedAssetID", "RelatedAssetType", "discoverPageSessionInfo", "gameSearchSessionInfo",
+            "gameSetTargetId", "isAd", "nativeAdData", "numberOfLoadedTiles",
+            "refPageId", "sortPos", "treatmentType", "universeId"
         ]
     },
     {
@@ -2601,6 +3959,18 @@ export const parameterRules = [
         removeParams: [
             "a", "affid", "c", "frm",
             "s1"
+        ]
+    },
+    {
+        domain: "saksfifthavenue.com",
+        removeParams: [
+            "LScreativeid", "LSlinkid", "LSoid"
+        ]
+    },
+    {
+        domain: "salming.com",
+        removeParams: [
+            "trackID"
         ]
     },
     {
@@ -2628,6 +3998,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "search.brave.com",
+        removeParams: [
+            "origin", "source"
+        ]
+    },
+    {
         domain: "search.naver.com",
         removeParams: [
             "document", "i", "image", "p",
@@ -2639,6 +4015,18 @@ export const parameterRules = [
         domain: "search.yahoo.co.jp",
         removeParams: [
             "fr"
+        ]
+    },
+    {
+        domain: "search.yahoo.com",
+        removeParams: [
+            "fr2"
+        ]
+    },
+    {
+        domain: "secretlab.com",
+        removeParams: [
+            "rfsn"
         ]
     },
     {
@@ -2661,10 +4049,32 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "sfgate.com",
+        removeParams: [
+            "IPID"
+        ]
+    },
+    {
         domain: "shareasale-analytics.com",
         removeParams: [
             "afftrack", "lplid", "ref", "shrsl_analytics_sscid",
             "shrsl_analytics_sstid"
+        ]
+    },
+    {
+        domain: "shein.co.uk",
+        removeParams: [
+            "_t", "adp", "ici", "icn",
+            "is_manual_change_site", "rep", "ret", "scici",
+            "srctype", "tag_ids", "userpath"
+        ]
+    },
+    {
+        domain: "shein.com",
+        removeParams: [
+            "_t", "adp", "ici", "icn",
+            "is_manual_change_site", "rep", "ret", "scici",
+            "srctype", "tag_ids", "userpath"
         ]
     },
     {
@@ -2681,10 +4091,34 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "shop.bt.com",
+        removeParams: [
+            "awc"
+        ]
+    },
+    {
         domain: "shop.hololivepro.com",
         removeParams: [
             "pr_prod_strat", "pr_rec_id", "pr_rec_pid", "pr_ref_pid",
             "pr_seq"
+        ]
+    },
+    {
+        domain: "shop.samsung.com",
+        removeParams: [
+            "hmz_campaign", "hmz_inf", "hmz_lid"
+        ]
+    },
+    {
+        domain: "shopbop.com",
+        removeParams: [
+            "extid"
+        ]
+    },
+    {
+        domain: "shopdisney.com",
+        removeParams: [
+            "EFC", "att"
         ]
     },
     {
@@ -2706,6 +4140,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "shrunken.com",
+        removeParams: [
+            "shortUrlDomain"
+        ]
+    },
+    {
         domain: "shutterstock.com",
         removeParams: [
             "src"
@@ -2724,6 +4164,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "simplermedia.com",
+        removeParams: [
+            "smg_campaign", "smg_content", "smg_medium", "smg_source"
+        ]
+    },
+    {
         domain: "sincode.ai",
         removeParams: [
             "via"
@@ -2736,9 +4182,27 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "sitepoint.com",
+        removeParams: [
+            "fromBlog"
+        ]
+    },
+    {
         domain: "skt.sh",
         removeParams: [
             "referer"
+        ]
+    },
+    {
+        domain: "sky.it",
+        removeParams: [
+            "social", "zoneid"
+        ]
+    },
+    {
+        domain: "skyscanner.com",
+        removeParams: [
+            "previousCultureSource", "redirectedFrom"
         ]
     },
     {
@@ -2767,6 +4231,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "smh.com.au",
+        removeParams: [
+            "btisdoc"
+        ]
+    },
+    {
         domain: "smotreshka.tv",
         removeParams: [
             "from"
@@ -2785,10 +4255,39 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "sogou.com",
+        removeParams: [
+            "/hp.*", "/stj.*", "_asf", "_ast",
+            "bh", "entityid", "fromTitle", "hintidx",
+            "htdbg", "innerid", "interV", "interation",
+            "lkt", "oq", "ri", "s_from",
+            "sst0", "suglabid", "sugsuv", "sugtime",
+            "suguuid", "sut", "w"
+        ]
+    },
+    {
         domain: "sohu.com",
         removeParams: [
             "_f", "_trans_", "pvid", "scm",
             "spm"
+        ]
+    },
+    {
+        domain: "son-video.com",
+        removeParams: [
+            "ae"
+        ]
+    },
+    {
+        domain: "sony.com",
+        removeParams: [
+            "cpint"
+        ]
+    },
+    {
+        domain: "soundcloud.com",
+        removeParams: [
+            "si"
         ]
     },
     {
@@ -2799,9 +4298,21 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "spartoo.com",
+        removeParams: [
+            "sx", "track_id"
+        ]
+    },
+    {
         domain: "spiegel.de",
         removeParams: [
             "b"
+        ]
+    },
+    {
+        domain: "sporcle.com,||hclips.com",
+        removeParams: [
+            "rp"
         ]
     },
     {
@@ -2835,6 +4346,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "squarespace.com",
+        removeParams: [
+            "subchannel"
+        ]
+    },
+    {
         domain: "stacksocial.com",
         removeParams: [
             "aid", "partnerid", "rid"
@@ -2847,9 +4364,27 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "startpage.com",
+        removeParams: [
+            "sc", "segment"
+        ]
+    },
+    {
         domain: "steampowered.com",
         removeParams: [
-            "curator_clanid", "rdt_cid", "snr"
+            "curator_clanid", "rdt_cid", "ser", "snr"
+        ]
+    },
+    {
+        domain: "store.google.com",
+        removeParams: [
+            "CJAID", "CJCID"
+        ]
+    },
+    {
+        domain: "store.hbr.org",
+        removeParams: [
+            "fromSku", "fromSkuRelated"
         ]
     },
     {
@@ -2890,7 +4425,25 @@ export const parameterRules = [
     {
         domain: "substack.com",
         removeParams: [
-            "triedRedirect"
+            "sddoc", "triedRedirect"
+        ]
+    },
+    {
+        domain: "sun9-44.userapi.com",
+        removeParams: [
+            "proxy", "type"
+        ]
+    },
+    {
+        domain: "sunbasket.com",
+        removeParams: [
+            "msb1", "msb2", "msb3", "muts"
+        ]
+    },
+    {
+        domain: "surfshark.com",
+        removeParams: [
+            "transaction_id"
         ]
     },
     {
@@ -2927,9 +4480,27 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "target.com",
+        removeParams: [
+            "clkid", "lnk", "lnm", "preselect"
+        ]
+    },
+    {
         domain: "target.georiot.com",
         removeParams: [
             "tsid"
+        ]
+    },
+    {
+        domain: "taskrabbit.com",
+        removeParams: [
+            "creative_id"
+        ]
+    },
+    {
+        domain: "taxscouts.com",
+        removeParams: [
+            "referralSource"
         ]
     },
     {
@@ -2941,7 +4512,7 @@ export const parameterRules = [
     {
         domain: "tcgplayer.com",
         removeParams: [
-            "source"
+            "productLineName", "setName", "source"
         ]
     },
     {
@@ -2978,23 +4549,44 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "tempo.co",
+        removeParams: [
+            "tracking_page_direct"
+        ]
+    },
+    {
         domain: "temu.com",
         removeParams: [
             "_bg_fs", "_oak_freesia_scene", "_oak_gallery_order", "_oak_mp_inf",
             "_oak_page_source", "_oak_rec_ext_1", "_oak_region", "_p_jump_id",
-            "_p_rfs", "_x_ads_channel", "_x_ads_sub_channel", "_x_campaign",
-            "_x_channel_scene", "_x_channel_src", "_x_cid", "_x_sessn_id",
-            "_x_vst_scene", "freesia_scene", "from_share", "g_ccy",
-            "g_lg", "g_region", "g_site", "refer_page_el_sn",
-            "refer_page_id", "refer_page_name", "refer_page_sn", "refer_share_channel",
-            "refer_share_id", "refer_share_suin", "refer_source", "share_img",
-            "sku_id", "spec_gallery_id", "top_gallery_url"
+            "_p_rfs", "_x_ads_account", "_x_ads_channel", "_x_ads_creative_id",
+            "_x_ads_id", "_x_ads_set", "_x_ads_sub_channel", "_x_campaign",
+            "_x_channel_scene", "_x_channel_src", "_x_cid", "_x_gmc_account",
+            "_x_gmc_catalog", "_x_ns_device", "_x_ns_match_type", "_x_ns_msclkid",
+            "_x_ns_source", "_x_sessn_id", "_x_vst_scene", "freesia_scene",
+            "from_share", "g_ccy", "g_lg", "g_region",
+            "g_site", "mkt_rec", "refer_page_el_sn", "refer_page_id",
+            "refer_page_name", "refer_page_sn", "refer_share_channel", "refer_share_id",
+            "refer_share_suin", "refer_source", "share_img", "sku_id",
+            "spec_gallery_id", "top_gallery_url"
+        ]
+    },
+    {
+        domain: "temu.com ",
+        removeParams: [
+            "_x_ns_sku_id"
         ]
     },
     {
         domain: "theathletic.com",
         removeParams: [
-            "login_source", "ref_page", "source"
+            "checkout_entry_point", "login_source", "ref_page", "source"
+        ]
+    },
+    {
+        domain: "thefocusfuel.com",
+        removeParams: [
+            "snowball"
         ]
     },
     {
@@ -3004,9 +4596,21 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "thehackernews.com",
+        removeParams: [
+            "_m"
+        ]
+    },
+    {
         domain: "theregister.com",
         removeParams: [
             "td"
+        ]
+    },
+    {
+        domain: "thisismoney.co.uk",
+        removeParams: [
+            "ico", "molReferrerUrl"
         ]
     },
     {
@@ -3022,20 +4626,45 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "tianqi.com",
+        removeParams: [
+            "cvid"
+        ]
+    },
+    {
         domain: "tiktok.com",
         removeParams: [
-            "_d", "_r", "embed_source", "enter_method",
-            "is_from_webapp", "preview_pb", "q", "refer",
-            "referer_url", "sec_uid", "sender_device", "share_app_id",
-            "share_app_name", "share_author_id", "share_iid", "share_link_id",
-            "source", "t", "timestamp", "tt_from",
-            "u_code", "user_id", "web_id"
+            "_d", "_r", "checksum", "embed_source",
+            "enter_method", "is_from_webapp", "preview_pb", "q",
+            "refer", "referer_url", "referer_video_id", "sec_uid",
+            "sec_user_id", "sender_device", "share_app_id", "share_app_name",
+            "share_author_id", "share_iid", "share_link_id", "source",
+            "t", "timestamp", "tt_from", "u_code",
+            "user_id", "web_id"
+        ]
+    },
+    {
+        domain: "ting.com",
+        removeParams: [
+            "lpn"
         ]
     },
     {
         domain: "tinkoff.ru",
         removeParams: [
             "dsp_click_id"
+        ]
+    },
+    {
+        domain: "tipsbladet.dk",
+        removeParams: [
+            "eblink"
+        ]
+    },
+    {
+        domain: "tkqlhce.com",
+        removeParams: [
+            "sdate"
         ]
     },
     {
@@ -3062,7 +4691,7 @@ export const parameterRules = [
         domain: "tokopedia.com",
         removeParams: [
             "extParam", "refined", "src", "trkid",
-            "whid"
+            "whid", "xClientId"
         ]
     },
     {
@@ -3102,6 +4731,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "tradera.com",
+        removeParams: [
+            "transactionalEmail"
+        ]
+    },
+    {
         domain: "tradingview.com",
         removeParams: [
             "aff_id", "aff_sub", "exchange", "source"
@@ -3116,8 +4751,8 @@ export const parameterRules = [
     {
         domain: "trendyol.com",
         removeParams: [
-            "adjust_t", "tyutm_campaign", "tyutm_medium", "tyutm_source",
-            "utm_subaff"
+            "/tyutm_.*", "adjust_t", "link_contentid", "link_userID",
+            "tyutm_campaign", "tyutm_medium", "tyutm_source", "utm_subaff"
         ]
     },
     {
@@ -3133,6 +4768,24 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "tsn.ca",
+        removeParams: [
+            "tsn-amp"
+        ]
+    },
+    {
+        domain: "tubepalm.com",
+        removeParams: [
+            "asgtbndr"
+        ]
+    },
+    {
+        domain: "tui.com",
+        removeParams: [
+            "agent"
+        ]
+    },
+    {
         domain: "tumblr.app.link",
         removeParams: [
             "_p"
@@ -3141,7 +4794,7 @@ export const parameterRules = [
     {
         domain: "tumblr.com",
         removeParams: [
-            "source"
+            "is_related_post", "source"
         ]
     },
     {
@@ -3170,6 +4823,12 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "typeform.com",
+        removeParams: [
+            "typeform-source"
+        ]
+    },
+    {
         domain: "uber.com",
         removeParams: [
             "uclick_id"
@@ -3182,6 +4841,24 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "ubisoft.com",
+        removeParams: [
+            "maltcode"
+        ]
+    },
+    {
+        domain: "udemy.com",
+        removeParams: [
+            "btn", "locale", "website_id"
+        ]
+    },
+    {
+        domain: "unieuro.it",
+        removeParams: [
+            "dedup"
+        ]
+    },
+    {
         domain: "upgrad.com",
         removeParams: [
             "UTM_MEDIUM"
@@ -3190,8 +4867,14 @@ export const parameterRules = [
     {
         domain: "urlshare.cn",
         removeParams: [
-            "apptype", "loginuin", "plateform", "src_uin",
-            "srctype"
+            "_wv", "apptype", "cli_scene", "loginuin",
+            "plateform", "src_scene", "src_uin", "srctype"
+        ]
+    },
+    {
+        domain: "uslecce.it",
+        removeParams: [
+            "et"
         ]
     },
     {
@@ -3226,6 +4909,24 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "verizon.com",
+        removeParams: [
+            "campaignGroup", "campaignName", "campaignSource", "vendorid"
+        ]
+    },
+    {
+        domain: "verkkokauppa.com",
+        removeParams: [
+            "list"
+        ]
+    },
+    {
+        domain: "veromoda.com",
+        removeParams: [
+            "rm"
+        ]
+    },
+    {
         domain: "versioncheck.addons.mozilla.org",
         removeParams: [
             "appID"
@@ -3235,6 +4936,18 @@ export const parameterRules = [
         domain: "video.laxd.com",
         removeParams: [
             "ref"
+        ]
+    },
+    {
+        domain: "view.inews.qq.com",
+        removeParams: [
+            "ft", "refer"
+        ]
+    },
+    {
+        domain: "vimeo.com",
+        removeParams: [
+            "owner"
         ]
     },
     {
@@ -3278,7 +4991,9 @@ export const parameterRules = [
     {
         domain: "walmart.com",
         removeParams: [
-            "ath[a-z]*", "from", "u1"
+            "/wl\d=.*", "ath[a-z]*", "classType", "from",
+            "u1", "veh", "wl10", "wl11",
+            "wl12"
         ]
     },
     {
@@ -3308,7 +5023,8 @@ export const parameterRules = [
     {
         domain: "weibo.com",
         removeParams: [
-            "dt_dapp", "weibo_id"
+            "act_code", "dt_dapp", "fid", "uicode",
+            "weibo_id"
         ]
     },
     {
@@ -3318,9 +5034,28 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "weidian.com",
+        removeParams: [
+            "distributorid", "ifr", "share_relation"
+        ]
+    },
+    {
+        domain: "welt.de",
+        removeParams: [
+            "wtrid"
+        ]
+    },
+    {
         domain: "wemakeprice.com",
         removeParams: [
             "refer"
+        ]
+    },
+    {
+        domain: "wenku.baidu.com",
+        removeParams: [
+            "_wkts_", "aggId", "cc", "fixfr",
+            "rec_flag", "sxts"
         ]
     },
     {
@@ -3343,9 +5078,21 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "whatsapp.com",
+        removeParams: [
+            "helpref"
+        ]
+    },
+    {
         domain: "whistleout.com.au",
         removeParams: [
             "ARRAffinity", "ARRAffinitySameSite"
+        ]
+    },
+    {
+        domain: "whitepages.com",
+        removeParams: [
+            "wp_content", "wp_medium", "wp_source", "wp_term"
         ]
     },
     {
@@ -3423,7 +5170,7 @@ export const parameterRules = [
     {
         domain: "wsj.com",
         removeParams: [
-            "reflink"
+            "inttrackingcode", "reflink", "st"
         ]
     },
     {
@@ -3441,15 +5188,41 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "xbox.com",
+        removeParams: [
+            "rtc", "xr"
+        ]
+    },
+    {
+        domain: "xg4ken.com",
+        removeParams: [
+            "criteriaid", "kchid", "kct", "kdv",
+            "kpid", "locphy", "prof"
+        ]
+    },
+    {
         domain: "xhamster.com",
         removeParams: [
             "from"
         ]
     },
     {
+        domain: "xiaohongshu.com",
+        removeParams: [
+            "app_platformdoc", "app_versiondoc", "apptimedoc", "appuiddoc",
+            "share_from_user_hiddendoc", "xhssharedoc"
+        ]
+    },
+    {
         domain: "xkcd.com",
         removeParams: [
             "trk"
+        ]
+    },
+    {
+        domain: "xvideos.com",
+        removeParams: [
+            "sxcaf"
         ]
     },
     {
@@ -3479,9 +5252,15 @@ export const parameterRules = [
     {
         domain: "yandex.com",
         removeParams: [
-            "did", "from", "mlid", "msid",
-            "persistent_id", "source-serpid", "stid", "suggest_reqid",
-            "utm-term"
+            "clid", "did", "from", "mlid",
+            "msid", "persistent_id", "sk", "source-serpid",
+            "stid", "suggest_reqid", "utm-term"
+        ]
+    },
+    {
+        domain: "yiyouliao.com",
+        removeParams: [
+            "cvid"
         ]
     },
     {
@@ -3517,13 +5296,20 @@ export const parameterRules = [
     {
         domain: "youtube.com",
         removeParams: [
-            "pp"
+            "ab_channel", "bp", "embeds_euri", "pp",
+            "source_ve_path"
         ]
     },
     {
         domain: "zapiska.substack.com",
         removeParams: [
             "isFreemail", "post_id", "publication_id", "r"
+        ]
+    },
+    {
+        domain: "zappos.com",
+        removeParams: [
+            "si"
         ]
     },
     {
@@ -3551,6 +5337,18 @@ export const parameterRules = [
         ]
     },
     {
+        domain: "zhidao.baidu.com",
+        removeParams: [
+            "qbl"
+        ]
+    },
+    {
+        domain: "zhihu.com",
+        removeParams: [
+            "hybrid_search_extra", "hybrid_search_source"
+        ]
+    },
+    {
         domain: "zillow.com",
         removeParams: [
             "rtoken"
@@ -3565,7 +5363,13 @@ export const parameterRules = [
     {
         domain: "zoho.com",
         removeParams: [
-            "iref"
+            "iref", "zsrc"
+        ]
+    },
+    {
+        domain: "zoominfo.com",
+        removeParams: [
+            "ch_source"
         ]
     },
     {
@@ -3574,7 +5378,7 @@ export const parameterRules = [
             "t"
         ]
     }
-  ];
+];
 
   export const urlPatternRules  = [ {
     regexPattern: "^https?:\\/\\/(?:[a-z0-9-]+\\.)*?amazon(?:\\.[a-z]{2,}){1,}",
