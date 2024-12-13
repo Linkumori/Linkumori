@@ -1532,9 +1532,9 @@ rules/adguard-modifed/rules4.json
 rules/adguard-modifed/rules12.json
 Original work: https://github.com/AdguardTeam/AdguardFilters/blob/master/TrackParamFilter/sections/specific.txt
 
-original work: license under General Public License v3
+original work: license under General Public License v3 only
 
-derivative work: also under General Public License v3
+derivative work: also under General Public License v3 only
 
 Copyright information of modified parts only: Copyright (c) 2024 Subham Mahesh
 
