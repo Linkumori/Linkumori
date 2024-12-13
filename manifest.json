@@ -93,6 +93,11 @@
         "id": "ruleset_11",
         "enabled": true,
         "path": "/rules/original/rules11.json"
+      },
+      {
+        "id": "ruleset_12",
+        "enabled": true,
+        "path": "rules/adguard-modifed/rules12.json"
       }
     ]
   }
