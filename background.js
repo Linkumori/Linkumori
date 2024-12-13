@@ -133,7 +133,8 @@ chrome.runtime.onInstalled.addListener(async () => {
   if (isFirstInstall) {
     setDefaultSettings();
     chrome.storage.local.set({ updateHyperlinkAuditing: true, firstInstalled: true, historyApiProtection: true,updateBadgeOnOff: true });
-    updateHyperlinkAuditing(true); 
+    updateHyperlinkAuditing(true);
+    chrome.alarms.create('wakeUpAlarm', { periodInMinutes: 1/60 }); 
       return; 
   }
 
@@ -157,10 +158,7 @@ chrome.runtime.onInstalled.addListener(async () => {
   updateDNRRules(settings.status);
   badge(badgesettings);
   updateHyperlinkAuditing(updatesettings); 
-  chrome.alarms.create('wakeUpAlarm', { periodInMinutes: 1/60 });
-  return; 
-}
-);
+});
 
 
 
