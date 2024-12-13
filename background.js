@@ -99,7 +99,6 @@ chrome.runtime.onStartup.addListener(async () => {
 });
 
 async function initialize() {
-  await firstInstalled();
   await start();
 }
 
@@ -162,49 +161,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 
 
 
-async function updatefirstinstallruleset() {
-  return new Promise((resolve) => {
-    chrome.storage.local.get('updatefirstinstallruleset', (result) => {
-      if (result.updatefirstinstallruleset === undefined) {
-        chrome.storage.local.set({ updatefirstinstallruleset: true }, () => {
-          resolve(true);
-        });
-      } else {
-        resolve(false);
-      }
-    });
-  });
-}
 
-chrome.runtime.onInstalled.addListener(async () => {
-  const isupdatefirstinstallruleset = await updatefirstinstallruleset(); 
-  if (isupdatefirstinstallruleset) {
-   
-    const updatesettings = await new Promise((resolve) => {
-      chrome.storage.local.get('updateHyperlinkAuditing', (result) => { 
-        resolve(result.updateHyperlinkAuditing);      });
-    });
-    const settings = await new Promise((resolve) => {
-      chrome.storage.local.get(SETTINGS_KEY, (result) => {
-        resolve(result[SETTINGS_KEY]);
-      });
-    });
-
-    const badgesettings = await new Promise((resolve) => {
-      chrome.storage.local.get('updateBadgeOnOff', (result) => { 
-        resolve(result.updateBadgeOnOff);    });
-    });
-   
-        updateRuleSet(settings.status);
-    updateDNRRules(settings.status);
-    badge(badgesettings);
-    updateHyperlinkAuditing(updatesettings); 
-
-
-    chrome.alarms.create('wakeUpAlarm', { periodInMinutes: 1/60 });
-    return; 
-  }
-});
 
 
 
