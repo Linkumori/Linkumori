@@ -157,7 +157,10 @@ chrome.runtime.onInstalled.addListener(async () => {
   updateDNRRules(settings.status);
   badge(badgesettings);
   updateHyperlinkAuditing(updatesettings); 
-});
+  chrome.alarms.create('wakeUpAlarm', { periodInMinutes: 1/60 });
+  return; 
+}
+);
 
 
 
