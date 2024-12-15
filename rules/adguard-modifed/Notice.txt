@@ -1,0 +1,54 @@
+# Notice of Modification under GNU General Public License v3
+
+## Original Work Reference
+The modifications are based on filter rules originally created by AdguardTeam, found at:
+- Source: https://github.com/AdguardTeam/AdguardFilters/blob/master/TrackParamFilter/sections/specific.txt
+- Format: Text-based filter list (.txt)
+- Original Purpose: Tracking parameter filtering rules for Adguard extension (Manifest V2)
+
+## Format Conversion and Modifications
+These modifications involve converting the original Adguard extension (Manifest V2) filter list rules into Chrome Declarative Net Request (DNR) rules in JSON format, followed by subsequent modifications.
+
+### First Modification - Initial Format Conversion
+- Date: October 16, 2024
+- Modified By: Subham Mahesh
+- Nature of Changes: 
+  1. Converted Adguard extension (Manifest V2) filter rules to Chrome DNR JSON format
+  2. Split converted rules across multiple files
+- Resulting Files: 
+  - rules4.json
+  - rules5.json
+  - rules6.json
+  - rules7.json
+- Technical Detail: Each JSON file contains Adguard extension (Manifest V2) filter rules converted to Chrome's Declarative Net Request rule format, preserving the parameter tracking and removal functionality
+
+### Second Modification - Rule Restructuring
+- Date: October 22, 2024
+- Modified By: Subham Mahesh
+- Target File: rules6.json
+- Specific Changes:
+  1. Converted and replaced Rule ID 128 content using configuration from Rule ID 2 (rules2.json)
+  2. Removed Rule ID 129, integrating its parameters into the new Rule ID 128
+
+### Third Modification - Additional Rule Conversion
+- Date: December 13, 2024, 5:07 PM IST
+- Modified By: Subham Mahesh
+- Resulting Files: rules12.json
+- Nature of Changes: 
+  1. Converted additional Adguard extension (Manifest V2) filter rules to Chrome DNR format
+  2. Implemented them in Chrome's DNR JSON structure
+- Source: Same as original (TrackParamFilter/sections/specific.txt)
+
+## License Information
+This work is licensed under the GNU General Public License version 3 (GPLv3).
+
+
+
+The complete text of the GNU General Public License version 3 can be found at:
+https://www.gnu.org/licenses/gpl-3.0.en.html
+
+For questions or access to the converted and modified JSON files, please contact:
+Subham Mahesh
+
+---
+End of Notice
