@@ -1,1 +1,1 @@
-Build script and neccassary file for building Dnr rules
+This branch is relevent for devs only 
