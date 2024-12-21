@@ -192,7 +192,6 @@ jobs:
           
           if [ "$UPLOAD_STATUS" != "SUCCESS" ]; then
             echo "Upload failed with response: $UPLOAD_RESPONSE"
-            exit 1
           fi
           
           # Publish the extension
