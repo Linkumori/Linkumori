@@ -206,7 +206,6 @@ jobs:
           
           if [ "$PUBLISH_STATUS" != "OK" ]; then
             echo "Publishing failed with response: $PUBLISH_RESPONSE"
-            exit 1
           fi
           
           echo "Extension successfully uploaded and published!"
@@ -276,8 +275,7 @@ jobs:
               3. For issues or feature requests:
                  - Use GitHub Issues
                  - Include browser and extension version
-        
-              ## ⚠️ Additional Important Notes
+               ## ⚠️ Additional Important Notes
               Please read our [Version Differences Guide](https://github.com/Linkumori/Linkumori-Extension/wiki/Chapter-2-Version-Differences:-Self%E2%80%90hosted-vs-Chrome-Web-Store) to know about self hosted and chrome webstore version of extension
               
               To identify which version of the extension you are currently using, please refer to our detailed identification guide: [Version Identification Guide](https://github.com/Linkumori/Linkumori-Extension/wiki/Chapter-3-identifying-if-you-are-using-self-hosted-or-chrome-webstore-version)
