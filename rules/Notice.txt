@@ -40,8 +40,7 @@ These modifications involve converting the original Adguard extension (Manifest 
 - Source: Same as original (TrackParamFilter/sections/specific.txt)
 
 # Fourth Modification - Rule System Restructuring
-Modified by Subham Mahesh
-
+Modified by Subham Mahesh in December 19, 2024, 10:07 PM IST
 ## Overview
 This modification involved a comprehensive restructuring of our rule system. The previous implementation contained rules from two distinct sources, which have now been consolidated into a more streamlined format.
 
