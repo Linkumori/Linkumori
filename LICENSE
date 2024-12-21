@@ -713,7 +713,7 @@ the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
 
-The following code in the files are completely under the GNU General Public License v3 or or later version:
+The following code in the files are completely under the GNU General Public License v3  or later version:
 
 `/rules/rules7.json`
 "/rules/rules8.json"
