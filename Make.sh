@@ -71,63 +71,42 @@ cat > "$BUILD_DIR/webstore/manifest.json" << EOL
       {
         "id": "ruleset_1",
         "enabled": true,
-        "path": "/rules/original/rules1.json"
+        "path": "/rules/rules1.json"
       },
       {
         "id": "ruleset_2",
         "enabled": true,
-        "path": "rules/original/rules2.json"
+        "path": "rules/rules2.json"
       },
       {
         "id": "ruleset_3",
         "enabled": true,
-        "path": "rules/original/rules3.json"
+        "path": "rules/rules3.json"
       },
       {
         "id": "ruleset_4",
         "enabled": true,
-        "path": "rules/adguard-modifed/rules4.json"
+        "path": "rules/rules4.json"
       },
       {
         "id": "ruleset_5",
         "enabled": true,
-        "path": "rules/adguard-modifed/rules5.json"
+        "path": "rules/rules5.json"
       },
       {
         "id": "ruleset_6",
         "enabled": true,
-        "path": "rules/adguard-modifed/rules6.json"
+        "path": "rules/rules6.json"
       },
       {
         "id": "ruleset_7",
         "enabled": true,
-        "path": "rules/adguard-modifed/rules7.json"
+        "path": "rules/rules7.json"
       },
       {
         "id": "ruleset_8",
         "enabled": true,
-        "path": "/rules/original/rules8.json"
-      },
-
-      {
-        "id": "ruleset_9",
-        "enabled": true,
-        "path": "/rules/original/rules9.json"
-      },
-      {
-        "id": "ruleset_10",
-        "enabled": true,
-        "path": "/rules/original/rules10.json"
-      },
-      {
-        "id": "ruleset_11",
-        "enabled": true,
-        "path": "/rules/original/rules11.json"
-      },
-      {
-        "id": "ruleset_12",
-        "enabled": true,
-        "path": "rules/adguard-modifed/rules12.json"
+        "path": "rules/rules8.json"
       }
     ]
   }
@@ -177,62 +156,42 @@ cat > "$BUILD_DIR/selfhosted/manifest.json" << EOL
       {
         "id": "ruleset_1",
         "enabled": true,
-        "path": "/rules/original/rules1.json"
+        "path": "/rules/rules1.json"
       },
       {
         "id": "ruleset_2",
         "enabled": true,
-        "path": "rules/original/rules2.json"
+        "path": "rules/rules2.json"
       },
       {
         "id": "ruleset_3",
         "enabled": true,
-        "path": "rules/original/rules3.json"
+        "path": "rules/rules3.json"
       },
       {
         "id": "ruleset_4",
         "enabled": true,
-        "path": "rules/adguard-modifed/rules4.json"
+        "path": "rules/rules4.json"
       },
       {
         "id": "ruleset_5",
         "enabled": true,
-        "path": "rules/adguard-modifed/rules5.json"
+        "path": "rules/rules5.json"
       },
       {
         "id": "ruleset_6",
         "enabled": true,
-        "path": "rules/adguard-modifed/rules6.json"
+        "path": "rules/rules6.json"
       },
       {
         "id": "ruleset_7",
         "enabled": true,
-        "path": "rules/adguard-modifed/rules7.json"
+        "path": "rules/rules7.json"
       },
       {
         "id": "ruleset_8",
         "enabled": true,
-        "path": "/rules/original/rules8.json"
-      },
-      {
-        "id": "ruleset_9",
-        "enabled": true,
-        "path": "/rules/original/rules9.json"
-      },
-      {
-        "id": "ruleset_10",
-        "enabled": true,
-        "path": "/rules/original/rules10.json"
-      },
-      {
-        "id": "ruleset_11",
-        "enabled": true,
-        "path": "/rules/original/rules11.json"
-      },
-      {
-        "id": "ruleset_12",
-        "enabled": true,
-        "path": "rules/adguard-modifed/rules12.json"
+        "path": "rules/rules8.json"
       }
     ]
   },
