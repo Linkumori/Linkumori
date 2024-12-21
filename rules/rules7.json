@@ -1,0 +1,3 @@
+[
+{"id":1,"priority":1,"action":{"type":"redirect","redirect":{"transform":{"queryTransform":{"removeParams":["asctag","bsst","category","cf","cl","ct","domain","dyTabStr","eqid","euri","f","fenlei","fid","for","frs","gsid","hisfilter","hl_tag","idctag","iid","inputT","issp","ivk_sa","jid","lattr","lm","logid","miniId","n_type","nc","od","oq","p_from","p_tk","pageFrom","params_ssrt","pi","platform","prefixsug","prod_type","ps","query","rn","rq","rqid","rs_src","rsf","rsp","sa","sfrom","sids","sourceFrom","srcp","t_kt","tn","tpl_from","usm","vit","vslid","wd","xzhid"]}}}},"condition":{"resourceTypes":["main_frame","sub_frame","xmlhttprequest"],"requestDomains":["baidu.com"]}}
+]

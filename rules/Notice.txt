@@ -39,8 +39,38 @@ These modifications involve converting the original Adguard extension (Manifest 
   2. Implemented them in Chrome's DNR JSON structure
 - Source: Same as original (TrackParamFilter/sections/specific.txt)
 
+# Fourth Modification - Rule System Restructuring
+Modified by Subham Mahesh
+
+## Overview
+This modification involved a comprehensive restructuring of our rule system. The previous implementation contained rules from two distinct sources, which have now been consolidated into a more streamlined format.
+
+## Previous Structure
+The files contained:
+1. Declarative NetRequest static rules converted by Subham Mahesh from AdGuard's MV2 extension filter lists (originally developed by AdGuard Software Ltd.) - rules12.json, rules4-7.json
+2. Independent URL parameter cleaning rules developed by Subham Mahesh - rules1-3.json, rules8.json, rules11.json
+
+## New Structure
+All previous files have been replaced with a new set of consolidated rule files (rules1.json through rules6.json). These new files contain:
+- Declarative NetRequest static rules converted from AdGuard's MV2 filter lists
+- Additional Declarative NetRequest static rules independently developed by Subham Mahesh
+
+## File Changes
+### Removed Files
+- AdGuard-derived conversions: rules12.json, rules4-7.json
+- Subham Mahesh's original rules: rules1-3.json, rules8.json, rules11.json
+
+### Added Files
+- New consolidated files: rules1.json through rules6.json
+
+## Attribution
+- Original tracking parameter filter lists: © AdGuard Software Ltd.
+- Independent URL parameter cleaning rules and conversions: © Subham Mahesh 2024
+
+
+
 ## License Information
-This work is licensed under the GNU General Public License version 3 (GPLv3).
+This work is licensed under the GNU General Public License version 3 (GPLv3) only
 
 
 

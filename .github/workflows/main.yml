@@ -100,7 +100,7 @@ jobs:
           mkdir webstore_ext
           
           # Copy all files except excluded ones to webstore directory
-          rsync -av --exclude='*.pem' --exclude='.git*' --exclude='.github' --exclude='*.crx' . webstore_ext/
+          rsync -av --exclude='*.pem' --exclude='.git*' --exclude='.github*' --exclude='*.sh' --exclude='*.crx' --exclude='*.zip' --exclude='webstore_ext*' --exclude='_metadata*' --exclude='docs*' . webstore_ext/
           
           # Create ZIP file for Chrome Web Store
           cd webstore_ext
@@ -119,7 +119,7 @@ jobs:
           jq '.update_url = "https://github.com/Linkumori/Linkumori-Extension/releases/latest/download/updates.xml"' manifest.json > selfhosted_ext/manifest.json
           
           # Copy all files except excluded ones to self-hosted directory
-          rsync -av --exclude='*.pem' --exclude='.git*' --exclude='.github' --exclude='*.crx' --exclude='manifest.json' . selfhosted_ext/
+          rsync -av --exclude='*.pem' --exclude='.git*' --exclude='.github*' --exclude='*.sh' --exclude='*.crx' --exclude='*.zip' --exclude='manifest.json' --exclude='selfhosted_ext*' --exclude='_metadata*' --exclude='docs*'  . selfhosted_ext/
           
           # Pack extension with PEM file
           google-chrome --pack-extension="$(pwd)/selfhosted_ext" --pack-extension-key="$(pwd)/extension.pem"
@@ -211,78 +211,83 @@ jobs:
           
           echo "Extension successfully uploaded and published!"
 
-      - name: Update Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            Linkumori.crx
-            updates.xml
-            config.zip
-          body: |
-            ${{ env.RELEASE_BODY }}
+          - name: Update Release
+          uses: softprops/action-gh-release@v2
+          with:
+            files: |
+              Linkumori.crx
+              updates.xml
+              config.zip
+            body: |
+              ${{ env.RELEASE_BODY }}
+              
+              ## 🔄 Version Information
+              - Status: ${{ steps.version_check.outputs.update || steps.version_check.outputs.warning }}
+              - Current Version: ${{ steps.manifest.outputs.version }}
+              
+              ## 📦 Download Options
+              
+              1️⃣ Chrome Web Store (Recommended)
+              <a href="https://chromewebstore.google.com/detail/linkumori-clean-urls/kcpfnbjlimolkcjllfooaipdpdjmjigg"><img height="58" src="https://i.imgur.com/K9Yh8G9.png" alt="Chrome Web Store"></a>
+              - ✨ Official release channel
+              - 🔄 Automatic updates
+              - ✅ Verified by Google
+              
+              ### 2️⃣ Self-hosted Version
+              - Download: `Linkumori.crx`
+              - Updates through GitHub releases
+              - Installation:
+                1. Go to chrome://extensions
+                2. Enable "Developer mode"
+                3. Drag & drop the .crx file
+              
+              ### 3️⃣ Developer Version
+              - Download: Source code (zip)
+              - Manual installation required
+              - For development and testing
+              
+              ## 📝 Changes
+              ### Commit History
+              ```
+              ${{ steps.get_commit_history.outputs.history }}
+              ```
+              
+              ## 🌐 Browser Support
+              | Browser | Status | Tested Version |
+              |---------|--------|----------------|
+              | Google Chrome | ✅ | 121+ |
+              | Microsoft Edge | ✅ | 121+ |
+              | Brave | ✅ | 121+ |
+              | Opera GX | ✅ | Latest |
+              | Vivaldi | ✅ | Latest |
+              
+              ## 🔧 Technical Details
+              - Minimum browser version: 121.0
+              - Extension ID: ${{ env.EXTENSION_ID }}
+              - Auto-update enabled: Yes
+              
+              ## ⚠️ Important Notes
+              1. If installing from source:
+                 - Keep the source folder after installation
+                 - Developer mode warnings are normal
+              2. Auto-updates:
+                 - Web Store version: Automatic through Chrome Web Store
+                 - Self-hosted: Through GitHub releases
+              3. For issues or feature requests:
+                 - Use GitHub Issues
+                 - Include browser and extension version
+        
+              ## ⚠️ Additional Important Notes
+              Please read our [Version Differences Guide](https://github.com/Linkumori/Linkumori-Extension/wiki/Chapter-2-Version-Differences:-Self%E2%80%90hosted-vs-Chrome-Web-Store) to know about self hosted and chrome webstore version of extension
+              
+              To identify which version of the extension you are currently using, please refer to our detailed identification guide: [Version Identification Guide](https://github.com/Linkumori/Linkumori-Extension/wiki/Chapter-3-identifying-if-you-are-using-self-hosted-or-chrome-webstore-version)
             
-            ## 🔄 Version Information
-            - Status: ${{ steps.version_check.outputs.update || steps.version_check.outputs.warning }}
-            - Current Version: ${{ steps.manifest.outputs.version }}
-            
-            ## 📦 Download Options
-            
-            1️⃣ Chrome Web Store (Recommended)
-                <a href="https://chromewebstore.google.com/detail/linkumori-clean-urls/kcpfnbjlimolkcjllfooaipdpdjmjigg
-                 "><img height="58" src="https://i.imgur.com/K9Yh8G9.png" alt="Chrome Web Store"></a>
-            - ✨ Official release channel
-            - 🔄 Automatic updates
-            - ✅ Verified by Google
-            
-            ### 2️⃣ Self-hosted Version
-            - Download: `Linkumori.crx`
-            - Updates through GitHub releases
-            - Installation:
-              1. Go to chrome://extensions
-              2. Enable "Developer mode"
-              3. Drag & drop the .crx file
-            
-            ### 3️⃣ Developer Version
-            - Download: Source code (zip)
-            - Manual installation required
-            - For development and testing
-            
-            ## 📝 Changes
-            ### Commit History
-            ```
-            ${{ steps.get_commit_history.outputs.history }}
-            ```
-            
-            ## 🌐 Browser Support
-            | Browser | Status | Tested Version |
-            |---------|--------|----------------|
-            | Google Chrome | ✅ | 121+ |
-            | Microsoft Edge | ✅ | 121+ |
-            | Brave | ✅ | 121+ |
-            | Opera GX | ✅ | Latest |
-            | Vivaldi | ✅ | Latest |
-            
-            ## 🔧 Technical Details
-            - Minimum browser version: 121.0
-            - Extension ID: ${{ env.EXTENSION_ID }}
-            - Auto-update enabled: Yes
-            
-            ## ⚠️ Important Notes
-            1. If installing from source:
-               - Keep the source folder after installation
-               - Developer mode warnings are normal
-            2. Auto-updates:
-               - Web Store version: Automatic through Chrome Web Store
-               - Self-hosted: Through GitHub releases
-            3. For issues or feature requests:
-               - Use GitHub Issues
-               - Include browser and extension version
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Cleanup
-        if: always()
-        run: |
-          rm -f extension.pem
-          rm -rf webstore_ext
-          rm -rf selfhosted_ext
-          rm -f *.zip
+            token: ${{ secrets.GITHUB_TOKEN }}
+        
+          - name: Cleanup
+          if: always()
+          run: |
+            rm -f extension.pem
+            rm -rf webstore_ext
+            rm -rf selfhosted_ext
+            rm -f *.zip

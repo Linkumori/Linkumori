@@ -138,26 +138,35 @@ chrome.runtime.onInstalled.addListener(async () => {
       return; 
   }
 
-  const updatesettings = await new Promise((resolve) => {
-    chrome.storage.local.get('updateHyperlinkAuditing', (result) => { 
-      resolve(result.updateHyperlinkAuditing);    });
-  });
+  const [updatesettings, badgesettings, settings, currentTheme] = await Promise.all([
+    new Promise(resolve => {
+      chrome.storage.local.get('updateHyperlinkAuditing', (result) => {
+        resolve(result.updateHyperlinkAuditing);
+      });
+    }),
+    new Promise(resolve => {
+      chrome.storage.local.get('updateBadgeOnOff', (result) => {
+        resolve(result.updateBadgeOnOff);
+      });
+    }),
+    new Promise(resolve => {
+      chrome.storage.local.get(SETTINGS_KEY, (result) => {
+        resolve(result[SETTINGS_KEY]);
+      });
+    }),
+    new Promise(resolve => {
+      chrome.storage.local.get(['theme'], (result) => {
+        resolve(result.theme || getSystemTheme());
+      });
+    })
+  ]);
 
-  const badgesettings = await new Promise((resolve) => {
-    chrome.storage.local.get('updateBadgeOnOff', (result) => { 
-      resolve(result.updateBadgeOnOff);    });
-  });
-  const settings = await new Promise((resolve) => {
-    chrome.storage.local.get(SETTINGS_KEY, (result) => {
-      resolve(result[SETTINGS_KEY]);
-    });
-  });
- 
-
+  // Update all settings and appearance
   updateRuleSet(settings.status);
   updateDNRRules(settings.status);
   badge(badgesettings);
-  updateHyperlinkAuditing(updatesettings); 
+  updateHyperlinkAuditing(updatesettings);
+  updateExtensionIcon(currentTheme);
 });
 
 
@@ -168,7 +177,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 
 
 async function updateRuleSet(enabled) {
-  const allRulesets = ['ruleset_1', 'ruleset_2', 'ruleset_3', 'ruleset_4', 'ruleset_5', 'ruleset_6', 'ruleset_7', 'ruleset_8','ruleset_9','ruleset_10','ruleset_12'];
+  const allRulesets = ['ruleset_1', 'ruleset_2', 'ruleset_3', 'ruleset_4', 'ruleset_5', 'ruleset_6','ruleset_7','ruleset_8'];
 
   await chrome.declarativeNetRequest.updateEnabledRulesets({
     disableRulesetIds: enabled ? [] : allRulesets,
@@ -345,33 +354,56 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === 'updateRuleSet') {
-    updateRuleSet(message.enabled);
-    updateDNRRules(message.enabled);
-    badge(message.enabled);
-    
-    // Always check current hyperlink setting and update ruleset11 accordingly
-    chrome.storage.local.get(['updateHyperlinkAuditing'], (result) => {
-      // If main extension is disabled or hyperlink is disabled, disable ruleset11
-      if (!message.enabled || !result.updateHyperlinkAuditing) {
-        chrome.declarativeNetRequest.updateEnabledRulesets({
-          disableRulesetIds: ['ruleset_11'],
-          enableRulesetIds: []
+    // Handle updateRuleSet action
+    (async () => {
+      try {
+        // Call the existing update functions
+        await updateRuleSet(message.enabled);
+        await updateDNRRules(message.enabled);
+        await badge(message.enabled);
+
+        // Get available rule count
+        await new Promise((resolve) => {
+          chrome.declarativeNetRequest.getAvailableStaticRuleCount((count) => {
+            console.log('Available static rule count:', count);
+            resolve(count);
+          });
         });
+
+        // Get current hyperlink setting
+        const result = await chrome.storage.local.get(['updateHyperlinkAuditing']);
+        
+        // If main extension is disabled or hyperlink is disabled, disable rule
+        if (!message.enabled || !result.updateHyperlinkAuditing) {
+          await chrome.declarativeNetRequest.updateStaticRules({
+            rulesetId: "ruleset_8",
+            disableRuleIds: [2]
+          });
+        }
+
+        // Update storage with new status
+        await chrome.storage.local.set({
+          [SETTINGS_KEY]: { status: message.enabled }
+        });
+
+        sendResponse({ success: true });
+      } catch (error) {
+        console.error('Error updating ruleset:', error);
+        sendResponse({ success: false, error: error.message });
       }
-      
-      chrome.storage.local.set({ 
-        [SETTINGS_KEY]: { status: message.enabled } 
-      });
-    });
-    
-    sendResponse({ success: true });
-    return true;
+    })();
+    return true; // Will respond asynchronously
   }
-  
+
   if (message.action === 'updateHyperlinkAuditing') {
+    // Handle updateHyperlinkAuditing action
     updateHyperlinkAuditing(message.enabled)
-      .then(success => sendResponse({ success }));
-    return true;
+      .then(success => sendResponse({ success }))
+      .catch(error => {
+        console.error('Error updating hyperlink auditing:', error);
+        sendResponse({ success: false, error: error.message });
+      });
+    return true; // Will respond asynchronously
   }
 });
 
@@ -379,29 +411,41 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 // Listen for changes in extension status
 chrome.storage.onChanged.addListener(async (changes, area) => {
-  if (area === 'local' && changes[SETTINGS_KEY]) {
-    const newStatus = changes[SETTINGS_KEY].newValue?.status;
-    
-    // If main extension is being enabled
-    if (newStatus) {
-      // Check if hyperlink auditing was already enabled
-      const { updateHyperlinkAuditing: hyperlinkEnabled } = 
-        await chrome.storage.local.get('updateHyperlinkAuditing');
+  try {
+    if (area === 'local' && changes[SETTINGS_KEY]) {
+      const newStatus = changes[SETTINGS_KEY].newValue?.status;
       
-      if (hyperlinkEnabled) {
-        // Enable ruleset11 if both are now true
-        await chrome.declarativeNetRequest.updateEnabledRulesets({
-          disableRulesetIds: [],
-          enableRulesetIds: ['ruleset_11']
+      // Get the available rule count first
+      await new Promise((resolve) => {
+        chrome.declarativeNetRequest.getAvailableStaticRuleCount((count) => {
+          console.log('Available static rule count:', count);
+          resolve(count);
+        });
+      });
+
+      // If main extension is being enabled
+      if (newStatus) {
+        // Check if hyperlink auditing was already enabled
+        const { updateHyperlinkAuditing: hyperlinkEnabled } = 
+          await chrome.storage.local.get('updateHyperlinkAuditing');
+        
+        if (hyperlinkEnabled) {
+          // Enable rule 2 if both are now true
+          await chrome.declarativeNetRequest.updateStaticRules({
+            rulesetId: "ruleset_8",
+            enableRuleIds: [2]
+          });
+        }
+      } else {
+        // Main extension disabled, ensure rule is disabled
+        await chrome.declarativeNetRequest.updateStaticRules({
+          rulesetId: "ruleset_8",
+          disableRuleIds: [2]
         });
       }
-    } else {
-      // Main extension disabled, ensure ruleset11 is disabled
-      await chrome.declarativeNetRequest.updateEnabledRulesets({
-        disableRulesetIds: ['ruleset_11'],
-        enableRulesetIds: []
-      });
     }
+  } catch (error) {
+    console.error('Error in storage change listener:', error);
   }
 });
 
@@ -529,31 +573,38 @@ async function updateDNRRule() {
 
 
 async function updateHyperlinkAuditing(enabled) {
-  const ruleset11 = ['ruleset_11'];
-  
   try {
     // Get main extension status
     const settings = await chrome.storage.local.get(SETTINGS_KEY);
     const isMainEnabled = settings[SETTINGS_KEY]?.status ?? false;
 
+    // Get available rule count first
+    const count = await new Promise((resolve) => {
+      chrome.declarativeNetRequest.getAvailableStaticRuleCount((count) => {
+        console.log('Available static rule count:', count);
+        resolve(count);
+      });
+    });
+
     // If either main extension is disabled OR hyperlink setting is disabled,
-    // then disable ruleset11
+    // then disable ruleset_1
     if (!isMainEnabled || !enabled) {
-      await chrome.declarativeNetRequest.updateEnabledRulesets({
-        disableRulesetIds: ruleset11,
-        enableRulesetIds: []
+      await chrome.declarativeNetRequest.updateStaticRules({
+        rulesetId: "ruleset_8",
+        disableRuleIds: [2]
       });
     } else {
       // Both main extension and hyperlink setting are enabled
-      await chrome.declarativeNetRequest.updateEnabledRulesets({
-        disableRulesetIds: [],
-        enableRulesetIds: ruleset11
+      await chrome.declarativeNetRequest.updateStaticRules({
+        rulesetId: "ruleset_8",
+        enableRuleIds: [2]
       });
     }
-    
-    await chrome.storage.local.set({ updateHyperlinkAuditing: enabled });
-    return true;
 
+    // Update the storage with new setting
+    await chrome.storage.local.set({ updateHyperlinkAuditing: enabled });
+    
+    return true;
   } catch (error) {
     console.error('Error updating hyperlink auditing:', error);
     return false;
@@ -696,10 +747,50 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
   }
 });
+const icons = {
+  light: {
+    16: 'icons/light/icon16.png',
+    32: 'icons/light/icon32.png',
+    48: 'icons/light/icon48.png',
+    96: 'icons/light/icon96.png',
+    128: 'icons/light/icon128.png'
+  },
+  dark: {
+    16: 'icons/dark/icon16.png',
+    32: 'icons/dark/icon32.png',
+    48: 'icons/dark/icon48.png',
+    96: 'icons/dark/icon96.png',
+    128: 'icons/dark/icon128.png'
+  }
+};
+
+const updateExtensionIcon = (theme) => {
+  chrome.action.setIcon({
+    path: icons[theme]
+  });
+};
+
+chrome.storage.onChanged.addListener((changes, namespace) => {
+  if (namespace === 'local' && changes.theme) {
+    updateExtensionIcon(changes.theme.newValue);
+  }
+});
 
 
 
 
+chrome.runtime.onStartup.addListener(async () => {
+  await initializeExtension();  
+});
 
 
 
+async function initializeExtension() {
+  const currentTheme = await new Promise(resolve => {
+    chrome.storage.local.get(['theme'], (result) => {
+      resolve(result.theme || getSystemTheme());
+    });
+  });
+
+  updateExtensionIcon(currentTheme);
+}

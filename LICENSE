@@ -1,5 +1,5 @@
 License Information
-Linkumori source code is subject to many open source license
+Linkumori (URLs Cleaners) Source code is subject to many open source license
 
 The following files contain a mix of GPLv3 and MIT licensed code:
 
@@ -715,23 +715,15 @@ Public License instead of this License.  But first, please read
 
 The following code in the files are completely under the GNU General Public License v3:
 
-"/rules/original/rules1.json"
-"/rules/original/rules2.json"
-"/rules/original/rules3.json"
-"/rules/original/rules9.json"
-"/rules/original/rules8.json"
-"/rules/original/rules10.json"
-"/rules/original/rules11.json"
+`/rules/rules7.json`
+"/rules/rules8.json"
 "common/rules.js"
 "panel/options.js"
 "panel/option.html"
 "/panel/panelMenu.html"
 "/panel/panelMenu.js"
 "/content.js",
-""/panel/style.css"
-"icons/icon48.png",
-"icons/icon96.png",
-"icons/icon128.png"
+"/panel/style.css"
 "/Linkumori-Artifact/Artifact.json"
 Copyright: (c) 2024 Subham Mahesh
 
@@ -1524,21 +1516,23 @@ DEALINGS IN THE FONT SOFTWARE.
 
 
 
-4.file containing derivative work or modified work is located in:
-rules/adguard-modifed/rules5.json
-rules/adguard-modifed/rules6.json
-rules/adguard-modifed/rules7.json
-rules/adguard-modifed/rules4.json
-rules/adguard-modifed/rules12.json
-Original work: https://github.com/AdguardTeam/AdguardFilters/blob/master/TrackParamFilter/sections/specific.txt
+4) Rule Source Attribution
+The  AdguardFilters filter lists were developed by AdGuard Software Ltd. which is license under (GNU General Public License v3.0 only) and have been converted by subham mahesh to work with Chrome's newer Declarative NetRequest API specification.
 
-original work: license under General Public License v3 only
+Rule File Locations
+rules/rules1.json
+rules/rules2.json
+rules/rules3.json
+rules/rules4.json
+rules/rules5.json
+rules/rules6.json
+Additional Information
+Each JSON file contains two types of Declarative NetRequest static rules:
 
-derivative work: also under General Public License v3 only
-
-Copyright information of modified parts only: Copyright (c) 2024 Subham Mahesh
-
-you may found rules/adguard-modifed/notice.txt to see information modification date and who modify the orginal work 
+Converted rules from AdGuard's original filter lists
+rules that are independently developed by Subham Mahesh
+Modification Details
+For detailed information about modifications, including dates and specific changes to the original work, please refer to the rules/notice.txt file in the extension source code.
 
 For more information about original work, please see the repository: https://github.com/AdguardTeam/AdguardFilters
 
@@ -3019,9 +3013,21 @@ Creative Commons may be contacted at creativecommons.org.
 
 7) The following files from the Linkumori source code are licensed under the Creative Commons Attribution 4.0 International License:
 
-icons/icon48.png
-icons/icon96.png
-icons/icon128.png
+icons/default/icon48.png
+icons/default/icon96.png
+icons/default/icon128.png
+icons/light/icon16.png
+icons/light/icon32.png
+icons/light/icon128.png
+icons/light/icon48.png
+icons/light/icon96.png
+icons/light/icon128.png
+icons/dark/icon16.png
+icons/dark/icon32.png
+icons/dark/icon128.png
+icons/dark/icon48.png
+icons/dark/icon96.png
+icons/dark/icon128.png
 Copyright information:© 2024 Subham Mahesh
 
 Attribution 4.0 International
@@ -3419,3 +3425,5 @@ the avoidance of doubt, this paragraph does not form part of the public
 licenses.
 
 Creative Commons may be contacted at creativecommons.org.
+
+

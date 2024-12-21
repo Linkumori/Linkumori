@@ -1,103 +1,84 @@
 {
   "manifest_version": 3,
-  "name": "Linkumori (Clean URLs)",
-  "version": "93.0",
+  "name": "Linkumori (URLs Cleaner)",
+  "version": "94.0",
   "description": "Clean tracking query parameters from URLs",
   
-  "icons": {
-    "48": "icons/icon48.png",
-    "96": "icons/icon96.png",
-    "128": "icons/icon128.png"
+"icons": {
+    "48": "icons/default/icon48.png",
+    "96": "icons/default/icon96.png",
+    "128": "icons/default/icon128.png"
   },
   "background": {
     "service_worker": "background.js",
     "type": "module"
   },
-    "minimum_chrome_version": "121.0",
+  
+  "minimum_chrome_version": "121.0",
+  
   "action": {
-    "default_icon": "icons/icon128.png",
+    "default_icon": "icons/default/icon128.png",
     "default_title": "Linkumori",
     "default_popup": "panel/panelMenu.html"
   },
+  
   "permissions": [
     "storage",
-    "tabs",
+    "tabs", 
     "declarativeNetRequest",
     "activeTab",
     "scripting",
     "alarms",
     "unlimitedStorage",
     "contextMenus"
-    ],
+  ],
   
   "host_permissions": [
     "http://*/*",
     "https://*/*"
   ],
+  
   "declarative_net_request": {
     "rule_resources": [
-     
-    
       {
         "id": "ruleset_1",
         "enabled": true,
-        "path": "/rules/original/rules1.json"
+        "path": "/rules/rules1.json"
       },
       {
         "id": "ruleset_2",
         "enabled": true,
-        "path": "rules/original/rules2.json"
+        "path": "rules/rules2.json"
       },
       {
         "id": "ruleset_3",
         "enabled": true,
-        "path": "rules/original/rules3.json"
+        "path": "rules/rules3.json"
       },
       {
         "id": "ruleset_4",
         "enabled": true,
-        "path": "rules/adguard-modifed/rules4.json"
+        "path": "rules/rules4.json"
       },
       {
         "id": "ruleset_5",
         "enabled": true,
-        "path": "rules/adguard-modifed/rules5.json"
+        "path": "rules/rules5.json"
       },
       {
         "id": "ruleset_6",
         "enabled": true,
-        "path": "rules/adguard-modifed/rules6.json"
+        "path": "rules/rules6.json"
       },
       {
         "id": "ruleset_7",
         "enabled": true,
-        "path": "rules/adguard-modifed/rules7.json"
+        "path": "rules/rules7.json"
       },
       {
         "id": "ruleset_8",
         "enabled": true,
-        "path": "/rules/original/rules8.json"
-      },
-
-      {
-        "id": "ruleset_9",
-        "enabled": true,
-        "path": "/rules/original/rules9.json"
-      },
-      {
-        "id": "ruleset_10",
-        "enabled": true,
-        "path": "/rules/original/rules10.json"
-      },
-      {
-        "id": "ruleset_11",
-        "enabled": true,
-        "path": "/rules/original/rules11.json"
-      },
-      {
-        "id": "ruleset_12",
-        "enabled": true,
-        "path": "rules/adguard-modifed/rules12.json"
+        "path": "rules/rules8.json"
       }
     ]
   }

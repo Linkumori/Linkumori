@@ -10,16 +10,16 @@
  <a href="https://chromewebstore.google.com/detail/linkumori-clean-urls/kcpfnbjlimolkcjllfooaipdpdjmjigg
 "><img height="58" src="https://i.imgur.com/K9Yh8G9.png" alt="Chrome Web Store"></a>
 
-Linkumori (URLs Purifier) is a powerful browser extension for Chromium-based browsers that enhances your privacy by purifying URLs, removing tracking parameters, and blocking hyperlink auditing, all without interrupting your browsing experience.
+Linkumori (URLs Cleaner) is a powerful browser extension for Chromium-based browsers that enhances your privacy by purifying URLs, removing tracking parameters, and blocking hyperlink auditing, all without interrupting your browsing experience.
 
 ## Features
 
 - Cleans URLs by removing tracking parameters without blocking or redirecting
-- Utilizes both static and dynamic Declarative Net Request (DNR) rules for efficient URL cleaning at the network level
+- Utilizes both static and dynamic Declarative Net Request (DNR) rules for efficient URL cleaning at the network level 
 - Supports a wide range of websites and URL patterns
 - Blocks hyperlink auditing for increased privacy
 - Uses the History API to update URLs without page reloads
-- Operates seamlessly in the background
+- Operates seamlessly in the background 
 - Supports dark/light mode theme toggle
 - Advanced tools interface for additional functionality
 
@@ -30,19 +30,19 @@ Linkumori (URLs Purifier) is a powerful browser extension for Chromium-based bro
 3. **History API**: For URLs that can't be caught by DNR rules, Linkumori uses the History API to clean the URL without reloading the page.
 4. **Hyperlink Auditing Block**: Prevents websites from tracking your clicks on links that leave their site.
 
-## Installation
+## Installation 
 
 ### Load unpacked: Chrome, MS Edge or Brave (all desktop)
 
 1. Clone this repository or download the source code to a permanent location (do not delete the folder after installation).
-2. Open your Chromium-based browser (e.g., Chrome, Edge) and navigate to the extensions page.
+2. Open your Chromium-based browser (e.g., Chrome, Edge) and navigate to the extensions page. 
 3. Enable "Developer mode" in the top right corner.
 4. Click "Load unpacked" and select the directory containing the extension files.
 
 ### CRX-file: other Chromium browsers (Opera/Vivaldi/Yandex)
 
 1. Download the extension as a crx-file from latest release (right-click > save link as).
-2. In your browser navigate to the extensions page
+2. In your browser navigate to the extensions page 
 3. Enable "Developer mode" in the top right corner.
 4. Drag your crx-file anywhere on the page to import it.
 
@@ -60,7 +60,7 @@ Once installed, Linkumori works automatically in the background:
 
 ### Main Tab
 ![Main Tab Interface](https://github.com/subham8907/Linkumori/blob/main/docs/images/main.png)
-- Simple On/Off toggle switch
+- Simple On/Off toggle switch  
 - Current extension status display
 - Theme toggle button
 - Advanced tools access
@@ -72,7 +72,7 @@ Once installed, Linkumori works automatically in the background:
 ![Whitelist Interface](https://github.com/subham8907/Linkumori/blob/main/docs/images/whitelist-active.png)
 - Domain input field with Add button
 - "Add Current Domain" button for quick whitelisting
-- List of whitelisted domains
+- List of whitelisted domains 
 - Quick remove options for each domain
 
 ### License Information
@@ -112,18 +112,11 @@ Linkumori includes a domain whitelisting system that allows you to exempt specif
 ### Best Practices:
 1. Check the actual URL in your browser's address bar
 2. For sites with `www`, you can use either format
-3. For sites without `www`, must match exactly
+3. For sites without `www`, must match exactly  
 4. For subdomains, always match exactly
 5. Test the whitelist entry by visiting different pages on the domain
 
-## Configuration
 
-Linkumori uses configuration files to determine which parameters to remove from URLs:
-
-- `rules/et_1` to `rules/et_12`: Static DNR rules
-- `Artifact.json`: Additional URL cleaning patterns for the History API method
-
-Advanced users can modify these files to customize the extension's behavior.
 
 ## Contributing
 
@@ -135,17 +128,18 @@ This project uses multiple licenses:
 
 ### GPLv3 License
 
-The following files are completely under the GNU General Public License v3:
+The following files are completely under the GNU General Public License v3 or any later version:
 
-- `/content.js`
-- `/panel/panelMenu.html`
+- `/rules/rules7.json`
+- `/rules/rules8.json`
 - `common/rules.js`
 - `panel/options.js`
 - `panel/option.html`
+- `/panel/panelMenu.html`
+- `/panel/panelMenu.js`
+- `/content.js`
 - `/panel/style.css`
 - `/Linkumori-Artifact/Artifact.json`
-- `/rules/original/rules1.json` to `/rules/original/rules3.json`
-- `/rules/original/rules8.json` to `/rules/original/rules11.json`
 
 Copyright (c) 2024 Subham Mahesh
 
@@ -153,39 +147,61 @@ Copyright (c) 2024 Subham Mahesh
 
 The following files contain a mix of GPLv3 and MIT licensed code:
 
-- `background.js`
+- `background.js`  
 - `common/constants.js`
 - `common/utils.js`
 
 GPLv3 portions: Copyright (c) 2024 Subham Mahesh
 MIT portions: Copyright (c) 2022 Nick
 
-### Derivative Work
+### Rule Source Attribution
+The AdGuard filter lists were developed by AdGuard Software Ltd. which is license under (GNU General Public License v3.0 only) and have been converted by subham mahesh to work with Chrome's newer Declarative NetRequest API specification.
 
-Files `rules/adguard-modifed/rules5.json`, `rules/adguard-modifed/rules6.json`,`rules/adguard-modifed/rules12.json`
- and `rules/adguard-modifed/rules7.json`, `rules/adguard-modifed/rules4.json` are modified works:
+Rule File Locations
+rules/rules1.json
+rules/rules2.json
+rules/rules3.json
+rules/rules4.json
+rules/rules5.json
+rules/rules6.json
+Additional Information
+Each JSON file contains two types of Declarative NetRequest static rules:
 
-- Original work: https://github.com/AdguardTeam/AdguardFilters/blob/master/TrackParamFilter/sections/specific.txt
-- Original work license: GNU General Public License v3 only
-- Derivative work: Also under GNU General Public License v3 only
-- Copyright for modified part only (c) 2024 Subham Mahesh
+Converted rules from AdGuard's original filter lists
+rules that are independently developed by Subham Mahesh
+Modification Details
+For detailed information about modifications, including dates and specific changes to the original work, please refer to the rules/notice.txt file in the extension source code.
 
-For more information about modifications, please see `rules/adguard-modifed/notice.txt`.
+
+
 
 ### Font License
 
-This project uses the Liberation Serif Regular font, which is licensed under the SIL Open Font License, Version 1.1. The font is located in the `./liberation-fonts` directory.
+This project uses the Liberation Serif Regular font, located in the `./liberation-fonts` directory. The font is licensed under the SIL Open Font License, Version 1.1.The font is located in the `./liberation-fonts` directory.
 
-### Creative Commons License
+### Creative Commons License 
 
-The following files are licensed under the Creative Commons Attribution 4.0 International License:
-- `icons/icon48.png`
-- `icons/icon96.png`
-- `icons/icon128.png`
+The following icon files are licensed under the Creative Commons Attribution 4.0 International License:
+- `icons/default/icon48.png`
+- `icons/default/icon96.png`  
+- `icons/default/icon128.png`
+- `icons/light/icon16.png`
+- `icons/light/icon32.png`
+- `icons/light/icon128.png`
+- `icons/light/icon48.png`
+- `icons/light/icon96.png`
+- `icons/light/icon128.png`
+- `icons/dark/icon16.png`
+- `icons/dark/icon32.png`
+- `icons/dark/icon128.png` 
+- `icons/dark/icon48.png`
+- `icons/dark/icon96.png`
+- `icons/dark/icon128.png`
 
 Copyright (c) 2024 Subham Mahesh
 
 ### Font Awesome Icons
+
 
 This project uses the Screwdriver Wrench icon from Font Awesome Free, which is licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).
 - Icon: Screwdriver Wrench
@@ -197,8 +213,8 @@ This project uses the Screwdriver Wrench icon from Font Awesome Free, which is l
   - `/panel/advanced-tools-light.svg`
 - Copyright: © 2024 Fonticons, Inc.
 
+### Mozilla Public License 2.0
 
-### Unmodified MPL 2.0 licensed works 
 The Linkumori (URLs Purifier) extension incorporates MPL 2.0 licensed code from the MDN Web Extensions repository, specifically the clipboard-helper.js file (original source: https://github.com/mdn/webextensions-examples/blob/main/context-menu-copy-link-with-types/clipboard-helper.js). This code is located at './clipboard-helper.js' within the Linkumori extension. In accordance with MPL 2.0 Section 3.3, recipients of this larger work have the option to receive and use this specific file under either the terms of the Mozilla Public License 2.0 or alternatively under the GNU General Public License version 3. This dual-licensing option applies exclusively to the clipboard-helper.js file and does not extend to other components of the Linkumori extension. Recipients must comply with the terms of whichever license they choose (MPL 2.0 or GPL v3) for this specific file, including maintaining appropriate notices and making the source code available as required by the chosen license.
 
 ## Acknowledgments
