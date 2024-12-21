@@ -4,7 +4,7 @@
 
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/kcpfnbjlimolkcjllfooaipdpdjmjigg?label=Chrome%20Web%20Store&logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/detail/linkumori-clean-urls/kcpfnbjlimolkcjllfooaipdpdjmjigg)
 
-![Linkumori](https://github.com/subham8907/Linkumori/blob/main/icons/icon128.png)
+![Linkumori](https://github.com/subham8907/Linkumori/blob/main/icons/default/icon128.png)
 
 
  <a href="https://chromewebstore.google.com/detail/linkumori-clean-urls/kcpfnbjlimolkcjllfooaipdpdjmjigg
