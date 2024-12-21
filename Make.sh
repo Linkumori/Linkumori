@@ -30,14 +30,14 @@ cat > "$BUILD_DIR/webstore/manifest.json" << EOL
 "update_url": "https://clients2.google.com/service/update2/crx",
 
   "manifest_version": 3,
-  "name": "Linkumori (Clean URLs)",
+  "name": "Linkumori (URLs Cleaner)",
   "version": "$VERSION",
   "description": "Clean tracking query parameters from URLs",
   
   "icons": {
-    "48": "icons/icon48.png",
-    "96": "icons/icon96.png",
-    "128": "icons/icon128.png"
+    "48": "icons/default/icon48.png",
+    "96": "icons/default/icon96.png",
+    "128": "icons/default/icon128.png"
   },
   "background": {
     "service_worker": "background.js",
@@ -45,7 +45,7 @@ cat > "$BUILD_DIR/webstore/manifest.json" << EOL
   },
     "minimum_chrome_version": "121.0",
   "action": {
-    "default_icon": "icons/icon128.png",
+    "default_icon": "icons/default/icon128.png",
     "default_title": "Linkumori",
     "default_popup": "panel/panelMenu.html"
   },
@@ -119,13 +119,13 @@ create_selfhosted_manifest() {
 cat > "$BUILD_DIR/selfhosted/manifest.json" << EOL
 {
   "manifest_version": 3,
-  "name": "Linkumori (Clean URLs)",
+  "name": "Linkumori (URLs Cleaner)",
   "version": "$VERSION",
   "description": "Clean tracking query parameters from URLs",
   "icons": {
-    "48": "icons/icon48.png",
-    "96": "icons/icon96.png",
-    "128": "icons/icon128.png"
+    "48": "icons/default/icon48.png",
+    "96": "icons/default/icon96.png",
+    "128": "icons/default/icon128.png"
   },
   "background": {
     "service_worker": "background.js",
@@ -133,7 +133,7 @@ cat > "$BUILD_DIR/selfhosted/manifest.json" << EOL
   },
   "minimum_chrome_version": "121.0",
   "action": {
-    "default_icon": "icons/icon128.png",
+    "default_icon": "icons/default/icon128.png",
     "default_title": "Linkumori",
     "default_popup": "panel/panelMenu.html"
   },
