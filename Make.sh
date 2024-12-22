@@ -27,8 +27,6 @@ echo "Current extension version: $VERSION"
 create_webstore_manifest() {
 cat > "$BUILD_DIR/webstore/manifest.json" << EOL
 {
-"update_url": "https://clients2.google.com/service/update2/crx",
-
   "manifest_version": 3,
   "name": "Linkumori (URLs Cleaner)",
   "version": "$VERSION",
@@ -43,31 +41,33 @@ cat > "$BUILD_DIR/webstore/manifest.json" << EOL
     "service_worker": "background.js",
     "type": "module"
   },
-    "minimum_chrome_version": "121.0",
+  
+  "minimum_chrome_version": "121.0",
+  
   "action": {
     "default_icon": "icons/default/icon128.png",
     "default_title": "Linkumori",
     "default_popup": "panel/panelMenu.html"
   },
+  
   "permissions": [
     "storage",
-    "tabs",
+    "tabs", 
     "declarativeNetRequest",
     "activeTab",
     "scripting",
     "alarms",
     "unlimitedStorage",
     "contextMenus"
-    ],
+  ],
   
   "host_permissions": [
     "http://*/*",
     "https://*/*"
   ],
+  
   "declarative_net_request": {
     "rule_resources": [
-     
-    
       {
         "id": "ruleset_1",
         "enabled": true,
