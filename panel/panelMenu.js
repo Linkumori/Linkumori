@@ -720,7 +720,7 @@ if (advancedToolsBtn) {
     advancedToolsBtn.addEventListener('click', () => {
         // Open options.html in a new tab
         chrome.tabs.create({
-            url: 'panel/option.html'
+            url: 'panel/cleanurls-tools.html'
         });
     });
 }

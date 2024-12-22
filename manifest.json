@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Linkumori (URLs Cleaner)",
-  "version": "100.0",
+  "version": "101.0",
   "description": "Clean tracking query parameters from URLs",
   
   "icons": {
@@ -37,7 +37,10 @@
     "http://*/*",
     "https://*/*"
   ],
-  
+  "options_ui": {
+    "page": "panel/option.html",
+    "open_in_tab": true
+  },
   "declarative_net_request": {
     "rule_resources": [
       {

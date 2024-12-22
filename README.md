@@ -133,8 +133,10 @@ The following files are completely under the GNU General Public License v3 or an
 - `/rules/rules7.json`
 - `/rules/rules8.json`
 - `common/rules.js`
-- `panel/options.js`
+- `panel/option.js`
 - `panel/option.html`
+- `panel/cleanurls-tools.html`
+- `panel/cleanurls-tools.js`
 - `/panel/panelMenu.html`
 - `/panel/panelMenu.js`
 - `/content.js`

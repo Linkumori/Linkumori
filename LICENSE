@@ -715,12 +715,14 @@ Public License instead of this License.  But first, please read
 
 The following code in the files are completely under the GNU General Public License v3  or later version:
 
-`/rules/rules7.json`
+"/rules/rules7.json"
 "/rules/rules8.json"
 "/panel/first-install.html"
 "/panel/first-install.js"
 "common/rules.js"
-"panel/options.js"
+"panel/option.js"
+"panel/cleanurls-tools.html"
+"panel/cleanurls-tools.js"
 "panel/option.html"
 "/panel/panelMenu.html"
 "/panel/panelMenu.js"

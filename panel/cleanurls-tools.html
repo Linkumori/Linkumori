@@ -1,0 +1,309 @@
+<!--/*
+Linkumori(URLs Purifier)
+Copyright (C) 2024 Subham Mahesh
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*
+
+
+*/-->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Linkumori</title>
+    <link rel="preload" href="../liberation-fonts/LiberationSerif-Regular.ttf" as="font" type="font/ttf" crossorigin>  
+
+    <style>
+        @font-face {
+            font-family: 'Liberation Serif';
+            src: url('../liberation-fonts/LiberationSerif-Regular.ttf') format('truetype');
+        }
+
+        :root {
+            /* Navy theme with original class structure */
+            --bg-primary: #0f1729;
+            --bg-secondary: #1a2238;
+            --bg-tertiary: #233049;
+            --bg-tertiary-license: #2d3b5e;
+            --bg-primary-theme: #1a2238;
+            --button-primary: #3b82f6;
+            --button-hover: #2563eb;
+            --button-danger: #dc2626;
+            --button-danger-hover: #ef4444;
+            --logo-bg: #ffffff;
+            --logo-accent: #3b82f6; 
+            --text-primary: #f8fafc;
+            --text-primary-domain: #f8fafc;
+            --text-secondary: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-color: rgba(148, 163, 184, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --input-border: rgba(148, 163, 184, 0.2);
+            --input-focus: #3b82f6;
+            --button-primary-toogle: rgba(59, 130, 246, 0.2);
+        }
+
+        :root[data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: ##ffffff;
+            --bg-primary-theme: #ffffff;
+            --bg-tertiary-license: #6b7280;
+            --text-primary: #ffffff;
+            --text-secondary: #1e293b;
+            --text-primary-domain: #1e293b;
+            --text-muted: #64748b;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --input-bg: rgba(0, 0, 0, 0.05);
+            --input-border: rgba(0, 0, 0, 0.1);
+            --input-focus: #3b82f6;
+            --logo-bg: #3b82f6;
+            --logo-accent: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Liberation Serif";
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+            color: var(--text-secondary);
+            line-height: 1.5;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: var(--bg-secondary);
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+        }
+
+        .header-text h1 {
+            font-size: 1.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-text span {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .main-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .card-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+        }
+
+        .card-header p {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .url-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            background: var(--input-bg);
+            color: var(--text-primary-domain);
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            transition: all 0.2s ease;
+        }
+
+        .url-textarea:focus {
+            outline: none;
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 3px var(--button-primary-toogle);
+        }
+
+        .card-footer {
+            padding: 1.25rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 1rem;
+            background: var(--bg-tertiary);
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(to right, var(--button-primary), var(--button-hover));
+            color: var(--text-primary);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        button:hover {
+            background: var(--button-hover);
+            transform: translateY(-1px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .copy-status {
+            margin-top: 1rem;
+            text-align: center;
+            color: var(--button-primary);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        [data-lucide] {
+            color: currentColor;
+            stroke-width: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">             
+                <circle cx="50" cy="50" r="45" fill="var(--logo-bg)"/>             
+                <path d="M35 50 Q35 35, 50 35 L65 35 Q80 35, 80 50 Q80 65, 65 65 L60 65" 
+                      fill="none" 
+                      stroke="var(--logo-accent)" 
+                      stroke-width="8" 
+                      stroke-linecap="round"/>             
+                <path d="M65 50 Q65 65, 50 65 L35 65 Q20 65, 20 50 Q20 35, 35 35 L40 35" 
+                      fill="none" 
+                      stroke="var(--logo-accent)" 
+                      stroke-width="8" 
+                      stroke-linecap="round"/>             
+                <polygon points="75,20 78,28 86,31 78,34 75,42 72,34 64,31 72,28" 
+                         fill="var(--logo-accent)"/>         
+            </svg>
+            <div class="header-text">
+                <h1>
+                    <i data-lucide="link-2"></i>
+                    Linkumori (URLs Cleaner)
+                </h1>
+                <span>Multiple URL Cleaning Tool</span>
+            </div>
+        </header>
+
+        <main class="main-card">
+            <div class="card-header">
+                <p>
+                    <i data-lucide="alert-circle"></i>
+                    Enter your URLs below, one per line. We'll clean and format them automatically.
+                </p>
+            </div>
+
+            <div class="card-body">
+                <div class="input-group">
+                    <label class="input-label">
+                        <i data-lucide="file-input"></i>
+                        Input URLs
+                    </label>
+                    <textarea id="inputUrls" class="url-textarea" placeholder="Paste your URLs here, one per line"></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">
+                        <i data-lucide="file-output"></i>
+                        Cleaned URLs
+                    </label>
+                    <textarea id="outputUrls" class="url-textarea" placeholder="Cleaned URLs will appear here" readonly></textarea>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button id="cleanUrls">
+                    <i data-lucide="spray-can"></i>
+                    Clean URLs
+                </button>
+                <button id="copyUrls">
+                    Copy Results
+                </button>
+            </div>
+        </main>
+        
+    </div>
+    <div id="copyStatus" class="copy-status"></div>
+</div>
+
+    <script src="cleanurls-tools.js"></script>
+</body>
+</html>
