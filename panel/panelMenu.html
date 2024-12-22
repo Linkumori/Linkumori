@@ -114,15 +114,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <button id="singledynamicwhitelistunwhitelistbutton" ></button>
 
     </div>
-    
+
     <div id="whitelistContent" class="content">
-        <div class="domain-input">
-            <input type="text" id="domainInput" placeholder="Enter domain (e.g., example.com)">
-            <button id="addDomain">Add</button>
-        </div>
-        <button id="addCurrentDomain" style="margin: -8px auto 12px auto; display: block; width: calc(100% - 24px);">Add Current Domain</button>
-        <div id="whitelistContainer"></div>
-    </div>
+      <div class="domain-input">
+
+          <input type="text" id="domainInput" placeholder="Enter domain (e.g., example.com)">
+          <button id="addDomain">Add</button>
+      </div>
+      <div style="margin: 10px 0;">
+          <div style="display: flex; gap: 10px; width: 100%;">
+              <button id="exportWhitelist" style="flex: 1;">Export Whitelist</button>
+              <button id="importWhitelist" style="flex: 1;">Import Whitelist</button>
+          </div>
+          <button id="addCurrentDomain" style="width: 100%; margin-top: 10px;">Add developer.chrome.com to Whitelist</button>
+      </div>
+      <div id="whitelistContainer"></div>
+  </div>
     
         <div id="licenseContent" class="content" style="display: none;">
             <h2>Open Source License Compliance Notice</h2>

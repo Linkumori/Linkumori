@@ -50,9 +50,14 @@ class PanelMenuController {
             badgeOnOffToggle: null,
             badgeOnOffLabel: null
         };
+
+        // Bind methods
+        this.exportWhitelist = this.exportWhitelist.bind(this);
+        this.importWhitelist = this.importWhitelist.bind(this);
         
         this.init();
     }
+
     
     async init() {
         if (document.readyState === 'loading') {
@@ -110,6 +115,18 @@ class PanelMenuController {
                 licenseTab: document.getElementById('licenseTab')
             }
         };
+        const exportBtn = document.getElementById('exportWhitelist');
+        const importBtn = document.getElementById('importWhitelist');
+
+        if (exportBtn) {
+            exportBtn.replaceWith(exportBtn.cloneNode(true));
+            document.getElementById('exportWhitelist').addEventListener('click', this.exportWhitelist);
+        }
+        
+        if (importBtn) {
+            importBtn.replaceWith(importBtn.cloneNode(true));
+            document.getElementById('importWhitelist').addEventListener('click', this.importWhitelist);
+        }
         
         document.getElementById('toggleButton')?.addEventListener('click', 
             () => this.togglePurifyUrlsSettings());
@@ -213,7 +230,73 @@ class PanelMenuController {
                 this.updateAllDynamicButtons();
             }
         }
-
+        async exportWhitelist() {
+            try {
+                const blob = new Blob([JSON.stringify(this.state.whitelist, null, 2)], { 
+                    type: 'application/json' 
+                });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'linkumori-whitelist.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error('Failed to export whitelist:', error);
+                alert('Failed to export whitelist: ' + error.message);
+            }
+        }
+    
+       
+        async importWhitelist() {
+            try {
+                const fileContent = await new Promise((resolve, reject) => {
+                    const input = document.createElement('input');
+                    input.type = 'file';
+                    input.accept = '.json';
+         
+                    const handleChange = async (e) => {
+                        input.removeEventListener('change', handleChange);
+                        const file = e.target.files[0];
+                        if (!file) {
+                            reject(new Error('No file selected'));
+                            return;
+                        }
+         
+                        try {
+                            const text = await file.text();
+                            resolve(text);
+                        } catch (err) {
+                            reject(err);
+                        }
+                    };
+         
+                    input.addEventListener('change', handleChange);
+                    input.click();
+                });
+         
+                const importedWhitelist = JSON.parse(fileContent);
+         
+                // Merge imported whitelist with existing whitelist
+                const newWhitelist = [...new Set([...this.state.whitelist,...importedWhitelist])];
+         
+                // Confirm before merging
+                if (await this.confirmImport(importedWhitelist.length)) {
+                    await chrome.storage.local.set({ whitelist: newWhitelist });
+                    alert('Whitelist imported successfully!');
+                }
+            } catch (error) {
+                console.error('Failed to import whitelist:', error);
+                alert('Failed to import whitelist: ' + error.message);
+            }
+         }
+         
+         async confirmImport(count) {
+            return confirm(`This will add ${count} entries to your current whitelist. Continue?`);
+         }
+        
     async togglePurifyUrlsSettings() {
         try {
             const newStatus = !this.state.isEnabled;

@@ -806,5 +806,5 @@ chrome.runtime.onMessage.addListener((request) => {
       console.error('Error opening popup:', error);
     }
   }
-  // Important: return true if you want to send a response asynchronously
 });
+
