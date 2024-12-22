@@ -798,9 +798,13 @@ async function initializeExtension() {
   updateExtensionIcon(currentTheme);
 }
 
-chrome.runtime.onMessage.addListener((message) => {
-  if (message.action === 'openPopup') {
-          chrome.action.openPopup();
-      }
+chrome.runtime.onMessage.addListener((request) => {
+  if (request.action === 'openPopup') {
+    try {
+      chrome.action.openPopup();
+    } catch (error) {
+      console.error('Error opening popup:', error);
+    }
   }
-);
+  // Important: return true if you want to send a response asynchronously
+});
