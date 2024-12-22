@@ -717,6 +717,8 @@ The following code in the files are completely under the GNU General Public Lice
 
 `/rules/rules7.json`
 "/rules/rules8.json"
+"/panel/first-install.html"
+"/panel/first-install.js"
 "common/rules.js"
 "panel/options.js"
 "panel/option.html"

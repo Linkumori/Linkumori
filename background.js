@@ -135,6 +135,9 @@ chrome.runtime.onInstalled.addListener(async () => {
     chrome.storage.local.set({ updateHyperlinkAuditing: true, firstInstalled: true, historyApiProtection: true,updateBadgeOnOff: true });
     updateHyperlinkAuditing(true);
     chrome.alarms.create('wakeUpAlarm', { periodInMinutes: 1/60 }); 
+    chrome.tabs.create({
+      url: 'panel/first-install.html',
+  });
       return; 
   }
 
@@ -156,7 +159,7 @@ chrome.runtime.onInstalled.addListener(async () => {
     }),
     new Promise(resolve => {
       chrome.storage.local.get(['theme'], (result) => {
-        resolve(result.theme || getSystemTheme());
+        resolve(result.theme);
       });
     })
   ]);
@@ -788,9 +791,16 @@ chrome.runtime.onStartup.addListener(async () => {
 async function initializeExtension() {
   const currentTheme = await new Promise(resolve => {
     chrome.storage.local.get(['theme'], (result) => {
-      resolve(result.theme || getSystemTheme());
+      resolve(result.theme);
     });
   });
 
   updateExtensionIcon(currentTheme);
 }
+
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.action === 'openPopup') {
+          chrome.action.openPopup();
+      }
+  }
+);

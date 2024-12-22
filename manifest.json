@@ -4,7 +4,7 @@
   "version": "96.0",
   "description": "Clean tracking query parameters from URLs",
   
-"icons": {
+  "icons": {
     "48": "icons/default/icon48.png",
     "96": "icons/default/icon96.png",
     "128": "icons/default/icon128.png"

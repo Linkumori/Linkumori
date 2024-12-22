@@ -140,7 +140,8 @@ The following files are completely under the GNU General Public License v3 or an
 - `/content.js`
 - `/panel/style.css`
 - `/Linkumori-Artifact/Artifact.json`
-
+- `/panel/first-install.html`
+-  `/panel/first-install.js`
 Copyright (c) 2024 Subham Mahesh
 
 ### Mixed License (GPLv3 and MIT)
